@@ -6,8 +6,8 @@
 
 1. What happened to my code below!?
 
-        some code here
+    some code here
 
-2. I need to add format with backtics to make it look like code again:
+2. I need to indent 8 spaces if this is a list:
 
     `some code here`
