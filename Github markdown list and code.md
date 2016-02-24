@@ -1,4 +1,4 @@
-#### The 4-space indetation works here:
+#### The 4-space "code" indentation works here:
 
     some code here
 
@@ -8,6 +8,6 @@
 
     some code here
 
-2. I need to indent 8 spaces if this is a list:
+2. I need to indent 8 spaces if this code is inside a list:
 
-    `some code here`
+        some code here
