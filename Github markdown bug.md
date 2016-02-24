@@ -6,8 +6,8 @@
 
 1. What happened to my code below!?
 
-    some code here
+        some code here
 
-2. I need to add back formatting with backtics:
+2. I need to add format with backtics to make it look like code again:
 
     `some code here`
