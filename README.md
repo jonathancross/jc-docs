@@ -1,2 +1,2 @@
-# my-docs
-Documentation and examples
+# jc-docs
+Documentation, demos and examples from Jonathan Cross.
