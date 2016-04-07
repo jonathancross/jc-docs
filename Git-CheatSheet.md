@@ -14,6 +14,7 @@ Git & GitHub Cheat Sheet
 
 
 ## Sign all commits with PGP key
+    git config --global user.email [YOUR PGP ID MAIL ADDRESS]
     git config --global user.signkey [YOUR KEY HERE]
     git config --global commit.gpgsign true
     
