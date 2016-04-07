@@ -9,7 +9,8 @@ Tutorials:
 * https://developers.yubico.com/PGP/Importing_keys.html
 * [Why Subkeys do not have a Public key](http://security.stackexchange.com/questions/84132/gpg-detaching-public-subkeys-why-cant-i-do-it)
 * [Why do I see “Secret key is available.” in gpg when it is not?](http://security.stackexchange.com/questions/115230/why-do-i-see-secret-key-is-available-in-gpg-when-it-is-not)
-
+* [Yubico developer signing keys](https://developers.yubico.com/Software_Projects/Software_Signing.html).
+ 
 #### Security concerns
 * Yubikey NEO issued before 2015-04-14 [contain an insecure OpenPGP applet](https://developers.yubico.com/ykneo-openpgp/SecurityAdvisory%202015-04-14.html).
 
