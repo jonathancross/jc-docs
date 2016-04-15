@@ -72,13 +72,19 @@ There are different types of keys, you can see this on the right as "usage":
 
 Symptom: `gpg -–card-status` works as root, but not as an unpriviledged user.
 
-    $ gpg --card-status
+    gpg --card-status
     gpg: selecting openpgp failed: unknown command
     gpg: OpenPGP card not available: general error
 
-Instead, use sudo:
+Workaround: use sudo:
 
-    $ sudo gpg --card-status
+    sudo gpg --card-status
+
+Same with signing, but you need to explicitly add -S
+
+        sudo git commit -a -S
+
+* In my case, only root can access the yubikey device.  Trying to fix with udev rules:  https://www.yubico.com/faq/enable-u2f-linux/
 
 #### Web Of Trust
 
@@ -100,4 +106,4 @@ TODO: Confirm if my Public key must also be imported / re-exported.
 
 ## Configuration
 
-TODO: Add example config file (`~/.gnupg/gpg.conf`)
+* TODO: Add example config file (`~/.gnupg/gpg.conf`)
