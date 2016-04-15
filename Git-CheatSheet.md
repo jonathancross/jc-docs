@@ -36,7 +36,7 @@ git config --global user.signkey [YOUR KEY HERE]
 git config --global commit.gpgsign true
 ```
 
-NOTE: git and GitHub will show that code was signed with your signing **subkey** (rather than primary key) which users may not recognize.  See [example here](https://github.com/jonathancross/j-renamer/commit/e93093aa5d87a33b0758b1614c31d70aae7999ed).
+NOTE: Both `git` and GitHub will show that code was signed with your signing **subkey** (rather than primary key).  This may be confusing for users because normally the primary key is used / communicated by devs and subkeys are selected quietly in the background as needed.  See [example here](https://github.com/jonathancross/j-renamer/commit/e93093aa5d87a33b0758b1614c31d70aae7999ed) and click on the green "Verified" button.
 
 ### Show commit signature info ([more info](https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work))
 ```bash
