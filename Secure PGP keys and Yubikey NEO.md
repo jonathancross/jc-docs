@@ -10,6 +10,7 @@ Tutorials:
 * [Why Subkeys do not have a Public key](http://security.stackexchange.com/questions/84132/gpg-detaching-public-subkeys-why-cant-i-do-it)
 * [Why do I see “Secret key is available.” in gpg when it is not?](http://security.stackexchange.com/questions/115230/why-do-i-see-secret-key-is-available-in-gpg-when-it-is-not)
 * [Yubico developer signing keys](https://developers.yubico.com/Software_Projects/Software_Signing.html).
+* [Using an OpenPGP SmartCard](http://www.narf.ssji.net/~shtrom/wiki/tips/openpgpsmartcard) (some good troubleshooting info)
  
 #### Security concerns
 * Yubikey NEO issued before 2015-04-14 [contain an insecure OpenPGP applet](https://developers.yubico.com/ykneo-openpgp/SecurityAdvisory%202015-04-14.html).
@@ -57,6 +58,25 @@ There are different types of keys, you can see this on the right as "usage":
   * In my case, I tried to get the device to work using offline Xubuntu, Tails, etc, but was not successful.
   * Instead, I created the master key, then put that into a TrueCrypt container.  Then did the same with a separate container for subkeys.  I then moved the subkey container to a computer with internet connection turned off, opened it and wrote the subkeys onto the Yubikey device.  I believe the computer was free of malware, but annot be certain.  The master key is only used on an air-gapped computer, so it is safe and can be used to revoke subkeys if needed.
 
+#### Creating stubs on a new computer
+
+1. Import public key.
+2. Run `sudo gpg2 -–card-status`
+3. May need to change owner of secure keyring to yourself if it was just created:
+
+        sudo chown $USER ~/.gnupg/secring.gpg
+4. Check your work by running `gpg --list-secret-keys`.  If you see `ssb>` for the subkeys, then all is good.
+
+##### Permissions problems
+Symptom: `gpg -–card-status` works as root, but not as an unpriviledged user.
+
+    $ gpg --card-status
+    gpg: selecting openpgp failed: unknown command
+    gpg: OpenPGP card not available: general error
+
+Instead, use sudo:
+
+    $ sudo gpg --card-status
 
 #### Web Of Trust
 Signing keys:
