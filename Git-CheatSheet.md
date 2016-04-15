@@ -18,6 +18,15 @@ alias git-revert='git checkout'
 # Revert ALL local changes to master. Can use git stash to save a copy.
 # Usage: git-revert-everything
 alias git-revert-everything='git fetch origin && git checkout master && git reset --hard origin/master'
+
+# Totally reset local to what is on github with a final cleaning
+# Usage: git-reset-to-github
+alias git-reset-to-github='git fetch origin && git reset --hard origin/master && git clean -ffdx'
+
+# Squash multiple commits into one for readability
+# Usage: git-squash
+alias git-squash='git rebase -i origin/master'
+
 ```
 
 ### git commands

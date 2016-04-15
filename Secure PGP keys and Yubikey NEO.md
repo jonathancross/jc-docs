@@ -54,6 +54,7 @@ There are different types of keys, you can see this on the right as "usage":
 * `usage: A` = **Authenticate** yourself, for example when using SSH to log into a server.  This can be a Subkey.
 
 #### Difficulties with offline master key
+
 * There is no existing linux distribution that can write the keys to the Yubikey as-is.  Therefore you will need to try and transfer all required software to the offline system (complex and could compromise your offline system), or you sacrifice some security and temporarily bring the subkeys onto a system which can easily write to the Yubikey.
   * In my case, I tried to get the device to work using offline Xubuntu, Tails, etc, but was not successful.
   * Instead, I created the master key, then put that into a TrueCrypt container.  Then did the same with a separate container for subkeys.  I then moved the subkey container to a computer with internet connection turned off, opened it and wrote the subkeys onto the Yubikey device.  I believe the computer was free of malware, but annot be certain.  The master key is only used on an air-gapped computer, so it is safe and can be used to revoke subkeys if needed.
