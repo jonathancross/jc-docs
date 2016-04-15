@@ -1,7 +1,7 @@
 Secure PGP keys and Yubikey NEO
 ===============================
 
-**Goal:** Create a secure OpenPGP keypair, eg: offline master key, subkeys stored on a Yubikey NEO hardware device.
+**Goal:** Create a secure OpenPGP keypair, eg: offline master key with subkeys stored on a Yubikey NEO hardware device.
 
 Tutorials:
 * https://www.esev.com/blog/post/2015-01-pgp-ssh-key-on-yubikey-neo/
@@ -61,13 +61,14 @@ There are different types of keys, you can see this on the right as "usage":
 #### Creating stubs on a new computer
 
 1. Import public key.
-2. Run `sudo gpg2 -–card-status`
+2. Run `sudo gpg -–card-status`
 3. May need to change owner of secure keyring to yourself if it was just created:
 
         sudo chown $USER ~/.gnupg/secring.gpg
 4. Check your work by running `gpg --list-secret-keys`.  If you see `ssb>` for the subkeys, then all is good.
 
 ##### Permissions problems
+
 Symptom: `gpg -–card-status` works as root, but not as an unpriviledged user.
 
     $ gpg --card-status
@@ -79,7 +80,8 @@ Instead, use sudo:
     $ sudo gpg --card-status
 
 #### Web Of Trust
-Signing keys:
+
+Signing another person's key:
 
 1. Import your current Secret key to the air-gapped machine
 2. Sign the person's public key
@@ -93,3 +95,8 @@ TODO: Confirm if my Public key must also be imported / re-exported.
 #### Useful commands
     gpg  --list-sigs --list-options show-keyserver-urls
     gpg -k --fingerprint --keyid-format long
+
+
+## Configuration
+
+TODO: Add example config file (`~/.gnupg/gpg.conf`)
