@@ -41,7 +41,7 @@ git remote set-url origin git@github.com:jonathancross/pics.jonathancross.com.gi
 ### Configure git to sign all commits with my PGP key
 ```bash
 git config --global user.email [EMAIL ADDRESS OF YOUR PGP IDENTITY]
-git config --global user.signkey [YOUR KEY HERE]
+git config --global user.signingkey [YOUR KEY HERE]
 git config --global commit.gpgsign true
 ```
 
