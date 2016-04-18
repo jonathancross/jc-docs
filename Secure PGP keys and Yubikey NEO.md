@@ -106,4 +106,4 @@ TODO: Confirm if my Public key must also be imported / re-exported.
 
 ## Configuration
 
-* TODO: Add example config file (`~/.gnupg/gpg.conf`)
+* [Example config](../master/gpg.conf) file (`~/.gnupg/gpg.conf`): 
