@@ -107,3 +107,7 @@ TODO: Confirm if my Public key must also be imported / re-exported.
 ## Configuration
 
 * [Example config](../master/gpg.conf) file (`~/.gnupg/gpg.conf`): 
+
+### Thunderbird
+* [Enigmail PGP plugin](https://enigmail.net/index.php/en/)
+* Sync Google contacts with [gcontactsync](https://addons.mozilla.org/en-US/thunderbird/addon/gcontactsync/)
