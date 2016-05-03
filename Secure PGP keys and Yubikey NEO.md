@@ -85,7 +85,7 @@ Same with signing, but you need to explicitly add -S
         sudo git commit -a -S
 
 
-UPDATE: 2016-05-03
+##### UPDATE: 2016-05-03
 I have been able to fix `gpg` and `git` signing in Linux Mint 17.3 using `udev` rules:
 
     sudo sh -c 'wget -q -O - https://raw.githubusercontent.com/Yubico/yubikey-neo-manager/master/resources/linux-fix-ccid-udev | python'
