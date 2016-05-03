@@ -84,7 +84,20 @@ Same with signing, but you need to explicitly add -S
 
         sudo git commit -a -S
 
-* In my case, only root can access the yubikey device.  Trying to fix with udev rules:  https://www.yubico.com/faq/enable-u2f-linux/
+
+UPDATE: 2016-05-03
+I have been able to fix `gpg` and `git` signing in Linux Mint 17.3 using `udev` rules:
+
+    sudo sh -c 'wget -q -O - https://raw.githubusercontent.com/Yubico/yubikey-neo-manager/master/resources/linux-fix-ccid-udev | python'
+
+Unfortunatly `gpg2` still reports an error unless `sudo` is used:
+
+    gpg2 --card-status
+    gpg: selecting openpgp failed: Unsupported certificate
+    gpg: OpenPGP card not available: Unsupported certificate
+
+Hope to figure out the issue soon.
+
 
 #### Web Of Trust
 
@@ -104,7 +117,7 @@ TODO: Confirm if my Public key must also be imported / re-exported.
     gpg -k --fingerprint --keyid-format long
 
 
-## Configuration
+## Configuration file
 
 * [Example config](../master/gpg.conf) file (`~/.gnupg/gpg.conf`): 
 
