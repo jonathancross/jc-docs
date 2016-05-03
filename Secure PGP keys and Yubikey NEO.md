@@ -82,13 +82,15 @@ Workaround: use sudo:
 
 Same with signing, but you need to explicitly add -S
 
-        sudo git commit -a -S
+    sudo git commit -a -S
 
 
 ##### UPDATE: 2016-05-03
 I have been able to fix `gpg` and `git` signing in Linux Mint 17.3 using `udev` rules:
 
     sudo sh -c 'wget -q -O - https://raw.githubusercontent.com/Yubico/yubikey-neo-manager/master/resources/linux-fix-ccid-udev | python'
+
+Can then use `git commit -a -S` (although I don't know why `-S` is needed when signing is configured globally)
 
 Unfortunatly `gpg2` still reports an error unless `sudo` is used:
 
