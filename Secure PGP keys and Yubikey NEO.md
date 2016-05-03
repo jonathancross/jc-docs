@@ -91,7 +91,7 @@ I have been able to fix `gpg` and `git` signing in Linux Mint 17.3 using `udev` 
 
     sudo sh -c 'wget -q -O - https://raw.githubusercontent.com/Yubico/yubikey-neo-manager/master/resources/linux-fix-ccid-udev | python'
 
-Can then use `git commit -a -S` (although I don't know why `-S` is needed when signing is configured globally)
+I can then use `git commit -a -S` (although I don't know why `-S` is needed when signing is configured globally)
 
 Unfortunatly `gpg2` still reports an error unless `sudo` is used:
 
