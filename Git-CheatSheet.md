@@ -7,10 +7,6 @@ Git Cheat Sheet
 # Usage: git-changes
 alias git-changes='git commit -a --verbose --dry-run'
 
-# Remove files from the index (opposite of git add):
-# Usage: git-remove <file.ext>
-alias git-remove='git reset HEAD'
-
 # Revert uncommitted changes in a file:
 # Usage: git-revert <file.ext>
 alias git-revert='git checkout'
@@ -26,7 +22,13 @@ alias git-reset-to-github='git fetch origin && git reset --hard origin/master &&
 # Squash multiple commits into one for readability
 # Usage: git-squash
 alias git-squash='git rebase -i origin/master'
+```
 
+### git aliases
+```bash
+# Opposit of git add, not to be confused with git rm
+git config --global alias.unadd 'reset HEAD --'
+git config --global alias.unstage 'reset HEAD --'
 ```
 
 ### git commands
