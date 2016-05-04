@@ -47,7 +47,7 @@ git config --global user.signingkey [YOUR KEY HERE]
 git config --global commit.gpgsign true  # Only works in git >= 2
 ```
 
-You should also add your public key to GitHub so that it can display verification info to users.
+You should also [add your OpenPGP public key to GitHub](https://github.com/settings/keys) so that verification info is displayed to users.
 
 NOTE: Both `git` and GitHub will show that code was signed with your signing **subkey** (rather than primary key).  This may be confusing for users because normally the primary key is used / publicly shared by devs and subkeys are selected quietly in the background as needed.  See [example here](https://github.com/jonathancross/j-renamer/commit/e93093aa5d87a33b0758b1614c31d70aae7999ed) and click on the green "Verified" button.
 
