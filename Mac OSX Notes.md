@@ -3,7 +3,7 @@ Mac OSX Notes
 
 ### Prevent Photos app from opening when SD card is inserted
     defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool YES
-    
+
 ### Mac version of `shred` - secure deletion tool
     alias shred=/usr/bin/srm
 
@@ -33,3 +33,6 @@ Allows you to limit the amount of CPU time a process can use.
     }
 
 Usage: `cpulimit <PID> <WAIT_TIME> <RUN_TIME>`  (only the PID is required)
+
+### Combine multiple files into a single PDF
+* https://forums.adobe.com/message/6788486#6788486
