@@ -37,7 +37,27 @@ git add --update # stages only the files which are already tracked and not new
 git commit --amend     # Change previous commit message and / or add staged files.
 git show --name-status # Show diff of previous commit
 git log --stat # Show latest changes committed
+git checkout [BRANCH NAME] # To switch to a particular branch
 git remote set-url origin git@github.com:jonathancross/pics.jonathancross.com.git # Allow git push via ssh without password
+```
+
+### edit a commit message created on a branch after pull request initiated
+```bash
+# Assuming remote is jonathancross/Signal-Android.git and changes are on branch patch-1
+git clone git@github.com:jonathancross/Signal-Android.git
+cd Signal-Android
+git checkout patch-1 # NOT git branch patch-1 with will CREATE patch-1!!!!!!!!!
+git branch # Check that you are now on patch-1
+git log --stat -1 # Look for your commit
+# git pull  # DOES NOTHING SO COMMENTING OUT
+git commit --amend
+## Should be able to force push here, but not sure...
+git push -f
+# If not, then:
+git pull
+# Then we have the stupid merge commit
+git rebase -i master ### Why master!? Doesn't work with patch-1
+git push -f
 ```
 
 ### Configure git to sign all commits with my PGP key
