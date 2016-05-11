@@ -53,9 +53,9 @@ git log --stat -1 # Look for your commit
 git commit --amend
 ## Should be able to force push here, but not sure...
 git push -f
+# If not then try git merge --squash
 # If not, then:
-git pull
-# Then we have the stupid merge commit
+git pull # Makes a stupid merge commit
 git rebase -i master ### Why master!? Doesn't work with patch-1
 git push -f
 ```
