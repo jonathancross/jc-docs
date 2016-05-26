@@ -60,6 +60,27 @@ git rebase -i master ### Why master!? Doesn't work with patch-1
 git push -f
 ```
 
+
+### To squash the last 3 commits (note the `~3`) into one after they were pushed:
+```bash
+git rebase -i HEAD~3
+```
+
+Then edit message like so:
+```
+pick  3074590 The message we want to keep.
+fixup 917fdb0 Comment to discard 1
+fixup b04757a Comment to discard 2
+```
+
+You might have to do some of this:
+```bash
+git add <file>         # Not clear why an existing file needs to be "added", but this is the way to mark resolution of conflicts.
+git rebase --continue  # Continua partial rebase if needed
+git commit --amend     # Fix the commit message
+git push -f            # Force push the amended commit & message
+```
+
 ### Configure git to sign all commits with my PGP key
 ```bash
 git config --global user.email [EMAIL ADDRESS OF YOUR PGP IDENTITY]
