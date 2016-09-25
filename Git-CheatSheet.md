@@ -38,6 +38,7 @@ git commit --amend     # Change previous commit message and / or add staged file
 git show --name-status # Show diff of previous commit
 git log --stat # Show latest changes committed
 git checkout [BRANCH NAME] # To switch to a particular branch
+git checkout -b [BRANCH NAME] # To CREATE a new branch
 git remote set-url origin git@github.com:jonathancross/pics.jonathancross.com.git # Allow git push via ssh without password
 ```
 
@@ -46,7 +47,7 @@ git remote set-url origin git@github.com:jonathancross/pics.jonathancross.com.gi
 # Assuming remote is jonathancross/Signal-Android.git and changes are on branch patch-1
 git clone git@github.com:jonathancross/Signal-Android.git
 cd Signal-Android
-git checkout patch-1 # NOT git branch patch-1 with will CREATE patch-1!!!!!!!!!
+git checkout patch-1 # NOT `git branch patch-1` which will CREATE patch-1!!!!!!!!!
 git branch # Check that you are now on patch-1
 git log --stat -1 # Look for your commit
 # git pull  # DOES NOTHING SO COMMENTING OUT
@@ -76,10 +77,14 @@ fixup b04757a Comment to discard 2
 You might have to do some of this:
 ```bash
 git add <file>         # Not clear why an existing file needs to be "added", but this is the way to mark resolution of conflicts.
-git rebase --continue  # Continua partial rebase if needed
+git rebase --continue  # Continue a partial rebase if needed
 git commit --amend     # Fix the commit message
 git push -f            # Force push the amended commit & message
 ```
+
+### Delete last commit after it was pushed:
+
+* http://ncona.com/2011/07/how-to-delete-a-commit-in-git-local-and-remote/
 
 ### Configure git to sign all commits with my PGP key
 ```bash
