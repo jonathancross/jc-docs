@@ -1,0 +1,21 @@
+Preformatted code inside a list
+
+This doesn't work:
+
+# one
+#:<pre>
+#::some stuff
+#::some more stuff</pre>
+# two
+
+--------------------------
+
+Need to use html:
+
+<ol>
+<li>one</li>
+<li>two</li>
+<pre>some stuff
+some more stuff</pre>
+<li>three</li>
+</ol>
