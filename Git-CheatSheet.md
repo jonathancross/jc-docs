@@ -109,11 +109,12 @@ git log --pretty="format:%h %G? %aN  %s"  # Log of last commits. The "G" means g
 
 #### Submitting multiple pull requests to same upstream repo
 In many situations, I'd like to be able to submit a series of unrelated pull requests to a repo.
-Unfortunatly, even if I use seperate branches for these, commits form each PR will show up in all later PRs on GitHub.
+Unfortunately, if the first PR was from `master` branch (the default), those changes will show up in all later PRs on GitHub, even if I put them in branches.
 
 I have tried the following:
 
-* `git cherry-pick` - even if I only cherry-pick the single commit I want, the others still apear in the GitHub pull request.
-* Submit a PR from commandline directly to the repo rather than using my fork.  Unfortunatly this doesn;t seem possible currently.
+* `git cherry-pick` - even if I only cherry-pick the single commit I want, the others still appear in the GitHub pull request.
+* Submit a PR from commandline directly to the repo rather than using my fork.  Unfortunately this doesn't seem possible currently.
 * Delete my forked repo after each PR is sent: **THIS WORKS**, however I am screwed if I need to make any changes to the PR.
 
+**Bottom line:** Always start with a new branch!
