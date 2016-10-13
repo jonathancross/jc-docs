@@ -106,3 +106,14 @@ git log --pretty="format:%h %G? %aN  %s"  # Log of last commits. The "G" means g
 ### GitHub specific info
 * To merge a branch back into master, use a pull request.  Will go from right (compare or "head" branch, what you did) to left ("base" where it should go)!
 * To merge changes made in original to the fork, click on the green arrows, change the base, then create pull request, then merge the pull request.
+
+#### Submitting multiple pull requests to same upstream repo
+In many situations, I'd like to be able to submit a series of unrelated pull requests to a repo.
+Unfortunatly, even if I use seperate branches for these, commits form each PR will show up in all later PRs on GitHub.
+
+I have tried the following:
+
+* `git cherry-pick` - even if I only cherry-pick the single commit I want, the others still apear in the GitHub pull request.
+* Submit a PR from commandline directly to the repo rather than using my fork.  Unfortunatly this doesn;t seem possible currently.
+* Delete my forked repo after each PR is sent: **THIS WORKS**, however I am screwed if I need to make any changes to the PR.
+
