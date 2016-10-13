@@ -120,6 +120,6 @@ git checkout new-branch
 
 #### Submitting multiple pull requests to same upstream repo
 In many situations, I'd like to be able to submit a series of unrelated pull requests to a repo.
-Unfortunately, if the first PR was from `master` branch (the default), future branches you create will include those changes unless you tell the branch to point to an earlier commit (see **Making a new branch after having already added changes in master** above).
+Unfortunately, if the first PR was from `master` branch (the default), future branches you create will include those changes unless you tell the branch to point to an earlier commit (see [Making a new branch after having already added changes in master](#making-a-new-branch-after-having-already-added-changes-in-master) above).
 
 **Bottom line:** Always start with a new branch!
