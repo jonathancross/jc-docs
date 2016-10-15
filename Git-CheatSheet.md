@@ -28,7 +28,7 @@ alias git-squash='git rebase --interactive'
 # Push up from a new (current) branch without having to remember:
 # git push --set-upstream origin <branchname>
 # Usage: git-push-branch
-alias git-push-branch="git push --set-upstream origin $(git branch | awk '/^\* / { print $2 }') >> /dev/null
+alias git-push-branch='git push --set-upstream origin $(git branch | awk "/^\* / { print $2 }") >> /dev/null'
 
 ```
 
