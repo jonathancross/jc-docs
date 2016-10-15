@@ -64,6 +64,13 @@ git log --pretty="format:%h %G? %aN  %s"  # Log of last commits. The "G" means g
 Troublshooting and cookbook
 ==============================
 
+### Move last commmit from current branch to a new one
+```bash
+git branch newbranch
+git reset --hard HEAD~1 # Go back 1 commit. You *will* lose uncommitted work.
+git checkout newbranch
+```
+
 ### Edit a commit message created on a branch after pull request initiated
 ```bash
 # Assuming remote is jonathancross/Signal-Android.git and changes are on branch patch-1
