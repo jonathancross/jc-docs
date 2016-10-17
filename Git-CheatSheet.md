@@ -28,7 +28,7 @@ alias git-squash='git rebase --interactive'
 # Push up from a new (current) branch without having to remember:
 # git push --set-upstream origin <branchname>
 # Usage: git-push-branch
-alias git-push-branch='git push --set-upstream origin $(git branch | awk "/^\* / { print $2 }") >> /dev/null'
+alias git-push-branch="git push --set-upstream origin $(git branch | awk '/^\* / { print $2 }') > /dev/null"
 
 ```
 
@@ -39,15 +39,14 @@ git config --global alias.unadd 'reset HEAD --'
 git config --global alias.unstage 'reset HEAD --'
 ```
 
-### git commands
+### git global config
 ```bash
-git add --update # stages only the files which are already tracked and not new
-git commit --amend     # Change previous commit message and / or add staged files.
-git show --name-status # Show diff of previous commit
-git log --stat # Show latest changes committed
-git checkout [BRANCH NAME] # To switch to a particular branch
-git checkout -b [BRANCH NAME] # To CREATE a new branch
-git remote set-url origin git@github.com:jonathancross/pics.jonathancross.com.git # Allow git push via ssh without password
+# Config git rebase -i to always autosquash.
+# If you use `git commit --fixup [hash]`, then `git rebase -i HEAD~2` you will see that it marks the fixup items
+# So you just need to hit save from the editor.
+# BTW: Why do I still need to go though this stupid interactive session when using "autosquash"!?
+#      Seems like git makes the easy complicated in its attempt to make the complicated easy.
+git config --global rebase.autosquash true
 ```
 
 ### Configure git to sign all commits with my PGP key
@@ -67,8 +66,19 @@ git log --show-signature -1               # Details of last commit sig.
 git log --pretty="format:%h %G? %aN  %s"  # Log of last commits. The "G" means good signature, "N" means no sig.
 ```
 
-Troublshooting and cookbook
+Troublshooting, cookbook and examples
 ==============================
+
+### Useful command reference
+```bash
+git add --update # stages only the files which are already tracked and not new
+git commit --amend     # Change previous commit message and / or add staged files.
+git show --name-status # Show diff of previous commit
+git log --stat # Show latest changes committed
+git checkout [BRANCH NAME] # To switch to a particular branch
+git checkout -b [BRANCH NAME] # To CREATE a new branch
+git remote set-url origin git@github.com:jonathancross/pics.jonathancross.com.git # Allow git push via ssh without password
+```
 
 ### Move last commmit from current branch to a new one
 ```bash
