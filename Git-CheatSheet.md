@@ -47,6 +47,9 @@ git config --global alias.unstage 'reset HEAD --'
 # BTW: Why do I still need to go though this stupid interactive session when using "autosquash"!?
 #      Seems like git makes the easy complicated in its attempt to make the complicated easy.
 git config --global rebase.autosquash true
+
+# When pushing, alyways use the current branch.   Duh!
+git config --global push.default current
 ```
 
 ### Configure git to sign all commits with my PGP key
@@ -78,6 +81,7 @@ git log --stat # Show latest changes committed
 git checkout [BRANCH NAME] # To switch to a particular branch
 git checkout -b [BRANCH NAME] # To CREATE a new branch
 git remote set-url origin git@github.com:jonathancross/pics.jonathancross.com.git # Allow git push via ssh without password
+git remote -v  # Show the remotes that are configured: https://help.github.com/articles/fork-a-repo/
 ```
 
 ### Move last commmit from current branch to a new one
