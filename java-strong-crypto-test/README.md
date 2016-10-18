@@ -1,24 +1,26 @@
-# Simple test to see if you have strong crypto support for Java enabled.
+# Test if you have strong crypto support for Java enabled
 
-### JDK 8 ships with insecure cyphers
-Due to absurd legacy [restrictions on export of cryptography](https://en.wikipedia.org/wiki/Export_of_cryptography_from_the_United_States), the Oracle JDK does not support secure cryptography cyphers by default.
+### OpenJDK not affected
+OpenJDK (not to be confuesed with **Oracle JDK**) supports modern cyphers, so use this if possible and avoid the issue entirly.
 
-Instead, users of JDK 8 must install 2 jars like so:
+### Oracle JDK 8 ships with insecure cyphers
+Due to absurd legacy [restrictions on export of cryptography](https://en.wikipedia.org/wiki/Export_of_cryptography_from_the_United_States), the Oracle JDK does not support modern, secure cryptographic cyphers by default.  To make matters worse, Oracle does not support secure download over TLS or supply a checksum, so there is **no way to verify** if the files you download are genuine or fake due to [MITM attack](https://en.wikipedia.org/wiki/Man-in-the-middle_attack).
+
+Users of JDK 8 must install 2 jar files like so:
 
     $ wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jce/8/jce_policy-8.zip
 
     # Verify the hash of jce_policy-8.zip == f3020a3922efd6626c2fff45695d527f34a8020e938a49292561f18ad1320b59
+    # How do we know this is the real checksum?  We don't but a google search suggests this is the most likely checksum acording to several project maintainers.
     $ sha256sum jce_policy-8.zip
     # If the hash matches, then continue, otherwise STOP and figure out why your file is different.
 
     $ unzip jce_policy-8.zip
-    $ sudo cp UnlimitedJCEPolicyJDK8/US_export_policy.jar $JAVA_HOME/jre/lib/security/
-    $ sudo cp UnlimitedJCEPolicyJDK8/local_policy.jar $JAVA_HOME/jre/lib/security/
-    $ sudo chmod 777 $JAVA_HOME/jre/lib/security/US_export_policy.jar
-    $ sudo chmod 777 $JAVA_HOME/jre/lib/security/local_policy.jar
+    $ sudo cp UnlimitedJCEPolicyJDK8/{US_export_policy.jar,local_policy.jar} $JAVA_HOME/jre/lib/security/
+    $ sudo chmod 664 $JAVA_HOME/jre/lib/security/{US_export_policy.jar,local_policy.jar}
     $ sudo rm -rf UnlimitedJCEPolicyJDK8 jce_policy-8.zip
 
-### JDK 9 Will [aparently support strong cyphers](http://stackoverflow.com/a/39872144/1117929), but they must be explicitly enabled.
+### Oracle JDK 9 will [aparently support strong cyphers](http://stackoverflow.com/a/39872144/1117929), but they must be explicitly enabled
 
 You can enable modern cyphers using:
 
@@ -26,12 +28,12 @@ You can enable modern cyphers using:
     ...
     Security.setProperty("crypto.policy", "unlimited");
 
-### Testing if strong cyphers are supported on your system
+### Testing if strong cyphers are available on your system
 I created this small class to test for strong crypto:
 
 * [CryptoTest.java](CryptoTest.java)
 
-You can download and test liks so:
+You can download the java code or class and test liks so:
 
     javac CryptoTest.java
     java -cp . CryptoTest
