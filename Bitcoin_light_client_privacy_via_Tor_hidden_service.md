@@ -50,32 +50,32 @@ Essentially we resolve the most significant issues inherent in a mobile wallet c
 # Setup & Configuration
 
 ## Trusted peer
-This setup will require a [Bitcoin Core full node](https://bitcoin.org/en/full-node) which you trust, ie a secure desktop computer (ideally running Linux) and available 24/7.  Can also be a close friend you trust not to spy on your transactions or make stupid configuration errors.  Although it is possible to host the full node on a remote server (ie Digital Ocean), realize this will probably undermine the trustlessness we are trying to achieve here, so it is not recomended.  You will also run a Tor proxy on the system allowing your mobile to connect securly to the server.
+This setup will require a [Bitcoin Core full node](https://bitcoin.org/en/full-node) which you trust, ie a secure desktop computer (ideally running Linux) and available 24/7.  Can also be a close friend you trust not to spy on your transactions or make stupid configuration errors.  Although it is possible to host the full node on a remote server (ie Digital Ocean), realize this will probably undermine the trustlessness we are trying to achieve here, so it is not recommended.  You will also run a Tor proxy on the system allowing your mobile to connect securely to the server.
 
 1. Install and [configure Tor](https://www.torproject.org/docs/installguide.html.en) and ensure it is properly routing traffic over the Tor network.
 2. [Install Bitcoin Core](https://bitcoin.org/en/download).  The wallet can be disabled, you only need `bitcoind`.
 3. [Configure Bitcoin Core to run as a Tor hidden service](https://github.com/bitcoin/bitcoin/blob/master/doc/tor.md).
-4. Use the Tor hidden service as the "Trusted peer" as shown in the Android Bitcoin Wallet screenshots below.
+4. Use the Tor hidden service as the "Trusted peer" as shown in the Android Bitcoin Wallet screen shots below.
 
 Once you have it all setup, you can [check your Tor hidden service is recognized on the bitcoin network](https://bitnodes.21.co/nodes/) and then configure your mobile to use the `.onion` address as shown below.
 
 ## Android
 You will need to install [Orbot](https://play.google.com/store/apps/details?id=org.torproject.android) (Tor Client for Android) and [Bitcoin Wallet for Android](https://play.google.com/store/apps/details?id=de.schildbach.wallet).
 
-#### Bitcoin Wallet Trusted peer
+#### Setup Bitcoin Wallet Trusted peer
 
 ![bitcoin-wallet-settings](Bitcoin_light_client_privacy_via_Tor_hidden_service/1.bitcoin-wallet-settings.png)
 ![bitcoin-wallet-trusted-peer](Bitcoin_light_client_privacy_via_Tor_hidden_service/2.bitcoin-wallet-trusted-peer.png)
 
 Once the **Trusted peer** is configured with your `.onion` hidden service, you will see only a single node connected on a private IP address (`10.xx.xx.xx`).
 
-#### Orbot
+#### Setup Orbot
 
 ![orbot-vpn-enabled](Bitcoin_light_client_privacy_via_Tor_hidden_service/3.orbot-vpn-enabled.png)
 ![orbot-settings](Bitcoin_light_client_privacy_via_Tor_hidden_service/4.orbot-settings.png)
 ![orbot-settings-apps-vpn](Bitcoin_light_client_privacy_via_Tor_hidden_service/5.orbot-settings-apps-vpn.png)
 
-Use Orbot's "Apps VPN Mode" in order to allow the wallet to connect to your Tor hidden service.
+Use Orbot's **Apps VPN Mode"" in order to allow the wallet to connect to your Tor hidden service.
 
 # Final thoughts and alternatives
 
@@ -86,4 +86,4 @@ Here are a couple other suggestions:
 1. [Electrum](https://play.google.com/store/apps/details?id=org.electrum.electrum) for Android with your own Electrum server.
 2. Use a standard VPN or SSH tunnel to route traffic over secure connection from your mobile device to your own server.
 
-Both options should used with Tor in order to prevent your mobile IP address from being linked to your transactions.
+Both options should be used with Tor in order to prevent your mobile IP address from being linked to your transactions.
