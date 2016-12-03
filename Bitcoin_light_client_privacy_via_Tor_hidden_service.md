@@ -57,6 +57,8 @@ This setup will require a [Bitcoin Core full node](https://bitcoin.org/en/full-n
 3. [Configure Bitcoin Core to run as a Tor hidden service](https://github.com/bitcoin/bitcoin/blob/master/doc/tor.md).
 4. Use the Tor hidden service as the "Trusted peer" as shown in the Android Bitcoin Wallet screenshots below.
 
+Once you have it all setup, you can [check your Tor hidden service is recognized on the bitcoin network](https://bitnodes.21.co/nodes/) and then configure your mobile to use the `.onion` address as shown below.
+
 ## Android
 You will need to install [Orbot](https://play.google.com/store/apps/details?id=org.torproject.android) (Tor Client for Android) and [Bitcoin Wallet for Android](https://play.google.com/store/apps/details?id=de.schildbach.wallet).
 
@@ -65,13 +67,15 @@ You will need to install [Orbot](https://play.google.com/store/apps/details?id=o
 ![bitcoin-wallet-settings](Bitcoin_light_client_privacy_via_Tor_hidden_service/1.bitcoin-wallet-settings.png)
 ![bitcoin-wallet-trusted-peer](Bitcoin_light_client_privacy_via_Tor_hidden_service/2.bitcoin-wallet-trusted-peer.png)
 
+Once the **Trusted node** is configured with your `.onion` hidden service, you will see only a single node connected on a private IP address (`10.xx.xx.xx`).
+
 #### Orbot
 
 ![orbot-vpn-enabled](Bitcoin_light_client_privacy_via_Tor_hidden_service/3.orbot-vpn-enabled.png)
 ![orbot-settings](Bitcoin_light_client_privacy_via_Tor_hidden_service/4.orbot-settings.png)
 ![orbot-settings-apps-vpn](Bitcoin_light_client_privacy_via_Tor_hidden_service/5.orbot-settings-apps-vpn.png)
 
-Once configured, you will see only a single node connected on a private IP address (10.xx.xx.xx).
+Use Orbot's "Apps VPN Mode" in order to allow the wallet to connect to your Tor hidden service.
 
 # Final thoughts and alternatives
 
@@ -82,4 +86,4 @@ Here are a couple other suggestions:
 1. [Electrum](https://play.google.com/store/apps/details?id=org.electrum.electrum) for Android with your own Electrum server.
 2. Use a standard VPN or SSH tunnel to route traffic over secure connection from your mobile device to your own server.
 
-Both options should used with Tor in order to prevent your mobile IP address from beine linked to transactions.
+Both options should used with Tor in order to prevent your mobile IP address from being linked to your transactions.
