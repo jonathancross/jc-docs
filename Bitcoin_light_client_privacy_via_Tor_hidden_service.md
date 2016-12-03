@@ -16,16 +16,17 @@ Contents:
 Privacy in the context of Bitcoin is a complex, multifaceted issue.  Here we will be focusing on addressing [privacy issues related to Bloom filters](https://eprint.iacr.org/2014/763.pdf), passive surveillance of transactions and capturing of IP addresses that broadcast a transaction.  Basically everything that happens before transactions are collected by miners and written to the blockchain.  There are many other privacy issues in the context of blockchain analysis, but those can be addressed in other ways and are out of scope for this document.
 
 
-#### Issues with SPV clients and Bloom filters:
+Issues with SPV clients and Bloom filters:
+
 1. The Bitcoin Wallet for Android, relies on [Bloom filters](https://github.com/bitcoin/bips/blob/master/bip-0037.mediawiki) to protect user privacy.  However it has been demonstrated that they are ineffective at doing so and connected peers can easily find out which addresses are owned by the user.
 2. When a transaction is broadcast, passive observers can often pinpoint the IP address that broadcast the transaction, then use this for geolocation, address clustering, etc.  This is unrelated to Bloom filters.
 
 #### Security:
-Without access to the full blockchain, payments can potentially be blocked and peers can lie about (withhold) transactions received by a mobile client.
+Without access to the full blockchain, payments can potentially be blocked and peers can hypothetically lie about (withhold) transactions.
 
 
 ### Trusted peer:
-The original Bitcoin Wallet for Android introduced a so called **Trusted peer** option allowing the wallet to communicate directly with a full node under user control. This theoretically offers the benefits of a full node on light clients assuming your connection to the node is secure.
+The original Bitcoin Wallet for Android introduced a so called **Trusted peer** option allowing the wallet to communicate directly with a full node which the user presumably controls. This theoretically offers the benefits of a full node on a light client (assuming your connection to the node is secure).
 
 In order to prevent a [Man In The Middle attack](https://en.wikipedia.org/wiki/Man-in-the-middle_attack), the connection to the "Trusted peer" must be secure - ie both authenticated and encrypted.  It is left to the user to figure out this crucial piece.
 
