@@ -1,5 +1,5 @@
-[draft] Bitcoin mobile wallet privacy and security
-==================================================
+[draft] Bitcoin mobile privacy via Trusted peer connection over Tor
+===================================================================
 
 Bitcoin mobile clients generally offer significantly reduced security and privacy in comparison to a full node. For many users, this is an unfortunate, but necessary compromise required for usability. Wallets have attempted to address the issues in several ways, but all have significant downsides. Here I will present a practical solution providing enhanced privacy and security to Bitcoin users on mobile devices. Specifically, I describe a solution using the [Bitcoin Wallet for Android](https://play.google.com/store/apps/details?id=de.schildbach.wallet) and its "Trusted peer" option with a Tor hidden service to avoid a known set of issues.
 
@@ -88,3 +88,7 @@ Here are a couple other suggestions:
 2. Use a standard VPN or SSH tunnel to route traffic over secure connection from your mobile device to your own server.
 
 Both options should be used with Tor in order to prevent your mobile IP address from being linked to your transactions.
+
+### Disclaimer
+
+This document has not been reviewed for accuracy and comes with no guarantees -- **Feedback is welcome!**
