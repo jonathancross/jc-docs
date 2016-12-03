@@ -43,7 +43,7 @@ Benefits:
 
 4. The Tor network hides the user’s IP address.  This frustrates attempts to **geolocate transactions** and **clustering Bitcoin addresses** per IP address.
 
-5. If you own the trusted node, then you know a **third party is not monitoring transactions** before they are broadcast on the Bitcoin network.
+5. If you own the trusted peer, then you know a **third party is not monitoring transactions** before they are broadcast on the Bitcoin network.
 
 Essentially we resolve the most significant issues inherent in a mobile wallet client using existing software.
 
@@ -67,7 +67,7 @@ You will need to install [Orbot](https://play.google.com/store/apps/details?id=o
 ![bitcoin-wallet-settings](Bitcoin_light_client_privacy_via_Tor_hidden_service/1.bitcoin-wallet-settings.png)
 ![bitcoin-wallet-trusted-peer](Bitcoin_light_client_privacy_via_Tor_hidden_service/2.bitcoin-wallet-trusted-peer.png)
 
-Once the **Trusted node** is configured with your `.onion` hidden service, you will see only a single node connected on a private IP address (`10.xx.xx.xx`).
+Once the **Trusted peer** is configured with your `.onion` hidden service, you will see only a single node connected on a private IP address (`10.xx.xx.xx`).
 
 #### Orbot
 
