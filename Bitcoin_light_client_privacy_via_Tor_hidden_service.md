@@ -41,6 +41,14 @@ Benefits:
 
 # Setup & Configuration
 
+## Trusted peer
+This setup will require a [Bitcoin Core full node](https://bitcoin.org/en/full-node) which you trust, ie a secure desktop computer (ideally running Linux) and available 24/7.  Can also be a close friend you trust not to spy on your transactions or make stupid configuration errors.  You can use a remote server (ie Digital Ocean, etc) but realize this undermines much of the trustlessness we are trying to achieve here.
+
+1. Install and [configure Tor](https://www.torproject.org/docs/installguide.html.en) and ensure it is accepting incomming connections.
+2. Setup Bitcoin Core and confirm it is working correctly.  You do not need the wallet, just bitcoind.
+3. [Configure Bitcoin Core to run as a Tor hidden service](https://github.com/bitcoin/bitcoin/blob/master/doc/tor.md).
+4. Use the Tor hidden service as the "Trusted peer" as shown in the Android Bitcoin Wallet screenshots below.
+
 ## Android
 You will need to install [Orbot](https://play.google.com/store/apps/details?id=org.torproject.android) (Tor Client for Android) and [Bitcoin Wallet for Android](https://play.google.com/store/apps/details?id=de.schildbach.wallet).
 
@@ -54,7 +62,3 @@ You will need to install [Orbot](https://play.google.com/store/apps/details?id=o
 ![orbot-vpn-enabled](Bitcoin_light_client_privacy_via_Tor_hidden_service/3.orbot-vpn-enabled.png)
 ![orbot-settings](Bitcoin_light_client_privacy_via_Tor_hidden_service/4.orbot-settings.png)
 ![orbot-settings-apps-vpn](Bitcoin_light_client_privacy_via_Tor_hidden_service/5.orbot-settings-apps-vpn.png)
-
-## Trusted node
-
-[TODO: Setup full node as Tor hidden service]
