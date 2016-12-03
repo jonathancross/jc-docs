@@ -1,28 +1,33 @@
-[draft] Bitcoin light client privacy via trusted peer as Tor hidden service
-===========================================================================
+[draft] Bitcoin mobile wallet privacy and security
+==================================================
 
-Bitcoin light clients generally offer significantly reduced security and privacy in comparison to a full node. For many users, this is an unfortunate, but necessary compromise required when using Bitcoin on a mobile device. Wallets have attempted to address the issues in several ways, but all have significant downsides. Here I will present a practical solution providing enhanced privacy to Bitcoin users on mobile devices.
+Bitcoin mobile clients generally offer significantly reduced security and privacy in comparison to a full node. For many users, this is an unfortunate, but necessary compromise required for usability. Wallets have attempted to address the issues in several ways, but all have significant downsides. Here I will present a practical solution providing enhanced privacy and security to Bitcoin users on mobile devices. Specifically, I describe a solution using the [Bitcoin Wallet for Android](https://play.google.com/store/apps/details?id=de.schildbach.wallet) and its "Trusted peer" option with a Tor hidden service to avoid a known set of issues.
+
+Contents:
+* [Background](#background)
+* [Setup & Configuration](#setup--configuration)
+* [Final thoughts and alternatives](#final-thoughts-and-alternatives)
+
+
+
+## Background
 
 #### Privacy:
-Privacy in the context of Bitcoin is a complex, multifaceted issue.  Here we will be focusing on addressing privacy issues related to bloom filters used in SPV wallets and geographic location of transaction broadcast.  Basically everything that happens before transactions are written to the blockchain.  There are many other issues in the context of blockchain analysis, but those can be addresses in other ways and are out of scope for this document.
+Privacy in the context of Bitcoin is a complex, multifaceted issue.  Here we will be focusing on addressing [privacy issues related to Bloom filters](https://eprint.iacr.org/2014/763.pdf), passive surveillance of transactions and capturing of IP addresses that broadcast a transaction.  Basically everything that happens before transactions are collected by miners and written to the blockchain.  There are many other privacy issues in the context of blockchain analysis, but those can be addressed in other ways and are out of scope for this document.
 
 
-#### Issues:
-1. Bloom filters leak all addresses to connected SPV peers.
-2. If the user connects to a third party server (as in Electrum, Mycelium, etc), all transactions can be monitored.
-3. When a transaction is broadcast, passive observers can often pinpoint the IP address that broadcast the transaction, then use this for geolocation, address clustering, etc.
-
+#### Issues with SPV clients and Bloom filters:
+1. The Bitcoin Wallet for Android, relies on [Bloom filters](https://github.com/bitcoin/bips/blob/master/bip-0037.mediawiki) to protect user privacy.  However it has been demonstrated that they are ineffective at doing so and connected peers can easily find out which addresses are owned by the user.
+2. When a transaction is broadcast, passive observers can often pinpoint the IP address that broadcast the transaction, then use this for geolocation, address clustering, etc.  This is unrelated to Bloom filters.
 
 #### Security:
-Without access to the full blockchain, payments can potentially be blocked and peers can lie about transactions received.
+Without access to the full blockchain, payments can potentially be blocked and peers can lie about (withhold) transactions received by a mobile client.
 
 
-## Trusted peer:
-Some wallets such as the original [Bitcoin Wallet for Android](https://play.google.com/store/apps/details?id=de.schildbach.wallet) have introduced a so called **"Trusted peer"** option to allow a light client to connect directly to a full node the user controls. A "Trusted peer" theoretically offers the benefits of a full node on light clients assuming your connection to the node is secure.
+### Trusted peer:
+The original Bitcoin Wallet for Android introduced a so called **Trusted peer** option allowing the wallet to communicate directly with a full node under user control. This theoretically offers the benefits of a full node on light clients assuming your connection to the node is secure.
 
-
-#### Protecting against a MITM attack:
-In order to prevent a [Man In The Middle attack](https://en.wikipedia.org/wiki/Man-in-the-middle_attack), the connection to the "Trusted peer" must be both authenticated and encrypted.
+In order to prevent a [Man In The Middle attack](https://en.wikipedia.org/wiki/Man-in-the-middle_attack), the connection to the "Trusted peer" must be secure - ie both authenticated and encrypted.  It is left to the user to figure out this crucial piece.
 
 
 ## Proposed solution:
@@ -38,14 +43,17 @@ Benefits:
 
 4. The Tor network hides the user’s IP address.  This frustrates attempts to **geolocate transactions** and **clustering Bitcoin addresses** per IP address.
 
+5. If you own the trusted node, then you know a **third party is not monitoring transactions** before they are broadcast on the Bitcoin network.
+
+Essentially we resolve the most significant issues inherent in a mobile wallet client using existing software.
 
 # Setup & Configuration
 
 ## Trusted peer
-This setup will require a [Bitcoin Core full node](https://bitcoin.org/en/full-node) which you trust, ie a secure desktop computer (ideally running Linux) and available 24/7.  Can also be a close friend you trust not to spy on your transactions or make stupid configuration errors.  You can use a remote server (ie Digital Ocean, etc) but realize this undermines much of the trustlessness we are trying to achieve here.
+This setup will require a [Bitcoin Core full node](https://bitcoin.org/en/full-node) which you trust, ie a secure desktop computer (ideally running Linux) and available 24/7.  Can also be a close friend you trust not to spy on your transactions or make stupid configuration errors.  Although it is possible to host the full node on a remote server (ie Digital Ocean), realize this will probably undermine the trustlessness we are trying to achieve here, so it is not recomended.  You will also run a Tor proxy on the system allowing your mobile to connect securly to the server.
 
-1. Install and [configure Tor](https://www.torproject.org/docs/installguide.html.en) and ensure it is accepting incomming connections.
-2. Setup Bitcoin Core and confirm it is working correctly.  You do not need the wallet, just bitcoind.
+1. Install and [configure Tor](https://www.torproject.org/docs/installguide.html.en) and ensure it is properly routing traffic over the Tor network.
+2. [Install Bitcoin Core](https://bitcoin.org/en/download).  The wallet can be disabled, you only need `bitcoind`.
 3. [Configure Bitcoin Core to run as a Tor hidden service](https://github.com/bitcoin/bitcoin/blob/master/doc/tor.md).
 4. Use the Tor hidden service as the "Trusted peer" as shown in the Android Bitcoin Wallet screenshots below.
 
@@ -62,3 +70,16 @@ You will need to install [Orbot](https://play.google.com/store/apps/details?id=o
 ![orbot-vpn-enabled](Bitcoin_light_client_privacy_via_Tor_hidden_service/3.orbot-vpn-enabled.png)
 ![orbot-settings](Bitcoin_light_client_privacy_via_Tor_hidden_service/4.orbot-settings.png)
 ![orbot-settings-apps-vpn](Bitcoin_light_client_privacy_via_Tor_hidden_service/5.orbot-settings-apps-vpn.png)
+
+Once configured, you will see only a single node connected on a private IP address (10.xx.xx.xx).
+
+# Final thoughts and alternatives
+
+This is by no means the only way to safely run a Bitcoin light client.
+
+Here are a couple other suggestions:
+
+1. [Electrum](https://play.google.com/store/apps/details?id=org.electrum.electrum) for Android with your own Electrum server.
+2. Use a standard VPN or SSH tunnel to route traffic over secure connection from your mobile device to your own server.
+
+Both options should used with Tor in order to prevent your mobile IP address from beine linked to transactions.
