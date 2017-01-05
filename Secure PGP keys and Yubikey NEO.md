@@ -6,8 +6,9 @@ Secure PGP keys and YubiKey NEO
 Below is a collection of notes and info that helped me navigate through a jungle of new concepts, jargon, bad UI decisions, broken software, bugs and other obstacles to reach the above goal. – [Jonathan](https://jonathancross.com)
 
 ## About the YubiKey NEO
-This is an elegant device that has many functions including the ability to store OpenPGP keys and use them to sign, encrypt and / or authenticate.  The keys cannot be extracted from the device.  The OpenPGP java apps that do the signing are Open Source.  **NOTE:** Yubico has released the "upgraded" **YubiKey 4** -- [which is not open source](https://github.com/Yubico/ykneo-openpgp/issues/2#issuecomment-218436213) and is phasing out the NEO-n which I use.  The maximum key size for the YubiKey NEO is 2048 bits, which is fine for disposable subkeys created today.  You can of course create a 4096 bit master key which stays offline.
+<img align="right" src="images/yubikey-neo-n.jpg" alt="yubikey neo-n"> This is an elegant device with many functions including the ability to store OpenPGP keys and use them to sign, encrypt and / or authenticate.  The keys cannot be extracted from the device.  The OpenPGP java apps that do the signing are Open Source.  **NOTE:** Yubico has released the "upgraded" **YubiKey 4** -- [which is not open source](https://github.com/Yubico/ykneo-openpgp/issues/2#issuecomment-218436213) and is phasing out the NEO-n which I use.  The maximum key size for the YubiKey NEO is 2048 bits, which is fine for subkeys.  You can of course create a 4096 bit master key which stays offline.
 
+Please note that YubiKey NEO devices issued before 2015-04-14 [contain an insecure OpenPGP applet](https://developers.yubico.com/ykneo-openpgp/SecurityAdvisory%202015-04-14.html).
 
 #### Tutorials and troubleshooting:
 * [PGP and SSH keys on a YubiKey NEO](https://www.esev.com/blog/post/2015-01-pgp-ssh-key-on-yubikey-neo/) (Eric Severance) - Primary guide used for this setup.
@@ -19,8 +20,6 @@ This is an elegant device that has many functions including the ability to store
 * [Creating the perfect gpg keypair](https://alexcabal.com/creating-the-perfect-gpg-keypair/)
 * [OpenPGP Best Practices ](https://riseup.net/en/gpg-best-practices) (riseup) - Good tips from those who need to do security right.
 
-#### Security concerns
-* YubiKey NEO issued before 2015-04-14 [contain an insecure OpenPGP applet](https://developers.yubico.com/ykneo-openpgp/SecurityAdvisory%202015-04-14.html).
 
 #### Things that confused me
 *  *Primary Key* = "Master Key"
