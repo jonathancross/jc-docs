@@ -69,16 +69,16 @@ You will need to install [Orbot](https://play.google.com/store/apps/details?id=o
 
 #### Setup Bitcoin Wallet Trusted peer
 
-![bitcoin-wallet-settings](Bitcoin_light_client_privacy_via_Tor_hidden_service/1.bitcoin-wallet-settings.png)
-![bitcoin-wallet-trusted-peer](Bitcoin_light_client_privacy_via_Tor_hidden_service/2.bitcoin-wallet-trusted-peer.png)
+![bitcoin-wallet-settings](images/1.bitcoin-wallet-settings.png)
+![bitcoin-wallet-trusted-peer](images/2.bitcoin-wallet-trusted-peer.png)
 
 Once the **Trusted peer** is configured with your `.onion` hidden service, you will see only a single node connected on a private IP address (`10.xx.xx.xx` in this example).
 
 #### Setup Orbot
 
-![orbot-vpn-enabled](Bitcoin_light_client_privacy_via_Tor_hidden_service/3.orbot-vpn-enabled.png)
-![orbot-settings](Bitcoin_light_client_privacy_via_Tor_hidden_service/4.orbot-settings.png)
-![orbot-settings-apps-vpn](Bitcoin_light_client_privacy_via_Tor_hidden_service/5.orbot-settings-apps-vpn.png)
+![orbot-vpn-enabled](images/3.orbot-vpn-enabled.png)
+![orbot-settings](images/4.orbot-settings.png)
+![orbot-settings-apps-vpn](images/5.orbot-settings-apps-vpn.png)
 
 Use Orbot's **Apps VPN Mode** which allows the wallet app to connect to your Tor hidden service.
 
