@@ -1,26 +1,43 @@
-Secure PGP keys and Yubikey NEO
+Secure PGP keys and YubiKey NEO
 ===============================
 
-**Goal:** Create a secure OpenPGP keypair, eg: offline master key with subkeys stored on a Yubikey NEO hardware device.
+**Objective:** Create a secure OpenPGP keypair, eg: offline master key with subkeys (aka "laptop keys") stored on a YubiKey NEO hardware device for everyday use.
 
-Tutorials:
-* https://www.esev.com/blog/post/2015-01-pgp-ssh-key-on-yubikey-neo/
-* http://blog.josefsson.org/2014/06/23/offline-gnupg-master-key-and-subkeys-on-yubikey-neo-smartcard/
-* https://developers.yubico.com/PGP/Importing_keys.html
+Below is a collection of notes and info that helped me navigate through a jungle of new concepts, jargon, bad UI decisions, broken software, bugs and other obstacles to reach the above goal. – [Jonathan](https://jonathancross.com)
+
+## About the YubiKey NEO
+This is an elegant device that has many functions including the ability to store OpenPGP keys and use them to sign, encrypt and / or authenticate.  The keys cannot be extracted from the device.  The OpenPGP java apps that do the signing are Open Source.  **NOTE:** Yubico has released the "upgraded" **YubiKey 4** -- [which is not open source](https://github.com/Yubico/ykneo-openpgp/issues/2#issuecomment-218436213) and is phasing out the NEO-n which I use.  The maximum key size for the YubiKey NEO is 2048 bits, which is fine for disposable subkeys created today.  You can of course create a 4096 bit master key which stays offline.
+
+
+#### Tutorials and troubleshooting:
+* [PGP and SSH keys on a YubiKey NEO](https://www.esev.com/blog/post/2015-01-pgp-ssh-key-on-yubikey-neo/) (Eric Severance) - Primary guide used for this setup.
+* [Offline GnuPG Master Key and Subkeys on YubiKey NEO Smartcard](http://blog.josefsson.org/2014/06/23/offline-gnupg-master-key-and-subkeys-on-yubikey-neo-smartcard/) (Simon Josefsson)
+* [How to import an existing PGP key to a YubiKey](https://developers.yubico.com/PGP/Importing_keys.html)
 * [Why Subkeys do not have a Public key](http://security.stackexchange.com/questions/84132/gpg-detaching-public-subkeys-why-cant-i-do-it)
-* [Why do I see “Secret key is available.” in gpg when it is not?](http://security.stackexchange.com/questions/115230/why-do-i-see-secret-key-is-available-in-gpg-when-it-is-not)
 * [Yubico developer signing keys](https://developers.yubico.com/Software_Projects/Software_Signing.html).
-* [Using an OpenPGP SmartCard](http://www.narf.ssji.net/~shtrom/wiki/tips/openpgpsmartcard) (some good troubleshooting info)
- 
+* [Using an OpenPGP SmartCard](http://www.narf.ssji.net/~shtrom/wiki/tips/openpgpsmartcard) (some good troubleshooting info related to Linux, gpg smartcards like the YubiKey, etc)
+* [Creating the perfect gpg keypair](https://alexcabal.com/creating-the-perfect-gpg-keypair/)
+* [OpenPGP Best Practices ](https://riseup.net/en/gpg-best-practices) (riseup) - Good tips from those who need to do security right.
+
 #### Security concerns
-* Yubikey NEO issued before 2015-04-14 [contain an insecure OpenPGP applet](https://developers.yubico.com/ykneo-openpgp/SecurityAdvisory%202015-04-14.html).
+* YubiKey NEO issued before 2015-04-14 [contain an insecure OpenPGP applet](https://developers.yubico.com/ykneo-openpgp/SecurityAdvisory%202015-04-14.html).
 
 #### Things that confused me
 *  *Primary Key* = "Master Key"
-*  `--armor` = This option causes the key to be output as ASCII (instead of the default binary format).  Why not use `--ascii`?
+*  `--armor` = This option causes the key to be output as ASCII (instead of the default binary format).  Why not use `--ascii`?  Furthermore, users will encounter plenty of nonsense if you forget this option while trying to encrypt a message.  ALL of these will fail without a useful error message for example:
+
+        gpg --encrypt
+        gpg --encrypt --recipient ja@wikileaks.org
+        gpg --encrypt ja@wikileaks.org
+        gpg --recipient 92318DBA
+        gpg --encrypt --recipient 92318DBA
+        gpg --recipient 92318DBA <<< "test"
+        gpg --recipient ja@wikileaks.org
+        gpg --recipient ja@wikileaks.org <<< "test"
+* [Why do I see “Secret key is available.” in gpg when it is not?](http://security.stackexchange.com/questions/115230/why-do-i-see-secret-key-is-available-in-gpg-when-it-is-not)
 *  By default, `gpg -k` will **not** list fingerprints or the recomended longer key ID format experts agree should be used.  Instead, it lists the [unsafe 8-character "short" format](http://www.asheesh.org/note/debian/short-key-ids-are-bad-news.html).  Why is the default the less secure option?  Use `gpg -k --fingerprint --keyid-format long` instead.
 * When you use `gpg --search-keys KEYID`, the command will often not find perfectly valid keys (eg: those on pool.sks-keyservers.net or pgp.mit.edu).  There is a bunch of keyservers, so the key you are looking for *may* be on any of them, or *none of them*, or maybe it is there, but the search algo doesn't find it.
-* If you add a picture (must be a jpg!), add a default keyserver, etc. it will be stored as part of your Public key.  So that will be changing often and needs to be republished each time.  It is still not clear to me which actions change your Public key:
+* If you add a picture (must be a jpg!), add a default keyserver, etc. it will be stored as part of your Public key.  Your pub key will be changing often and should be republished.  It is still not clear to me which actions change your Public key:
   * `YES` Adding a jpg photo.
   * `YES` Adding / revoking an identity. (NOTE: identities cannot *modified*)
   * `YES` Updating the expiration date.
@@ -33,31 +50,36 @@ Tutorials:
 
 #### gpg will use various cryptic symbols noting the properties of the key.
 When listing Secret keys (`gpg --list-secret-keys` or `gpg -K`) you may see:
-* `sec` = Secret (aka Private) and Public key exists for the Master key. 
-* `sec#` = Master key secret is not present, only the Public key (called a "stub").  This is normal when using subkeys on the online system. 
+* `sec` = Secret (aka Private) and Public key exists for the Master key.
+* `sec#` = Master key secret is not present, only the Public key (called a "stub").  This is normal when using subkeys on the online system.
 * `uid` = User ID.  Combination of name, email address and an optional comment.  You can have multiple UIDs, add and remove (`revoke`) them without breaking your Master key.  If you add a photo, it will be a new `uid` added ot the key.
 * `ssb` = Subkey Certified by the master key.
-* `ssb>` = Subkey where the private portion is on the Yubikey or another device.
+* `ssb>` = Subkey where the private portion is on the YubiKey or another device.
 
-When listing Public keys (`gpg --list-keys` or `gog -k`) you may see:
+When listing Public keys (`gpg --list-keys` or `gpg -k`) you may see:
 * `pub` = Public portion of your Master keypair.
 * `sub` = Subkey (you will never actually work with a public key for a Subkey, only the Master).
 
 When editing a key (`gpg --edit-key KEYID`) you may see:
-* `sub*` = The star indicated athe the particular Subkey is selected for editing.
+* `sub*` = The star indicates the particular Subkey is selected for editing.
 * `sig!3` = You see this after running the `check` command. I don't know what it means.
+
+When listing signatures (`gpg --list-sigs KEYID`) you may see:
+* `sig `, `sig 1`, `sig 2`, `sig 3` = How thoroughly was the identity claim verified (`sig`=unknown ... `sig 3`=extremely thorough).
+Here is [a detailed explanation](http://security.stackexchange.com/a/141508/16036).
 
 There are different types of keys, you can see this on the right as "usage":
 * `usage: C` = **Certify** other keys, IE: this is your Master key.
-* `usage: S` = **Sign** messages so people know it was sent from you.  This can be a Subkey. 
+* `usage: S` = **Sign** messages so people know it was sent from you.  This can be a Subkey.
 * `usage: E` = **Encrypt** messages to sent to other people.  This can be a Subkey.
 * `usage: A` = **Authenticate** yourself, for example when using SSH to log into a server.  This can be a Subkey.
 
 #### Difficulties with offline master key
 
-* There is no existing linux distribution that can write the keys to the Yubikey as-is.  Therefore you will need to try and transfer all required software to the offline system (complex and could compromise your offline system), or you sacrifice some security and temporarily bring the subkeys onto a system which can easily write to the Yubikey.
+* As of February 2016, I was not able to find any Linux distribution that could write gpg keys to the YubiKey without additional software being installed.  Therefore you will need to try and transfer all required software to the offline system (complex and could compromise your offline system), or you sacrifice some security and temporarily bring the subkeys onto a system which can easily write to the YubiKey.
   * In my case, I tried to get the device to work using offline Xubuntu, Tails, etc, but was not successful.
-  * Instead, I created the master key, then put that into a TrueCrypt container.  Then did the same with a separate container for subkeys.  I then moved the subkey container to a computer with internet connection turned off, opened it and wrote the subkeys onto the Yubikey device.  I believe the computer was free of malware, but annot be certain.  The master key is only used on an air-gapped computer, so it is safe and can be used to revoke subkeys if needed.
+  * Instead, I created the master key, then put that into a TrueCrypt container.  Then did the same with a separate container for subkeys.  I then moved the subkey container to a computer with Internet connection turned off, opened it and wrote the subkeys onto the YubiKey device.  I believe the computer was free of malware, but cannot be 100% certain.  The master key is only used on an air-gapped computer, so it is safe and can be used to revoke subkeys if needed.
+* I now use [Tails 2.x](https://tails.boum.org/) on a USB stick whenever I need to work with my Master key (eg: sign another user's key).  This works well on my Macbook Air as there is no functioning WiFi driver and furthermore it is effortless to disable networking on boot.
 
 #### Creating stubs on a new computer
 
@@ -95,7 +117,7 @@ I can then use `git commit -a -S` to sign my commit. NOTE: If using git version 
 
     git config --global commit.gpgsign true
 
-Unfortunatly `gpg2` still reports an error unless `sudo` is used:
+Unfortunately `gpg2` still reports an error unless `sudo` is used:
 
     gpg2 --card-status
     gpg: selecting openpgp failed: Unsupported certificate
@@ -108,24 +130,32 @@ Hope to figure out the issue soon.
 
 Signing another person's key:
 
-1. Import your current Secret key to the air-gapped machine
-2. Sign the person's public key
-3. `export` the signed key for them
-4. Transport that signed key file back to the online system
-5. `import` and republish / email to the friend.  Can encrypt the file before sending to be sure that they have the means to decrypt with the key you signed.
-
-TODO: Confirm if my Public key must also be imported / re-exported.
-
+1. Import your current Secret key to the air-gapped machine (if necessary).
+2. Import the key to be signed (I simply bring over the entire public keyring).
+3. Sign the person's public key.
+4. `export` the signed key for them.
+5. Transport that signed key file back to the online system.
+6. `import` and email the key to owner. Encrypt the file / email to be sure that they have the means to decrypt with the key you signed.
 
 #### Useful commands
-    gpg  --list-sigs --list-options show-keyserver-urls
+    gpg --list-sigs --list-options show-keyserver-urls
     gpg -k --fingerprint --keyid-format long
 
 
-## Configuration file
+## GPG Configuration file
 
-* [Example config](../master/gpg.conf) file (`~/.gnupg/gpg.conf`): 
+* [Example config](../master/gpg.conf) file (`~/.gnupg/gpg.conf`):
 
-### Thunderbird
+
+# GUI Tools to make Open PGP more usable
+
+#### Mac
+* Use Apple's built-in `Mail.app` program with `GPGMail` (part of the fantastic [GPG Suite](https://gpgtools.org/)).
+* Can be [setup to use a Gmail account via IMAP](https://support.google.com/mail/answer/78892?hl=en).
+
+#### Android
+* Use [K9 Mail](https://k9mail.github.io/) and [Open Keychain](https://www.openkeychain.org/) -- [Here is a tutorial](https://www.openkeychain.org/howto/#/).
+
+#### Linux or Windows
 * [Enigmail PGP plugin](https://enigmail.net/index.php/en/)
 * Sync Google contacts with [gcontactsync](https://addons.mozilla.org/en-US/thunderbird/addon/gcontactsync/)
