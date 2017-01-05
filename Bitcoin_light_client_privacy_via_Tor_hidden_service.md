@@ -95,4 +95,4 @@ Both options may also use Tor to further obfuscate your IP address.
 
 ### Disclaimer
 
-This document has not been reviewed for accuracy and comes with no guarantees. There may be other metadata, etc. which is leaked via this setup -- **Feedback is welcome!**
+This document has not been reviewed for accuracy and comes with no guarantees. There may be other metadata, etc. which is leaked via this setup -- **[Feedback is welcome!](https://github.com/jonathancross/jc-docs/issues/new?title=Feedback: Bitcoin mobile privacy)**
