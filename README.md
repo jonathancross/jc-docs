@@ -1,6 +1,7 @@
 # jc-docs
 Documentation, demos and examples from Jonathan Cross.
 
+* [Bitcoin mobile privacy](Bitcoin_mobile_privacy.md) - Guide explaining how to improve your mobile client privacy and security via Tor and a full node.
 * [Java strong crypto test](java-strong-crypto-test) - Test if you have strong crypto support for Java enabled.
 * [Git Cheat Sheet](Git-CheatSheet.md) - Notes on how to configure and use Git / GitHub
 * [Mac OSX Notes](Mac OSX Notes.md) - General notes on useful configuration options for Mac OSX.
