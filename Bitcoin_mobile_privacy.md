@@ -23,7 +23,7 @@ Privacy in the context of Bitcoin is a complex, multifaceted issue.  Here we wil
 Issues with SPV clients and Bloom filters:
 
 1. The Bitcoin Wallet for Android, relies on [Bloom filters](https://github.com/bitcoin/bips/blob/master/bip-0037.mediawiki) to protect user privacy.  However it has been demonstrated that this is ineffective and connected peers can easily discover which addresses are owned by the user.
-2. A passive observer controlling many nodes can pinpoint the IP address of the node which is first to broadcast a transaction. This information can then be used for geolocation, address clustering, etc.  This is unrelated to Bloom filter information leakage, but can be used to further enhance an attack.  Bitcoin full nodes are less vulnerable to this sort of data collection because they are constantly replaying not only their own transactions, but all transactions on the network.
+2. A passive observer controlling many nodes can pinpoint the IP address of the node which is first to broadcast a transaction. This information can then be used for geolocation, address clustering, etc.  This is unrelated to Bloom filter information leakage, but can be used to link transactions to a specific actual user.  Bitcoin full nodes are less vulnerable to this sort of data collection because they are constantly relaying not only their own transactions, but all transactions on the network.
 
 #### Security:
 Without access to the full blockchain, payments can potentially be blocked and peers can hypothetically lie about (withhold) transactions from SPV clients.
@@ -48,7 +48,7 @@ Benefits:
 
 4. The Tor network hides the user’s IP address.  This frustrates attempts to **geolocate transactions** and **clustering Bitcoin addresses** per IP address.
 
-5. If you own the trusted peer, then you know a **third party is not monitoring transactions** before they are broadcast on the Bitcoin network.
+5. If you own the Trusted peer, then you can be reasonably confident that a **third party is not monitoring transactions** before they are broadcast on the Bitcoin network.
 
 Essentially we resolve the most significant issues inherent in a mobile wallet client using existing software.
 
@@ -57,7 +57,7 @@ Essentially we resolve the most significant issues inherent in a mobile wallet c
 ## Trusted peer
 This setup will require a [Bitcoin Core full node](https://bitcoin.org/en/full-node) which you trust, ie a secure desktop computer (ideally running Linux, etc) and available 24/7.  Can also be a close friend you trust not to spy on your transactions or make stupid configuration errors.  Although it is possible to host the full node on a remote server (ie Digital Ocean), this will undermine the trustlessness we are trying to achieve here, so it is not recommended.  You will also run a Tor proxy on the system allowing your mobile to connect securely to the server.
 
-1. Install and [configure Tor](https://www.torproject.org/docs/installguide.html.en) and ensure it is properly routing traffic over the Tor network.
+1. Install and [configure Tor](https://www.torproject.org/docs/installguide.html.en), then ensure it is properly routing traffic over the Tor network.
 2. [Install Bitcoin Core](https://bitcoin.org/en/download).  The wallet can be disabled, you only need `bitcoind`.
 3. [Configure Bitcoin Core to run as a Tor hidden service](https://github.com/bitcoin/bitcoin/blob/master/doc/tor.md).
 4. Use the Tor hidden service as the "Trusted peer" as shown in the Android Bitcoin Wallet screen shots below.
