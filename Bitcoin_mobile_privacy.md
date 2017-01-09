@@ -1,5 +1,5 @@
-[draft] Bitcoin mobile privacy via Trusted peer connection over Tor
-===================================================================
+Bitcoin mobile privacy via Trusted peer over Tor
+================================================
 
 TL;DR; This guide will help you easily configure an Android Bitcoin Wallet to relay transactions via a trusted Full Node using Tor, therefore mitigating the most important security and privacy concerns on mobile devices.
 
@@ -12,7 +12,7 @@ Contents:
 * [Setup & Configuration](#setup--configuration)
 * [Alternatives](#alternatives)
 * [FAQ](#faq)
-
+* [Conclusion](#conclusion)
 
 
 ## Background
@@ -60,7 +60,7 @@ This setup will require a [Bitcoin Core full node](https://bitcoin.org/en/full-n
 
 1. Install and [configure Tor](https://www.torproject.org/docs/installguide.html.en), then ensure it is properly routing traffic over the Tor network.
 2. [Install Bitcoin Core](https://bitcoin.org/en/download).  The wallet can be disabled, you only need `bitcoind`.
-3. [Configure Bitcoin Core to run as a Tor hidden service](https://github.com/bitcoin/bitcoin/blob/master/doc/tor.md). **IMPORATANT** Do now skip this step as this provides all the security / privacy benefits listed here.
+3. [Configure Bitcoin Core to run as a Tor hidden service](https://github.com/bitcoin/bitcoin/blob/master/doc/tor.md).<br>**IMPORATANT** Do not skip this step as this provides all the security / privacy benefits outlined here.
 4. Use the Tor hidden service as the "Trusted peer" as shown in the Android Bitcoin Wallet screen shots below.
 
 Once you have it all setup, you can [check your Tor hidden service is recognized on the bitcoin network](https://bitnodes.21.co/nodes/) and then configure your mobile to use the `.onion` address as shown below.
@@ -126,11 +126,16 @@ A: No. Tor is less anonymous than people once thought and is easy to misuse and 
 #### Q: Why should I go to all this trouble?
 A: Because you believe in freedom enough to experiment with cryptocurrency maybe?
 
+# Conclusion
 
 ### Acknowledgments
 
-Thanks to [Andreas Schildbach](https://github.com/schildbach) (Android Wallet) and [Jonas Schnelli](https://github.com/jonasschnelli) (Bitcoin Core) for their input and feedback.
+Thanks to [Andreas Schildbach](https://github.com/schildbach) (Bitcoin Wallet for Android) and [Jonas Schnelli](https://github.com/jonasschnelli) (Bitcoin Core developer) for their input and feedback.
 
 ### Disclaimer
 
-This document comes with no guarantees. There may be other metadata, etc. which is leaked via this setup -- **[Feedback is welcome!](https://github.com/jonathancross/jc-docs/issues/new?title=Feedback: Bitcoin mobile privacy)**
+This document comes with no guarantees, do your own homework :-) **[Feedback is welcome!](https://github.com/jonathancross/jc-docs/issues/new?title=Feedback: Bitcoin mobile privacy)**
+
+### License
+
+CC0 1.0 Universal - See [LICENSE](https://github.com/jonathancross/jc-docs/blob/master/LICENSE) for more info.
