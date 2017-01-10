@@ -3,40 +3,54 @@
 # AUTHOR:  Jonathan Cross 0xC0C076132FFA7695 (jonathancross.com)
 # LICENSE: https://mit-license.org
 
-PGP_KEY=XXXXXXXXXXXXXXXX # Your 16 character key handle
-GPG_COMMAND=gpg2         # GnuPG command to use: gpg or gpg2
+################################################################################
+# YOU MUST CHANGE THE SETTINGS BELOW BEFORE RUNNING
+################################################################################
 
-# SERVICES
+PGP_KEY=XXXXXXXXXXXXXXXX # Your 16 character PGP key handle. (required)
+GPG_COMMAND=gpg2         # GnuPG command to use: gpg or gpg2 (optional)
 
-# Use one or more public key servers:
-ENABLE_PUBLIC_KEY_SERVERS=1
+
+# Local backup of your key. (required)
+# Change this to match where you want the key backup stored:
+# Example: LOCAL_KEY_FILE=/tmp/${PGP_KEY}.asc
+# Example: LOCAL_KEY_FILE=~/Documents/${PGP_KEY}.asc
+LOCAL_KEY_FILE=~/${PGP_KEY}_pub.asc
+
+
+# Upload to one or more public key servers:
+ENABLE_PUBLIC_KEY_SERVERS=1 # Change to 0 (zero) to disable.
 PUBLIC_KEY_SERVERS=(
   "x-hkp://pool.sks-keyservers.net"
   "pgp.mit.edu"
   "hkp://keys.gnupg.net"
 )
 
-# Local backup of your key.  I use the short 8 character key:
-PGP_KEY_SHORT=${PGP_KEY:8-16} #  8 character key handle
-LOCAL_KEY_FILE=~/Documents/${PGP_KEY_SHORT}.asc
 
 # Do you have a personal website where you want to upload your key?
-ENABLE_PERSONAL_KEY_SERVER=1
-# scp login parameters
+ENABLE_PERSONAL_KEY_SERVER=0 # Change to 1 (one) to enable.
+# scp login settings:
 PERSONAL_KEY_SERVER_USER=username           # Eg: jonathan
 PERSONAL_KEY_SERVER_DOMAIN=example.com      # Eg: example.com
 PERSONAL_KEY_SERVER_DEST_FOLDER=webroot/foo # Eg: folder name on remote server
 
-# Upload your key to keybase?
-# Note: You should have an account there and the `keybase` command installed.
-ENABLE_KEBASE=1
+
+# Upload your key to Keybase?
+# Note: You must have an account on keybase.io and the `keybase` commandline
+# program installed on your computer. Test that `keybase login` command works.
+ENABLE_KEBASE=0 # Change to 1 (one) to enable.
 
 
-##############################################################################
+################################################################################
 # DO NOT MODIFY BELOW THIS LINE
-##############################################################################
+################################################################################
 
-# Look at last time the key was exported
+# Test config:
+if [[ "${PGP_KEY}" == "XXXXXXXXXXXXXXXX" ]]; then
+  echo "ERROR: Please configure this script with YOUR PGP Key handle."
+fi
+
+# Look at last time the key was exported:
 if [ -f ${LOCAL_KEY_FILE} ]; then
   LASTMOD_DATE="$(ls -al ${LOCAL_KEY_FILE} | awk '{print $6,$7, $8}')"
 else
@@ -50,7 +64,8 @@ Publishing your key: ${PGP_KEY}
 # Save the new public key to a file:
 echo " • Exporting key to file: ${LOCAL_KEY_FILE}"
 echo "   Last modified: ${LASTMOD_DATE}"
-# Grep for the key becasue gpg always returns true, even for missing keys!
+
+# Grep for the key because gpg always returns true, even for missing keys:
 if ${GPG_COMMAND} --list-secret-keys --keyid-format=long | grep -q ${PGP_KEY}; then
   ${GPG_COMMAND} --armor --export=${PGP_KEY} > ${LOCAL_KEY_FILE}
   LASTMOD_DATE="$(ls -al ${LOCAL_KEY_FILE} | awk '{print $6,$7, $8}')"
@@ -78,6 +93,6 @@ fi
 if [[ "${ENABLE_PUBLIC_KEY_SERVERS}" == "1" ]]; then
   for S in ${PUBLIC_KEY_SERVERS[@]};do
     printf " • ";
-     ${GPG_COMMAND} --keyid-format=long --keyserver ${S} --send-key ${PGP_KEY}
+    ${GPG_COMMAND} --keyid-format=long --send-key ${PGP_KEY} --keyserver ${S}
   done
 fi
