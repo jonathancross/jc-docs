@@ -1,6 +1,9 @@
 Mac OSX Notes
 =============
 
+### Security
+https://github.com/drduh/macOS-Security-and-Privacy-Guide - A fantastic resource!
+
 ### Prevent Photos app from opening when SD card is inserted
     defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool YES
 
@@ -36,3 +39,8 @@ Usage: `cpulimit <PID> <WAIT_TIME> <RUN_TIME>`  (only the PID is required)
 
 ### Combine multiple files into a single PDF
 * https://forums.adobe.com/message/6788486#6788486
+
+### [Cannot erase USB flash drive, "name invalid"](https://discussions.apple.com/message/29454263#message29454263)
+The GUI Disk Utility refuses to format my 16 GB Sandisk Cruzer USB Stick.
+
+    diskutil eraseVolume HFS+ NAME disk2
