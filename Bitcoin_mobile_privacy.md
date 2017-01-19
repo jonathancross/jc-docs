@@ -1,7 +1,7 @@
 Bitcoin mobile privacy via Trusted peer over Tor
 ================================================
 
-TL;DR; This guide will help you easily configure an Android Bitcoin Wallet to relay transactions via a trusted Full Node using Tor, therefore mitigating the most important security and privacy concerns on mobile devices.
+TL;DR; This guide will help you easily configure an Android Bitcoin Wallet to relay transactions via a trusted full node using Tor, thereby mitigating the several critical security and privacy issues on mobile devices.
 
 ## Intro
 
