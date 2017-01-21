@@ -10,11 +10,13 @@ Users of JDK 8 must install 2 jar files like so:
 
     $ wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jce/8/jce_policy-8.zip
 
-    # Verify the hash of jce_policy-8.zip == f3020a3922efd6626c2fff45695d527f34a8020e938a49292561f18ad1320b59
-    # How do we know this is the real checksum?  We don't, but a google search suggests this
-    # is the most likely checksum according to several project maintainers.
+Verify the hash of jce_policy-8.zip == `f3020a3922efd6626c2fff45695d527f34a8020e938a49292561f18ad1320b59`
+How do we know this is the real checksum?  We don't!  But a Google search suggests this
+is the most likely checksum according to several project maintainers.
+
     $ sha256sum jce_policy-8.zip
-    # If the hash matches, then continue, otherwise STOP and figure out why your file is different.
+
+If the hash matches, then continue, otherwise STOP and figure out why your file is different.
 
     $ unzip jce_policy-8.zip
     $ sudo cp UnlimitedJCEPolicyJDK8/{US_export_policy.jar,local_policy.jar} $JAVA_HOME/jre/lib/security/
