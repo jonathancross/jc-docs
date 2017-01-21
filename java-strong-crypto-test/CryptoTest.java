@@ -1,3 +1,7 @@
+/**
+ * Copyright 2016 Jonathan Cross.
+ * License: WTFPL
+ */
 import javax.crypto.Cipher;
 
 public class CryptoTest {
@@ -6,7 +10,7 @@ public class CryptoTest {
       System.out.println("Testing javax.crypto.Cipher key lengths:");
       int maxKeyLen = Cipher.getMaxAllowedKeyLength("AES");
       if (maxKeyLen > 128) {
-        System.out.println(" • Congratulations, you have unlimited key length support!");
+        System.out.println(" • Congratulations, you have unrestricted key length support!");
       } else {
         System.out.println(" • Warning: strong crypto not enabled.");
         System.out.println(" • For Java 7 and 8, you can install required jars from here:");
@@ -16,7 +20,9 @@ public class CryptoTest {
       }
       System.out.println(" • Max key length: " + maxKeyLen);
     } catch (Exception e){
-      System.out.println("ERROR: Could not determin max key length.");
+      System.out.print("ERROR: Could not determine max key length from ");
+      System.out.println("Cipher.getMaxAllowedKeyLength(\"AES\") : ");
+      System.out.println(e);
     }
   }
 }
