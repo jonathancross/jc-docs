@@ -150,3 +150,7 @@ In many situations, I'd like to be able to submit a series of unrelated pull req
 Unfortunately, if the first PR was from `master` branch (the default), future branches you create will include those changes unless you tell the branch to point to an earlier commit (see [Making a new branch after having already added changes in master](#making-a-new-branch-after-having-already-added-changes-in-master) above).
 
 **Bottom line:** Always start with a new branch!
+
+### License
+
+WTFPL - See [LICENSE](https://github.com/jonathancross/jc-docs/blob/master/LICENSE) for more info.

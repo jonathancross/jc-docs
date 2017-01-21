@@ -1,7 +1,7 @@
 #!/bin/bash
 # Script used to upload your GPG public key to multiple services after a change.
 # AUTHOR:  Jonathan Cross 0xC0C076132FFA7695 (jonathancross.com)
-# LICENSE: https://mit-license.org
+# LICENSE: WTFPL - https://github.com/jonathancross/jc-docs/blob/master/LICENSE
 
 ################################################################################
 # YOU MUST CHANGE THE SETTINGS BELOW BEFORE RUNNING

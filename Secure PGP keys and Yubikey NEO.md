@@ -158,3 +158,7 @@ Signing another person's key:
 #### Linux or Windows
 * [Enigmail PGP plugin](https://enigmail.net/index.php/en/)
 * Sync Google contacts with [gcontactsync](https://addons.mozilla.org/en-US/thunderbird/addon/gcontactsync/)
+
+### License
+
+WTFPL - See [LICENSE](https://github.com/jonathancross/jc-docs/blob/master/LICENSE) for more info.

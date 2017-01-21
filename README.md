@@ -10,4 +10,4 @@
 
 ### License
 
-CC0 1.0 Universal - See [LICENSE](https://github.com/jonathancross/jc-docs/blob/master/LICENSE) for more info.
+WTFPL - See [LICENSE](https://github.com/jonathancross/jc-docs/blob/master/LICENSE) for more info.

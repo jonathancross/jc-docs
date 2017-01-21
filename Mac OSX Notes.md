@@ -44,3 +44,7 @@ Usage: `cpulimit <PID> <WAIT_TIME> <RUN_TIME>`  (only the PID is required)
 The GUI Disk Utility refuses to format my 16 GB Sandisk Cruzer USB Stick.
 
     diskutil eraseVolume HFS+ NAME disk2
+
+### License
+
+WTFPL - See [LICENSE](https://github.com/jonathancross/jc-docs/blob/master/LICENSE) for more info.
