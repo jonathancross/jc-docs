@@ -51,7 +51,7 @@ Benefits:
 
 5. If you own the Trusted peer, then you can be reasonably confident that a **third party is not monitoring transactions** before they are broadcast on the Bitcoin network.
 
-Essentially we resolve the most significant issues inherent in a mobile wallet client using existing software.
+Essentially we resolve the most significant issues inherent in a mobile wallet client using existing software.  See [Possible data leakage](#possible-data-leakage) section below.
 
 # Setup & Configuration
 
@@ -84,11 +84,11 @@ Once the **Trusted peer** is configured with your `.onion` hidden service, you w
 Use Orbot's **Apps VPN Mode** which allows the wallet app to connect to your Tor hidden service.
 
 
-### Metadata
+### Possible data leakage
 
-Note that this setup will protect your **transactions** from passive surveillance, however the Android Wallet requires additional information via `https` when constructing the transaction:
+This setup will protect your **transactions** from passive surveillance, however the Android Wallet requires additional information via `https` when constructing the transaction:
 
-1. BIP70 payment request.
+1. BIP70 payment requests (sent form merchant for example. Should be `https`.)
 2. Current fee data is requested from a server controlled by [Bitcoin Wallet developers](https://play.google.com/store/apps/dev?id=5750589945930020869). (public data)
 3. Exchange rate feed from bitcoinaverage.com. (public data)
 
