@@ -104,12 +104,12 @@ These connections should therefore not present serious privacy / security concer
 
 This is by no means the only way to safely run a Bitcoin light client.
 
-Here are a few additional possibilities:
+Here are a few additional possibilities which I have not tested:
 
 
-1. Use a standard VPN or SSH tunnel to route traffic over secure connection from your mobile device to your own full node.
-2. Use ssh to remotely login to your full node, then use the [Bitcoin command line interface](https://bitcoin.org/en/developer-examples#transactions) to handle transactions (not user friendly).
-3. [Electrum for Android](https://play.google.com/store/apps/details?id=org.electrum.electrum) with your own Electrum server (unfortunately this is not supported yet).
+1. Use [Electrum for Android](https://play.google.com/store/apps/details?id=org.electrum.electrum) with your own Electrum server.
+2. Use a standard VPN or SSH tunnel to route traffic over secure connection from your mobile device to your own full node.
+3. Use ssh to remotely login to your full node, then use the [Bitcoin command line interface](https://bitcoin.org/en/developer-examples#transactions) to handle transactions (not user friendly).
 
 These options may also use Tor to further obfuscate your IP address.
 
