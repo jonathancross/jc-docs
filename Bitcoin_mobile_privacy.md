@@ -134,7 +134,7 @@ Thanks to [Andreas Schildbach](https://github.com/schildbach) (Bitcoin Wallet fo
 
 ### Disclaimer
 
-This document comes with no guarantees, do your own homework :-) **[Feedback is welcome!](https://github.com/jonathancross/jc-docs/issues/new?title=Feedback: Bitcoin mobile privacy)**
+This document comes with no guarantees, do your own homework. [Feedback](https://github.com/jonathancross/jc-docs/issues/new?title=Feedback:%20Bitcoin%20Mobile%20Privacy) is welcome.
 
 ### License
 
