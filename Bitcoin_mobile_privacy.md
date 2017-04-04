@@ -3,16 +3,19 @@ Bitcoin mobile privacy & security via Trusted peer over Tor
 
 TL;DR; This guide will help you easily configure an Android Bitcoin Wallet to relay transactions via a trusted full node using Tor, thereby mitigating the several critical security and privacy issues on mobile devices.
 
-## Intro
+##### Contents:
 
-Bitcoin mobile clients generally offer significantly reduced security and privacy in comparison to a full node. For many users, this is an unfortunate, but seemingly necessary usability compromise. Wallets have attempted to address the issues in several ways, but all have significant downsides. This guide presents a practical setup for enhanced privacy and security on mobile devices. Specifically, the guide below describes how to use the [Bitcoin Wallet for Android](https://play.google.com/store/apps/details?id=de.schildbach.wallet) and its "Trusted peer" option with a Tor hidden service to avoid several critical issues without sacrificing usability.  This guide does not cover any of the issues related to endpoint security (keeping your Android device and full node secure) or analysis of the Bitcoin blockchain.
-
-Contents:
+* [Intro](#intro)
 * [Background](#background)
 * [Setup & Configuration](#setup--configuration)
 * [Alternatives](#alternatives)
 * [FAQ](#faq)
 * [Conclusion](#conclusion)
+
+
+## Intro
+
+Bitcoin mobile clients generally offer significantly reduced security and privacy in comparison to a full node. For many users, this is an unfortunate, but seemingly necessary usability compromise. Wallets have attempted to address the issues in several ways, but all have significant downsides. This guide presents a practical setup for enhanced privacy and security on mobile devices. Specifically, the guide below describes how to use the [Bitcoin Wallet for Android](https://play.google.com/store/apps/details?id=de.schildbach.wallet) and its "Trusted peer" option with a Tor hidden service to avoid several critical issues without sacrificing usability.  This guide does not cover any of the issues related to endpoint security (keeping your Android device and full node secure) or analysis of the Bitcoin blockchain.
 
 
 ## Background
