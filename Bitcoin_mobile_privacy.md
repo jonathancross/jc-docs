@@ -1,5 +1,5 @@
-Bitcoin mobile privacy via Trusted peer over Tor
-================================================
+Bitcoin mobile privacy & security via Trusted peer over Tor
+===========================================================
 
 TL;DR; This guide will help you easily configure an Android Bitcoin Wallet to relay transactions via a trusted full node using Tor, thereby mitigating the several critical security and privacy issues on mobile devices.
 
@@ -27,7 +27,7 @@ Issues with SPV clients and Bloom filters:
 2. A passive observer controlling many nodes can pinpoint the IP address of the node which is first to broadcast a transaction. This information can then be used for geolocation, address clustering, etc.  This is unrelated to Bloom filter information leakage, but can be used to link transactions to a specific actual user.  Bitcoin full nodes are less vulnerable to this sort of data collection because they are constantly relaying not only their own transactions, but all transactions on the network.
 
 #### Security:
-Without access to the full blockchain, payments can potentially be blocked and peers can hypothetically lie about (withhold) transactions from SPV clients.
+Without access to the full blockchain, payments can potentially be blocked and peers can hypothetically lie about (withhold) transactions from SPV clients.  In the event of a hard fork, running your own full node ensures that you see the fork you are interested in rather than blindly trusting peers.
 
 
 ### Trusted peer:
@@ -103,8 +103,10 @@ This is by no means the only way to safely run a Bitcoin light client.
 
 Here are a couple other possibilities:
 
-1. [Electrum for Android](https://play.google.com/store/apps/details?id=org.electrum.electrum) with your own Electrum server.
-2. Use a standard VPN or SSH tunnel to route traffic over secure connection from your mobile device to your own full node.
+
+1. Use a standard VPN or SSH tunnel to route traffic over secure connection from your mobile device to your own full node.
+2. [Electrum for Android](https://play.google.com/store/apps/details?id=org.electrum.electrum) with your own Electrum server, however this is not supported yet.
+3. Use ssh to remotely login to your full node, then use the [Bitcoin command line interface](https://bitcoin.org/en/developer-examples#transactions) to handle transactions (not user friendly).
 
 Both options may also use Tor to further obfuscate your IP address.
 
