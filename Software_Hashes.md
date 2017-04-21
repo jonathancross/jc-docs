@@ -32,13 +32,17 @@ Explanation
 
 ### How is this information useful?
 
-If you trust me ([Jonathan Cross](https://github.com/jonathancross)), you can use the hashes above to check if the file you downloaded matches the one I downloaded.
+You can use the hashes (aka "digest" values) above to check if a file you downloaded matches the one I ([Jonathan Cross](https://github.com/jonathancross)) downloaded.  If you find a mismatch, **[please let me know](https://github.com/jonathancross/jc-docs/issues)** immediately.
 
-### How do I know you created this file?
+### How does this list provide security?
 
-All changes to this file should be signed with my gpg key: [C0C076132FFA7695](https://jonathancross.com/2FFA7695.asc)
+[SHA-256](https://en.wikipedia.org/wiki/SHA-2) (Secure Hashing Algorithm, 256 bits in length) can create a unique string of number and letters for any piece of data.  This allows you to confirm that the file you downloaded is the same as the one created by the developer.  Sometimes, it is difficult to determine what the *correct* hash should be because there is no definitive answer from the developer, this is one situation in which the list above might be most useful.  Or maybe you trust me and therefore want to ensure that you install the exact same version I did.  Or maybe it is just a way for me to record a log of what I have verified / installed and is of no use to anyone  :-)
 
-Here in GitHub, each commit will have a green "Verified" badge for the subkey `D8578DF8EA7CCF1B`. You can also verify independently via `git show --show-signature HEAD`.
+### How do I know YOU created this file?
+
+All changes (git commits) to this file are signed with my GPG/PGP key: [C0C076132FFA7695](https://jonathancross.com/2FFA7695.asc)
+
+Here in GitHub, each commit will have a green "Verified" badge for the GPG subkey `D8578DF8EA7CCF1B`. You can also verify independently via `git show --show-signature HEAD` if you don't trust GitHub.
 
 ### How can I get the SHA-256 digest of a file on my computer?
 
@@ -53,7 +57,8 @@ One of these commands should work on all recent **Mac OSX / Linux** machines:
 
 **Windows:**
 
-You'll have to install software that can calculate hashes.  [hashdeep](https://github.com/jessek/hashdeep/releases) (part of the `md5deep-4.4.zip` package) seems okay.
+You'll have to install software that can calculate SHA-256 hashes.  [hashdeep](https://github.com/jessek/hashdeep/releases) (part of the `md5deep-4.4.zip` package) seems okay.
+
 
 ### What about PGP signatures?
 
