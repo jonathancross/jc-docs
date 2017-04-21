@@ -32,7 +32,7 @@ Explanation
 
 ### How is this information useful?
 
-You can use the hashes (aka "digest" values) above to check if a file you downloaded matches the one I ([Jonathan Cross](https://github.com/jonathancross)) downloaded.  If you find a mismatch, **[please let me know](https://github.com/jonathancross/jc-docs/issues)** immediately.
+You can use the hashes (aka "digest" values) above to check if a file you downloaded matches the one I ([Jonathan Cross](https://github.com/jonathancross)) downloaded.  If you find a mismatch, **[please let me know](https://github.com/jonathancross/jc-docs/issues/new?title=Feedback:%20Software_Hashes)** immediately.
 
 ### How does this list provide security?
 
