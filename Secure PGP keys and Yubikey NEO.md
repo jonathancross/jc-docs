@@ -6,7 +6,7 @@ Secure PGP keys and YubiKey NEO
 Below is a collection of notes and info that helped me navigate through a jungle of new concepts, jargon, bad UI decisions, broken software, bugs and other obstacles to reach the above goal. – [Jonathan](https://jonathancross.com)
 
 ## About the YubiKey NEO
-<img align="right" src="images/yubikey-neo-n.jpg" alt="yubikey neo-n"> This is an elegant device with many functions including the ability to store OpenPGP keys and use them to sign, encrypt and / or authenticate.  The keys cannot be extracted from the device.  The OpenPGP java apps that do the signing are Open Source.  **NOTE:** Yubico has released the "upgraded" **YubiKey 4** -- [which is not open source](https://github.com/Yubico/ykneo-openpgp/issues/2#issuecomment-218436213) and is phasing out the NEO-n which I use.  The maximum key size for the YubiKey NEO is 2048 bits, which is fine for subkeys.  You can of course create a 4096 bit master key which stays offline.
+<img align="right" src="images/yubikey-neo-n.jpg" alt="yubikey neo-n"> This is an elegant device with many functions including the ability to store OpenPGP keys and use them to sign, encrypt and / or authenticate.  The keys cannot be extracted from the device.  The OpenPGP java apps that do the signing are Open Source.  **NOTE:** Yubico has released the "upgraded" **YubiKey 4** -- [which I discovered is not open source](https://github.com/Yubico/ykneo-openpgp/issues/2#issuecomment-218436213) and is phasing out the NEO-n which I use.  The maximum key size for the YubiKey NEO is 2048 bits, which is fine for subkeys.  You can of course create a 4096 bit master key which stays offline.
 
 Please note that YubiKey NEO devices issued before 2015-04-14 [contain an insecure OpenPGP applet](https://developers.yubico.com/ykneo-openpgp/SecurityAdvisory%202015-04-14.html).
 
@@ -19,7 +19,7 @@ Please note that YubiKey NEO devices issued before 2015-04-14 [contain an insecu
 * [Using an OpenPGP SmartCard](http://www.narf.ssji.net/~shtrom/wiki/tips/openpgpsmartcard) (some good troubleshooting info related to Linux, gpg smartcards like the YubiKey, etc)
 * [Creating the perfect gpg keypair](https://alexcabal.com/creating-the-perfect-gpg-keypair/)
 * [OpenPGP Best Practices ](https://riseup.net/en/gpg-best-practices) (riseup) - Good tips from those who need to do security right.
-
+* [Problems with apps sharing the same token on the Mac](https://gpgtools.tenderapp.com/discussions/problems/50028-macgpg2-scdaemon-pcsc-open-failed-sharing-violation-0x8010000b) (Error: `pcsc_connect failed: sharing violation (0x8010000b)`)
 
 #### Things that confused me
 *  *Primary Key* = "Master Key"
@@ -29,29 +29,25 @@ Please note that YubiKey NEO devices issued before 2015-04-14 [contain an insecu
         gpg --encrypt --recipient ja@wikileaks.org
         gpg --encrypt ja@wikileaks.org
         gpg --recipient 92318DBA
-        gpg --encrypt --recipient 92318DBA
-        gpg --recipient 92318DBA <<< "test"
-        gpg --recipient ja@wikileaks.org
-        gpg --recipient ja@wikileaks.org <<< "test"
 * [Why do I see “Secret key is available.” in gpg when it is not?](http://security.stackexchange.com/questions/115230/why-do-i-see-secret-key-is-available-in-gpg-when-it-is-not)
+* The command `gpg --armor --export=2FFA7695` will export *ALL* public keys, not just `2FFA7695` as one might expect.  Unlike many other gnu programs, gpg doesn't support the `=` (equals sign) as separator, so it just silently assumes you want everything.
 *  By default, `gpg -k` will **not** list fingerprints or the recomended longer key ID format experts agree should be used.  Instead, it lists the [unsafe 8-character "short" format](http://www.asheesh.org/note/debian/short-key-ids-are-bad-news.html).  Why is the default the less secure option?  Use `gpg -k --fingerprint --keyid-format long` instead.
 * When you use `gpg --search-keys KEYID`, the command will often not find perfectly valid keys (eg: those on pool.sks-keyservers.net or pgp.mit.edu).  There is a bunch of keyservers, so the key you are looking for *may* be on any of them, or *none of them*, or maybe it is there, but the search algo doesn't find it.
 * If you add a picture (must be a jpg!), add a default keyserver, etc. it will be stored as part of your Public key.  Your pub key will be changing often and should be republished.  It is still not clear to me which actions change your Public key:
   * `YES` Adding a jpg photo.
-  * `YES` Adding / revoking an identity. (NOTE: identities cannot *modified*)
+  * `YES` Adding / revoking an identity. (NOTE: identities cannot be *modified*)
   * `YES` Updating the expiration date.
   * `YES` Certifying / adding or revoking a subkey.
   * `YES` Importing a signed copy of your key from someone else.
   * `YES` Adding a keyserver url.
-  * `???` Changing the password used to encrypt the master key (I don't think so)?
   * `NO` Signing another person's key.
   * `NO` Publishing your Public key to a keyserver.
 
-#### gpg will use various cryptic symbols noting the properties of the key.
+#### gpg will use various cryptic symbols and abbreviations noting the properties of the key
 When listing Secret keys (`gpg --list-secret-keys` or `gpg -K`) you may see:
 * `sec` = Secret (aka Private) and Public key exists for the Master key.
-* `sec#` = Master key secret is not present, only the Public key (called a "stub").  This is normal when using subkeys on the online system.
-* `uid` = User ID.  Combination of name, email address and an optional comment.  You can have multiple UIDs, add and remove (`revoke`) them without breaking your Master key.  If you add a photo, it will be a new `uid` added ot the key.
+* `sec#` = Master key secret is not present, only a "stub" of the private key.  This is normal when using subkeys without their Master key being present.
+* `uid` = User ID.  Combination of name, email address and an optional comment.  You can have multiple UIDs, add and remove (`revoke`) them without breaking your Master key.  If you add a photo, it will be a new `uid` added to the key. When people "sign your key", they are really signing one or more of these UIDs.
 * `ssb` = Subkey Certified by the master key.
 * `ssb>` = Subkey where the private portion is on the YubiKey or another device.
 
@@ -61,7 +57,7 @@ When listing Public keys (`gpg --list-keys` or `gpg -k`) you may see:
 
 When editing a key (`gpg --edit-key KEYID`) you may see:
 * `sub*` = The star indicates the particular Subkey is selected for editing.
-* `sig!3` = You see this after running the `check` command. I don't know what it means.
+* `sig!3` = You see this after running the `check` command. The number explains the quality of the ID check (see below).
 
 When listing signatures (`gpg --list-sigs KEYID`) you may see:
 * `sig `, `sig 1`, `sig 2`, `sig 3` = How thoroughly was the identity claim verified (`sig`=unknown ... `sig 3`=extremely thorough).
@@ -78,7 +74,7 @@ There are different types of keys, you can see this on the right as "usage":
 * As of February 2016, I was not able to find any Linux distribution that could write gpg keys to the YubiKey without additional software being installed.  Therefore you will need to try and transfer all required software to the offline system (complex and could compromise your offline system), or you sacrifice some security and temporarily bring the subkeys onto a system which can easily write to the YubiKey.
   * In my case, I tried to get the device to work using offline Xubuntu, Tails, etc, but was not successful.
   * Instead, I created the master key, then put that into a TrueCrypt container.  Then did the same with a separate container for subkeys.  I then moved the subkey container to a computer with Internet connection turned off, opened it and wrote the subkeys onto the YubiKey device.  I believe the computer was free of malware, but cannot be 100% certain.  The master key is only used on an air-gapped computer, so it is safe and can be used to revoke subkeys if needed.
-* I now use [Tails 2.x](https://tails.boum.org/) on a USB stick whenever I need to work with my Master key (eg: sign another user's key).  This works well on my Macbook Air as there is no functioning WiFi driver and furthermore it is effortless to disable networking on boot.
+* I now use [Tails 2.x](https://tails.boum.org/) on a USB stick whenever I need to work with my Master key (eg: sign another user's key).  This works well on my MacBook Air as there is no functioning WiFi driver and furthermore it is effortless to disable networking on boot.
 
 #### Creating stubs on a new computer
 
