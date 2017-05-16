@@ -54,7 +54,7 @@ function git-fixup () {
     # Non-interactive rebase using `true` as EDITOR
     # http://stackoverflow.com/a/12395024/1117929
     GIT_SEQUENCE_EDITOR=true git rebase --interactive HEAD~2 &&
-    git push --force
+    git push --quiet --force
 }
 ```
 
