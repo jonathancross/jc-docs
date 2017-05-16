@@ -1,6 +1,8 @@
 Git Cheat Sheet
 =======================
 
+Git can be challenging to learn and often _**makes the easy complicated**_ in its attempt to _**make the complicated easy**_. This is a collection of notes, aliases, shortcuts and explanations that help me to survive.
+
 ## Configuration
 
 ### Some useful bash aliases
@@ -30,6 +32,30 @@ alias git-squash='git rebase --interactive'
 # Usage: git-push-branch
 alias git-push-branch="git push --set-upstream origin $(git branch | awk '/^\* / { print $2 }') > /dev/null"
 
+# Grab latest changes from the original project you forked on GitHub.
+# Before doing this, you should have configured:
+#    git remote add upstream https://github.com/ORIGINAL/ORIGINAL.git
+# If you have a branch, you should go there and type `git merge master`.
+# Usage: git-merge-from-upstream
+alias git-merge-from-upstream='git fetch upstream && git checkout master && git merge upstream/master'
+
+```
+
+### Bash function used to automate a "fixup" of the previous commit
+```bash
+# Call git-fixup (from bash) to add your current changes to the last commit and force push.
+function git-fixup () {
+  local PREV_COMMIT=$(git log -1 | perl -n -e "/^commit (.+)/ && print \"\$1\n\"")
+  echo "Last commit:"
+  git log -1
+  echo -e "Fixing up last commit: $PREV_COMMIT"
+  # Commit the change without signing because the rebase later is signed.
+  git commit -a --no-gpg-sign --fixup "$PREV_COMMIT" &&
+    # Non-interactive rebase using `true` as EDITOR
+    # http://stackoverflow.com/a/12395024/1117929
+    GIT_SEQUENCE_EDITOR=true git rebase --interactive HEAD~2 &&
+    git push --force
+}
 ```
 
 ### git aliases
@@ -42,13 +68,13 @@ git config --global alias.unstage 'reset HEAD --'
 ### git global config
 ```bash
 # Config git rebase -i to always autosquash.
-# If you use `git commit --fixup [hash]`, then `git rebase -i HEAD~2` you will see that it marks the fixup items
+# If you use `git commit --fixup [hash]`, then `git rebase -i HEAD~2` you will see that it marks the fixup items.
 # So you just need to hit save from the editor.
 # BTW: Why do I still need to go though this stupid interactive session when using "autosquash"!?
-#      Seems like git makes the easy complicated in its attempt to make the complicated easy.
+#      Seems the hack-job workaround is to set `GIT_SEQUENCE_EDITOR=true`... see `git-fixup` above.
 git config --global rebase.autosquash true
 
-# When pushing, alyways use the current branch.   Duh!
+# When pushing, always use the current branch.   Duh!
 git config --global push.default current
 ```
 
@@ -69,8 +95,10 @@ git log --show-signature -1               # Details of last commit sig.
 git log --pretty="format:%h %G? %aN  %s"  # Log of last commits. The "G" means good signature, "N" means no sig.
 ```
 
-Troublshooting, cookbook and examples
+Troubleshooting, cookbook and examples
 ==============================
+
+* http://ohshitgit.com - Solutions to common problems in plain English.
 
 ### Useful command reference
 ```bash
@@ -84,11 +112,11 @@ git remote set-url origin git@github.com:jonathancross/pics.jonathancross.com.gi
 git remote -v  # Show the remotes that are configured: https://help.github.com/articles/fork-a-repo/
 ```
 
-### Move last commmit from current branch to a new one
+### Move last commit from current branch to a new one
 ```bash
-git branch newbranch
+git branch newbranch    # Creates a new branch using your current state in master
 git reset --hard HEAD~1 # Go back 1 commit. You *will* lose uncommitted work.
-git checkout newbranch
+git checkout newbranch  # Switch to the new branch you made from master.
 ```
 
 ### Edit a commit message created on a branch after pull request initiated
@@ -130,7 +158,7 @@ git push -f            # Force push the amended commit & message
 ```
 
 ### Making a new branch after having already added changes in master
-If you want to set your new branch to start at dome time in the past, just add that commit hash to the end of your `git branch`
+If you want to set your new branch to start at some time in the past, just add that commit hash to the end of your `git branch`
 ```bash
 git log                # Get the commit hash of your starting point
 git branch new-branch e673afd45c5246ac0f16f30472c677bcb9c0fd7b
@@ -147,9 +175,9 @@ git checkout new-branch
 
 #### Submitting multiple pull requests to same upstream repo
 In many situations, I'd like to be able to submit a series of unrelated pull requests to a repo.
-Unfortunately, if the first PR was from `master` branch (the default), future branches you create will include those changes unless you tell the branch to point to an earlier commit (see [Making a new branch after having already added changes in master](#making-a-new-branch-after-having-already-added-changes-in-master) above).
+Unfortunately, if the first PR was from `master` branch (the default), future branches you create will include those changes unless you tell the branch to point to an earlier commit.
 
-**Bottom line:** Always start with a new branch!
+**Bottom line:** Always start with a new branch!  If you forgot, then see [Making a new branch after having already added changes in master](#making-a-new-branch-after-having-already-added-changes-in-master) above.
 
 ### License
 
