@@ -9,6 +9,7 @@ A collection of SHA-256 software hashes I have verified
 `0ec0f4bb66ef660d3c3b0433dd3186e093a1b4f23bf8fac8b4ebca9fa6d80420`  GPG_Suite-2015.09.dmg
 `d8b618878b1949496197e31ee4b8d36b50ad6169cc5acef8c1cb1917e6b4200b`  hpprinterdriver3.1.dmg
 `44271fef18fd07a29241e5324be407fa8edce77fb0b55c5646cd238092cdf823`  KeePassX-2.0.3.dmg
+`0d6d03b6d5b13e0916f18d156dd83a5b46d9f6b25625af8723f211ad39d261cb`  Keybase.dmg (92012764 bytes) v1.0.22-20170515141716+b608f0e ([Downloaded](https://keybase.io/docs/the_app/install_macos) on 2017-05-20)
 `b46e5786343f236d203037a7ace8f1b28145a51a3f84fa527efcf62f47b5b8de`  meld-1.8.4.tar.xz
 `db3572c5c6905b09f4fc28415a7f6f223014391492dd2165ed1bc8512ac4e6fd`  meld-3.12.3.tar.xz
 `c80ca68037158216a080e59e90b0a70761cff2f317d3c9cd0eeb661e8e2a1f99`  monero-gui-mac-x64-v0.10.3.1.tar.bz2
