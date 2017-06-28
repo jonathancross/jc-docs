@@ -8,14 +8,15 @@ A collection of SHA-256 software hashes I have verified
 `6f2308b082e6b74ac43e31d59b3ea50555de02984fb6ba5a229bbeddb57e8025`  GnuPG-2.1.9.dmg
 `0ec0f4bb66ef660d3c3b0433dd3186e093a1b4f23bf8fac8b4ebca9fa6d80420`  GPG_Suite-2015.09.dmg
 `d8b618878b1949496197e31ee4b8d36b50ad6169cc5acef8c1cb1917e6b4200b`  hpprinterdriver3.1.dmg
-`44271fef18fd07a29241e5324be407fa8edce77fb0b55c5646cd238092cdf823`  KeePassX-2.0.3.dmg
-`0d6d03b6d5b13e0916f18d156dd83a5b46d9f6b25625af8723f211ad39d261cb`  Keybase.dmg (92012764 bytes) v1.0.22-20170515141716+b608f0e ([Downloaded](https://keybase.io/docs/the_app/install_macos) on 2017-05-20)
+`44271fef18fd07a29241e5324be407fa8edce77fb0b55c5646cd238092cdf823`  [KeePassX-2.0.3.dmg](https://www.keepassx.org/releases/2.0.3/KeePassX-2.0.3.dmg) ([sig](https://www.keepassx.org/releases/2.0.3/KeePassX-2.0.3.dmg.sig))
+`0d6d03b6d5b13e0916f18d156dd83a5b46d9f6b25625af8723f211ad39d261cb`  [Keybase.dmg](https://keybase.io/docs/the_app/install_macos) [1]
 `b46e5786343f236d203037a7ace8f1b28145a51a3f84fa527efcf62f47b5b8de`  meld-1.8.4.tar.xz
 `db3572c5c6905b09f4fc28415a7f6f223014391492dd2165ed1bc8512ac4e6fd`  meld-3.12.3.tar.xz
-`c80ca68037158216a080e59e90b0a70761cff2f317d3c9cd0eeb661e8e2a1f99`  monero-gui-mac-x64-v0.10.3.1.tar.bz2
-`fd17d55a8c9e901ff4064c39d9e14786cdd077aff9b3bb556e60d3a5e322050c`  monero-mac-x64-v0.10.3.1.tar.bz2
+`c80ca68037158216a080e59e90b0a70761cff2f317d3c9cd0eeb661e8e2a1f99`  [monero-gui-mac-x64-v0.10.3.1.tar.bz2](https://github.com/monero-project/monero-core/releases/download/v0.10.3.1/monero-gui-mac-x64-v0.10.3.1.tar.bz2) [2]
+`fd17d55a8c9e901ff4064c39d9e14786cdd077aff9b3bb556e60d3a5e322050c`  [monero-mac-x64-v0.10.3.1.tar.bz2](https://github.com/monero-project/monero/releases/download/v0.10.3.1/monero-mac-x64-v0.10.3.1.tar.bz2) [2]
 `0f31b7d8f00779969e339bec89163b573c9c9e9ce10cdbbe0c4acfc11fcb527b`  Mumble-1.2.15.dmg
-`59a2549913f523dac5a51859de135d92e434c1801ca571eb2d74664d19d6b627`  picasamac39.dmg
+`59a2549913f523dac5a51859de135d92e434c1801ca571eb2d74664d19d6b627`  picasamac39.dmg [3]
+`e3d0d74242f25a7c8b097cedf7cb9ccb67b11db8764166748f3f793c41e6199d`  [picasamac39.dmg](https://www.macupdate.com/app/mac/30131/picasa/download) [4]
 `dda519484075ce455f91962d04ca57535c50604b30e886e5025ab97a4e5be1df`  qbittorrent-3.3.11.dmg
 `fe46c69d783f2aa290d18caec30b3f17481c47def9c271dc66db1b7bbd3074c5`  [sudo-1.8.19p2.pkg](https://www.sudo.ws/sudo/dist/packages/macOS/10.11/sudo-1.8.19p2.pkg)
 `04db58b737c05bb6b0b83f1cb37a29edec844b59ff223b9e213ee1f4e287f586`  TrueCrypt 7.1a Mac OS X.dmg
@@ -24,8 +25,28 @@ A collection of SHA-256 software hashes I have verified
 
 ## LINUX
 
-`4915473265d58720fd8f019e536c2b7fb02648ab51a8087e84aa1e2434788452`  monero-gui-linux-x64-v0.10.3.1.tar.bz2
+`4915473265d58720fd8f019e536c2b7fb02648ab51a8087e84aa1e2434788452`  [monero-gui-linux-x64-v0.10.3.1.tar.bz2](https://github.com/monero-project/monero-core/releases/download/v0.10.3.1/monero-gui-linux-x64-v0.10.3.1.tar.bz2) [2]
+`8db80f8cc4f80d4106db807432828df730a59eac78972ea81652aa6b9bac04ad`  [monero-linux-x64-v0.10.3.1.tar.bz2](https://github.com/monero-project/monero/releases/download/v0.10.3.1/monero-linux-x64-v0.10.3.1.tar.bz2) [2]
 `f3f31634c05243e33a82a96e82c3cd691958057489e47eebe8ac3b0c0e6dd3b4`  sublime-text_build-3126_amd64.deb
+`676f1322166536dc1e27b8db22462ae73f0891888cfcb09033ebc38f586e834a`  [tails-amd64-3.0.iso](https://tails.mirror.metalgamer.eu/tails/stable/tails-amd64-3.0/tails-amd64-3.0.iso) [5]
+`43f895cfcdbe230907c47b4cd465e5c967bbe741a9b68512c09f809d1a2da1e9`  truecrypt-7.1a-linux-x64.tar.gz
+`62f95e8d8a7cee3dd1072f54942d39605e2a860031ce56ea0a6e6b832e4ad147`  truecrypt-sha256-hashes.txt
+
+
+#### Notes:
+
+[1] Keybase.dmg : (92012764 bytes) v1.0.22-20170515141716+b608f0e (Downloaded on 2017-05-20)
+
+[2] Monero : [signed hashes](https://getmonero.org/downloads/hashes.txt) and [GPG keys](https://github.com/monero-project/monero/tree/master/utils/gpg_keys).
+
+[3] picasamac39.dmg : v3.9.139 - 84,801,775 bytes
+
+[4] picasamac39.dmg : v3.9.141.306 - 87,858,245 bytes
+
+[5] tails-amd64-3.0.iso : File [signature](https://tails.boum.org/torrents/files/tails-amd64-3.0.iso.sig) and signing key [0x58ACD84F](https://tails.boum.org/tails-signing.key).
+
+
+--------------------------------------------------------------------------------
 
 
 Explanation
