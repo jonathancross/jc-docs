@@ -6,7 +6,7 @@ A collection of SHA-256 software hashes I have verified
 `a5146a143c7bbd6a0b8384a1aa233243b72cca94cbec62aa3d70a82f5b262550`  androidfiletransfer.dmg (v 1.0.50.2266)
 `18317ba924475223ae6fc50787850e63ed078d4d4a2e8d534c5843a2df2a9bf2`  electrum-2.7.18.dmg
 `6f2308b082e6b74ac43e31d59b3ea50555de02984fb6ba5a229bbeddb57e8025`  GnuPG-2.1.9.dmg
-`0ec0f4bb66ef660d3c3b0433dd3186e093a1b4f23bf8fac8b4ebca9fa6d80420`  GPG_Suite-2015.09.dmg
+`a29edb4f44abfb1608a6a957aca21e6cc21d1b2c5f400ea5008f2ac18cb8cbc1`  [GPG_Suite-2017.1b3-v2.dmg](https://releases.gpgtools.org/GPG_Suite-2017.1b3-v2.dmg) ([sig](https://releases.gpgtools.org/GPG_Suite-2017.1b3-v2.dmg.sig))
 `d8b618878b1949496197e31ee4b8d36b50ad6169cc5acef8c1cb1917e6b4200b`  hpprinterdriver3.1.dmg
 `44271fef18fd07a29241e5324be407fa8edce77fb0b55c5646cd238092cdf823`  [KeePassX-2.0.3.dmg](https://www.keepassx.org/releases/2.0.3/KeePassX-2.0.3.dmg) ([sig](https://www.keepassx.org/releases/2.0.3/KeePassX-2.0.3.dmg.sig))
 `0d6d03b6d5b13e0916f18d156dd83a5b46d9f6b25625af8723f211ad39d261cb`  [Keybase.dmg](https://keybase.io/docs/the_app/install_macos) [1]
@@ -21,6 +21,7 @@ A collection of SHA-256 software hashes I have verified
 `fe46c69d783f2aa290d18caec30b3f17481c47def9c271dc66db1b7bbd3074c5`  [sudo-1.8.19p2.pkg](https://www.sudo.ws/sudo/dist/packages/macOS/10.11/sudo-1.8.19p2.pkg)
 `04db58b737c05bb6b0b83f1cb37a29edec844b59ff223b9e213ee1f4e287f586`  TrueCrypt 7.1a Mac OS X.dmg
 `de47cbbbcd9be8241a31a7924a6840a70215300154d352f28c31d8fbb2edbf2e`  tuxerantfs_2015.dmg
+`d957b207b13b705f9ef5e4f54942af0b41fb335219ca0833c34627ce95e968f9`  [tuxerantfs_2016.1.dmg](http://www.tuxera.com/products/tuxera-ntfs-for-mac/download/)
 `c9b3a373b7fd989331117acb9696fffd6b9ee1a08ba838b02ed751b184005211`  XQuartz-2.7.7.dmg
 
 ## LINUX
@@ -54,7 +55,7 @@ Explanation
 
 ### How is this information useful?
 
-You can use the hashes (aka "digest" values) above to check if a file you downloaded matches the one I ([Jonathan Cross](https://github.com/jonathancross)) downloaded.  If you find a mismatch, **[please let me know](https://github.com/jonathancross/jc-docs/issues/new?title=Feedback:%20Software_Hashes)** immediately.
+You can use the hashes (aka "digest" or "digital fingerprint" values) above to check if a file you downloaded matches the one I ([Jonathan Cross](https://github.com/jonathancross)) downloaded.  If you find a mismatch, **[please let me know](https://github.com/jonathancross/jc-docs/issues/new?title=Feedback:%20Software_Hashes)** immediately.
 
 ### How does this list provide security?
 
@@ -81,7 +82,6 @@ One of these commands should work on all recent **Mac OSX / Linux** machines:
 
 You'll have to install software that can calculate SHA-256 hashes.  [hashdeep](https://github.com/jessek/hashdeep/releases) (part of the `md5deep-4.4.zip` package) seems okay.
 
+### What about PGP / GPG signatures?
 
-### What about PGP signatures?
-
-I'll try add info about the signatures and keys I know of at some point.
+Digital signatures offer additional information.  They start with a hash of the file, then this hash is digitally "signed" with the developer's key.  This information can be used to determine if _**the the program you are installing**_ was created by _**the person writing the software**_ (or at least someone with access to their private key).  The most common program for doing this is [Gnu Privacy Guard](https://gnupg.org/) (aka `gpg` command) which was developed as a Free / Libre implementation of the [OpenPGP](https://en.wikipedia.org/wiki/OpenPGP).  I have included digital signature info above when available.
