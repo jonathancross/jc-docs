@@ -79,7 +79,7 @@ There are different types of keys, you can see this on the right as "usage":
 #### Creating stubs on a new computer
 
 1. Import public key.
-2. Run `sudo gpg -–card-status`
+2. Run `sudo gpg --card-status`
 3. May need to change owner of secure keyring to yourself if it was just created:
 
         sudo chown $USER ~/.gnupg/secring.gpg
@@ -87,7 +87,7 @@ There are different types of keys, you can see this on the right as "usage":
 
 ##### Permissions problems
 
-Symptom: `gpg -–card-status` works as root, but not as an unpriviledged user.
+Symptom: `gpg --card-status` works as root, but not as an unprivileged user.
 
     gpg --card-status
     gpg: selecting openpgp failed: unknown command
