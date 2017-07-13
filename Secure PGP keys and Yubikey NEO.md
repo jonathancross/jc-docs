@@ -36,9 +36,9 @@ Please note that YubiKey NEO devices issued before 2015-04-14 [contain an insecu
 * If you add a picture (must be a jpg!), add a default keyserver, etc. it will be stored as part of your Public key.  Your pub key will be changing often and should be republished.  It is still not clear to me which actions change your Public key:
   * `YES` Adding a jpg photo.
   * `YES` Adding / revoking an identity. (NOTE: identities cannot be *modified*)
-  * `YES` Updating the expiration date.
+  * `YES` Updating the expiration date on keys.
   * `YES` Certifying / adding or revoking a subkey.
-  * `YES` Importing a signed copy of your key from someone else.
+  * `YES` Importing a key signature from someone else.
   * `YES` Adding a keyserver url.
   * `NO` Signing another person's key.
   * `NO` Publishing your Public key to a keyserver.
@@ -69,12 +69,9 @@ There are different types of keys, you can see this on the right as "usage":
 * `usage: E` = **Encrypt** messages to sent to other people.  This can be a Subkey.
 * `usage: A` = **Authenticate** yourself, for example when using SSH to log into a server.  This can be a Subkey.
 
-#### Difficulties with offline master key
+#### Difficulties with offline master key and older versions of gnupg
 
-* As of February 2016, I was not able to find any Linux distribution that could write gpg keys to the YubiKey without additional software being installed.  Therefore you will need to try and transfer all required software to the offline system (complex and could compromise your offline system), or you sacrifice some security and temporarily bring the subkeys onto a system which can easily write to the YubiKey.
-  * In my case, I tried to get the device to work using offline Xubuntu, Tails, etc, but was not successful.
-  * Instead, I created the master key, then put that into a TrueCrypt container.  Then did the same with a separate container for subkeys.  I then moved the subkey container to a computer with Internet connection turned off, opened it and wrote the subkeys onto the YubiKey device.  I believe the computer was free of malware, but cannot be 100% certain.  The master key is only used on an air-gapped computer, so it is safe and can be used to revoke subkeys if needed.
-* I now use [Tails 2.x](https://tails.boum.org/) on a USB stick whenever I need to work with my Master key (eg: sign another user's key).  This works well on my MacBook Air as there is no functioning WiFi driver and furthermore it is effortless to disable networking on boot.
+I now use [Tails 3.x](https://tails.boum.org/) on a USB stick whenever I need to work with my Master key (eg: sign another user's key).  This works well on my MacBook Air as there is no functioning WiFi driver and furthermore it is effortless to disable networking on boot.  Tails now contains a modern version of Gnupg 2.1.x which fixes many known bugs in previous versions.
 
 #### Creating stubs on a new computer
 
