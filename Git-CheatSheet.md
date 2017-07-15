@@ -173,6 +173,15 @@ git checkout new-branch
 * To merge a branch back into master, use a pull request.  Will go from right (compare or "head" branch, what you did) to left ("base" where it should go)!
 * To merge changes made in original to the fork, click on the green arrows, change the base, then create pull request, then merge the pull request.
 
+
+### To checkout a pull request locally:
+Eg: Pull this locally to test: https://github.com/monero-project/monero-core/pull/786 (branch name is `android_dockerfile`)
+
+  cd monero-project
+  git fetch upstream pull/786/head:android_dockerfile
+
+Can probably then push to my fork, then submit a PR to them. Need to test.
+
 #### Submitting multiple pull requests to same upstream repo
 In many situations, I'd like to be able to submit a series of unrelated pull requests to a repo.
 Unfortunately, if the first PR was from `master` branch (the default), future branches you create will include those changes unless you tell the branch to point to an earlier commit.
