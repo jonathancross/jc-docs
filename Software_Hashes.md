@@ -22,6 +22,7 @@ A collection of SHA-256 software hashes I have verified
 `04db58b737c05bb6b0b83f1cb37a29edec844b59ff223b9e213ee1f4e287f586`  TrueCrypt 7.1a Mac OS X.dmg
 `de47cbbbcd9be8241a31a7924a6840a70215300154d352f28c31d8fbb2edbf2e`  tuxerantfs_2015.dmg
 `d957b207b13b705f9ef5e4f54942af0b41fb335219ca0833c34627ce95e968f9`  [tuxerantfs_2016.1.dmg](http://www.tuxera.com/products/tuxera-ntfs-for-mac/download/)
+`51a6cc75841ed60e01ea62974907049fd3d39be7a916f30e77d842c1a8354655`  [VirtualBox-5.1.26-117224-OSX.dmg](http://download.virtualbox.org/virtualbox/5.1.26/VirtualBox-5.1.26-117224-OSX.dmg) [5]
 `c9b3a373b7fd989331117acb9696fffd6b9ee1a08ba838b02ed751b184005211`  XQuartz-2.7.7.dmg
 
 ## LINUX
@@ -29,7 +30,7 @@ A collection of SHA-256 software hashes I have verified
 `4915473265d58720fd8f019e536c2b7fb02648ab51a8087e84aa1e2434788452`  [monero-gui-linux-x64-v0.10.3.1.tar.bz2](https://github.com/monero-project/monero-core/releases/download/v0.10.3.1/monero-gui-linux-x64-v0.10.3.1.tar.bz2) [2]
 `8db80f8cc4f80d4106db807432828df730a59eac78972ea81652aa6b9bac04ad`  [monero-linux-x64-v0.10.3.1.tar.bz2](https://github.com/monero-project/monero/releases/download/v0.10.3.1/monero-linux-x64-v0.10.3.1.tar.bz2) [2]
 `f3f31634c05243e33a82a96e82c3cd691958057489e47eebe8ac3b0c0e6dd3b4`  sublime-text_build-3126_amd64.deb
-`676f1322166536dc1e27b8db22462ae73f0891888cfcb09033ebc38f586e834a`  [tails-amd64-3.0.iso](https://tails.mirror.metalgamer.eu/tails/stable/tails-amd64-3.0/tails-amd64-3.0.iso) [5]
+`676f1322166536dc1e27b8db22462ae73f0891888cfcb09033ebc38f586e834a`  [tails-amd64-3.0.iso](https://tails.mirror.metalgamer.eu/tails/stable/tails-amd64-3.0/tails-amd64-3.0.iso) [6]
 `43f895cfcdbe230907c47b4cd465e5c967bbe741a9b68512c09f809d1a2da1e9`  truecrypt-7.1a-linux-x64.tar.gz
 `62f95e8d8a7cee3dd1072f54942d39605e2a860031ce56ea0a6e6b832e4ad147`  truecrypt-sha256-hashes.txt
 
@@ -44,7 +45,9 @@ A collection of SHA-256 software hashes I have verified
 
 [4] picasamac39.dmg : v3.9.141.306 - 87,858,245 bytes
 
-[5] tails-amd64-3.0.iso : File [signature](https://tails.boum.org/torrents/files/tails-amd64-3.0.iso.sig) and signing key [0x58ACD84F](https://tails.boum.org/tails-signing.key).
+[5] [VirtualBox-5.1.26-117224-OSX.dmg](http://download.virtualbox.org/virtualbox/5.1.26/VirtualBox-5.1.26-117224-OSX.dmg) : v5.1.26 -  94,537,485 bytes (verified via [SHA256SUMS](https://www.virtualbox.org/download/hashes/5.1.26/SHA256SUMS))
+
+[6] tails-amd64-3.0.iso : File [signature](https://tails.boum.org/torrents/files/tails-amd64-3.0.iso.sig) and signing key [0x58ACD84F](https://tails.boum.org/tails-signing.key).
 
 
 --------------------------------------------------------------------------------
