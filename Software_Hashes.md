@@ -4,6 +4,7 @@ A collection of SHA-256 software hashes I have verified
 ## Mac OSX
 
 `a5146a143c7bbd6a0b8384a1aa233243b72cca94cbec62aa3d70a82f5b262550`  androidfiletransfer.dmg (v 1.0.50.2266)
+`68fffc5e94d65d0f5dc336ac2e603a13307aa77bb5ccc6b2968f7c117dd89395`  [ccid-installer.dmg v0.14](https://github.com/martinpaljak/osx-ccid-installer/releases/tag/v0.14)
 `18317ba924475223ae6fc50787850e63ed078d4d4a2e8d534c5843a2df2a9bf2`  electrum-2.7.18.dmg
 `6f2308b082e6b74ac43e31d59b3ea50555de02984fb6ba5a229bbeddb57e8025`  GnuPG-2.1.9.dmg
 `a29edb4f44abfb1608a6a957aca21e6cc21d1b2c5f400ea5008f2ac18cb8cbc1`  [GPG_Suite-2017.1b3-v2.dmg](https://releases.gpgtools.org/GPG_Suite-2017.1b3-v2.dmg) ([sig](https://releases.gpgtools.org/GPG_Suite-2017.1b3-v2.dmg.sig))
@@ -15,6 +16,7 @@ A collection of SHA-256 software hashes I have verified
 `c80ca68037158216a080e59e90b0a70761cff2f317d3c9cd0eeb661e8e2a1f99`  [monero-gui-mac-x64-v0.10.3.1.tar.bz2](https://github.com/monero-project/monero-core/releases/download/v0.10.3.1/monero-gui-mac-x64-v0.10.3.1.tar.bz2) [2]
 `fd17d55a8c9e901ff4064c39d9e14786cdd077aff9b3bb556e60d3a5e322050c`  [monero-mac-x64-v0.10.3.1.tar.bz2](https://github.com/monero-project/monero/releases/download/v0.10.3.1/monero-mac-x64-v0.10.3.1.tar.bz2) [2]
 `0f31b7d8f00779969e339bec89163b573c9c9e9ce10cdbbe0c4acfc11fcb527b`  Mumble-1.2.15.dmg
+`b35a56cafa4403fcb941422e4975c843018965282571d05a660485a21fde1bbe`  OpenSC-0.17.0.dmg
 `59a2549913f523dac5a51859de135d92e434c1801ca571eb2d74664d19d6b627`  picasamac39.dmg [3]
 `e3d0d74242f25a7c8b097cedf7cb9ccb67b11db8764166748f3f793c41e6199d`  [picasamac39.dmg](https://www.macupdate.com/app/mac/30131/picasa/download) [4]
 `dda519484075ce455f91962d04ca57535c50604b30e886e5025ab97a4e5be1df`  qbittorrent-3.3.11.dmg
