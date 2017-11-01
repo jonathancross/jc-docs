@@ -15,7 +15,7 @@ TL;DR; This guide will help you easily configure an Android Bitcoin Wallet to re
 
 ## Intro
 
-Bitcoin mobile clients generally offer significantly reduced security and privacy in comparison to a full node. For many users, this is an unfortunate, but seemingly necessary usability compromise. Wallets have attempted to address the issues in several ways, but all have significant downsides. This guide presents a practical setup for enhanced privacy and security on mobile devices. Specifically, the guide below describes how to use the [Bitcoin Wallet for Android](https://play.google.com/store/apps/details?id=de.schildbach.wallet) and its "Trusted peer" option with a Tor hidden service to avoid several critical issues without sacrificing usability.  This guide does not cover any of the issues related to endpoint security (keeping your Android device and full node secure) or analysis of the Bitcoin blockchain.
+Bitcoin mobile clients generally offer significantly reduced security and privacy in comparison to a full node. For many users, this is an unfortunate, but seemingly necessary usability compromise.  Wallets have attempted to address the issues in several ways, but all have significant downsides. This guide presents a practical setup for enhanced privacy and security on mobile devices. Specifically, the guide below describes how to use the [Bitcoin Wallet for Android](https://play.google.com/store/apps/details?id=de.schildbach.wallet) and its "Trusted peer" option with a Tor hidden service to avoid several critical issues without sacrificing usability.  This guide does not cover any of the issues related to endpoint security (keeping your Android device and full node secure) or privacy loss due to blockchain analysis.
 
 
 ## Background
@@ -95,7 +95,7 @@ This setup will protect your **transactions** from passive surveillance, however
 2. Current fee data is requested from a server controlled by [Bitcoin Wallet developers](https://play.google.com/store/apps/dev?id=5750589945930020869). (public data)
 3. Exchange rate feed from bitcoinaverage.com. (public data)
 
-This data is transferred over https and tunneled through Tor, so they do involve exit nodes which *could* try and spy on you.  A malicious entrance node might harvest your IP address and a little metadata, but nothing of real value because the connection is authenticated and data is encrypted.
+This data is transferred over `https` and tunneled through Tor, so they do involve exit nodes which *could* try and spy on you.  A malicious entrance node might harvest your IP address and a little metadata, but nothing of real value because the connection is authenticated and data is encrypted.
 
 These connections should therefore not present serious privacy / security concerns, but are good to be aware of.
 
@@ -109,7 +109,8 @@ Here are a few additional possibilities which I have not tested:
 
 1. Use [Electrum for Android](https://play.google.com/store/apps/details?id=org.electrum.electrum) with your own Electrum server.
 2. Use a standard VPN or SSH tunnel to route traffic over secure connection from your mobile device to your own full node.
-3. Use ssh to remotely login to your full node, then use the [Bitcoin command line interface](https://bitcoin.org/en/developer-examples#transactions) to handle transactions (not user friendly).
+3. Use ssh to remotely login to your full node, then use the [Bitcoin Core command line interface](https://bitcoin.org/en/developer-examples#transactions) or to handle transactions (not user friendly).
+4. Run a pruned full node on your mobile device (significant bandwidth required)
 
 These options may also use Tor to further obfuscate your IP address.
 
