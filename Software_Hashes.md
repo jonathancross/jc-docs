@@ -11,6 +11,7 @@ A collection of SHA-256 software hashes I have verified
 `d8b618878b1949496197e31ee4b8d36b50ad6169cc5acef8c1cb1917e6b4200b`  hpprinterdriver3.1.dmg
 `44271fef18fd07a29241e5324be407fa8edce77fb0b55c5646cd238092cdf823`  [KeePassX-2.0.3.dmg](https://www.keepassx.org/releases/2.0.3/KeePassX-2.0.3.dmg) ([sig](https://www.keepassx.org/releases/2.0.3/KeePassX-2.0.3.dmg.sig))
 `0d6d03b6d5b13e0916f18d156dd83a5b46d9f6b25625af8723f211ad39d261cb`  [Keybase.dmg](https://keybase.io/docs/the_app/install_macos) [1]
+`5521bcf0dccc8394fbb95b1bd70c85abc2e704474b3d6da465b327a865c8002c`  [macosupd10.12.1.dmg](http://support.apple.com/downloads/DL1897/en_US/macosupd10.12.1.dmg) macOS Sierra
 `b46e5786343f236d203037a7ace8f1b28145a51a3f84fa527efcf62f47b5b8de`  meld-1.8.4.tar.xz
 `db3572c5c6905b09f4fc28415a7f6f223014391492dd2165ed1bc8512ac4e6fd`  meld-3.12.3.tar.xz
 `c80ca68037158216a080e59e90b0a70761cff2f317d3c9cd0eeb661e8e2a1f99`  [monero-gui-mac-x64-v0.10.3.1.tar.bz2](https://github.com/monero-project/monero-core/releases/download/v0.10.3.1/monero-gui-mac-x64-v0.10.3.1.tar.bz2) [2]
