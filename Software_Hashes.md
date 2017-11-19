@@ -9,6 +9,7 @@ A collection of SHA-256 software hashes I have verified
 `6f2308b082e6b74ac43e31d59b3ea50555de02984fb6ba5a229bbeddb57e8025`  GnuPG-2.1.9.dmg
 `a29edb4f44abfb1608a6a957aca21e6cc21d1b2c5f400ea5008f2ac18cb8cbc1`  [GPG_Suite-2017.1b3-v2.dmg](https://releases.gpgtools.org/GPG_Suite-2017.1b3-v2.dmg) ([sig](https://releases.gpgtools.org/GPG_Suite-2017.1b3-v2.dmg.sig))
 `d8b618878b1949496197e31ee4b8d36b50ad6169cc5acef8c1cb1917e6b4200b`  hpprinterdriver3.1.dmg
+`a6ea47965542b5c06787f832f3ae5be65da6c6ed91664b0c0ed4994650d98244`  [javaforosx.dmg](https://support.apple.com/kb/DL1572?locale=en_US) Java for OS X 2017-001
 `44271fef18fd07a29241e5324be407fa8edce77fb0b55c5646cd238092cdf823`  [KeePassX-2.0.3.dmg](https://www.keepassx.org/releases/2.0.3/KeePassX-2.0.3.dmg) ([sig](https://www.keepassx.org/releases/2.0.3/KeePassX-2.0.3.dmg.sig))
 `0d6d03b6d5b13e0916f18d156dd83a5b46d9f6b25625af8723f211ad39d261cb`  [Keybase.dmg](https://keybase.io/docs/the_app/install_macos) [1]
 `5521bcf0dccc8394fbb95b1bd70c85abc2e704474b3d6da465b327a865c8002c`  [macosupd10.12.1.dmg](http://support.apple.com/downloads/DL1897/en_US/macosupd10.12.1.dmg) macOS Sierra
@@ -23,7 +24,6 @@ A collection of SHA-256 software hashes I have verified
 `dda519484075ce455f91962d04ca57535c50604b30e886e5025ab97a4e5be1df`  qbittorrent-3.3.11.dmg
 `fe46c69d783f2aa290d18caec30b3f17481c47def9c271dc66db1b7bbd3074c5`  [sudo-1.8.19p2.pkg](https://www.sudo.ws/sudo/dist/packages/macOS/10.11/sudo-1.8.19p2.pkg)
 `04db58b737c05bb6b0b83f1cb37a29edec844b59ff223b9e213ee1f4e287f586`  TrueCrypt 7.1a Mac OS X.dmg
-`de47cbbbcd9be8241a31a7924a6840a70215300154d352f28c31d8fbb2edbf2e`  tuxerantfs_2015.dmg
 `d957b207b13b705f9ef5e4f54942af0b41fb335219ca0833c34627ce95e968f9`  [tuxerantfs_2016.1.dmg](http://www.tuxera.com/products/tuxera-ntfs-for-mac/download/)
 `51a6cc75841ed60e01ea62974907049fd3d39be7a916f30e77d842c1a8354655`  [VirtualBox-5.1.26-117224-OSX.dmg](http://download.virtualbox.org/virtualbox/5.1.26/VirtualBox-5.1.26-117224-OSX.dmg) [5]
 `c9b3a373b7fd989331117acb9696fffd6b9ee1a08ba838b02ed751b184005211`  XQuartz-2.7.7.dmg
