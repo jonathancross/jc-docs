@@ -22,6 +22,7 @@ A collection of SHA-256 software hashes I have verified
 `59a2549913f523dac5a51859de135d92e434c1801ca571eb2d74664d19d6b627`  picasamac39.dmg [3]
 `e3d0d74242f25a7c8b097cedf7cb9ccb67b11db8764166748f3f793c41e6199d`  [picasamac39.dmg](https://www.macupdate.com/app/mac/30131/picasa/download) [4]
 `dda519484075ce455f91962d04ca57535c50604b30e886e5025ab97a4e5be1df`  qbittorrent-3.3.11.dmg
+`952f81f79efb1a0a103fe87328af6a0dd8adf64e16636ecb221e79e453564b6c`  [Sublime Text Build 3143.dmg](https://download.sublimetext.com/Sublime%20Text%20Build%203143.dmg)
 `fe46c69d783f2aa290d18caec30b3f17481c47def9c271dc66db1b7bbd3074c5`  [sudo-1.8.19p2.pkg](https://www.sudo.ws/sudo/dist/packages/macOS/10.11/sudo-1.8.19p2.pkg)
 `04db58b737c05bb6b0b83f1cb37a29edec844b59ff223b9e213ee1f4e287f586`  TrueCrypt 7.1a Mac OS X.dmg
 `d957b207b13b705f9ef5e4f54942af0b41fb335219ca0833c34627ce95e968f9`  [tuxerantfs_2016.1.dmg](http://www.tuxera.com/products/tuxera-ntfs-for-mac/download/)
