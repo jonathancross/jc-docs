@@ -41,6 +41,11 @@ You should now be able to tunnel packets to your node.
 #### Open a tunnel for Monero GUI
 
 1. Create an ssh tunnel forwarding port `18081` to the remote node: `ssh -nNT -L 18081:localhost:18081 user@host` (change `user@host` to the "username" you created above and name / ip address of your node)
+   - `-n` Redirects stdin from /dev/null (actually, prevents reading from stdin).
+   - `-N` Do not execute a remote command.
+   - `-T` Disable pseudo-tty allocation.
+   - `-L` Specifies that the given port on the local (client) host is to be forwarded to the given host and port on the remote side.
+
 2. As long as it doesn't fail, you can then open up the Monero GUI and configure a "Remote node" as:
    - Address: `localhost`
    - Port: `18081`
