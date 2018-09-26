@@ -11,6 +11,7 @@ A collection of SHA-256 software hashes I have verified
 `d8b618878b1949496197e31ee4b8d36b50ad6169cc5acef8c1cb1917e6b4200b`  hpprinterdriver3.1.dmg
 `a6ea47965542b5c06787f832f3ae5be65da6c6ed91664b0c0ed4994650d98244`  [javaforosx.dmg](https://support.apple.com/kb/DL1572?locale=en_US) Java for OS X 2017-001
 `44271fef18fd07a29241e5324be407fa8edce77fb0b55c5646cd238092cdf823`  [KeePassX-2.0.3.dmg](https://www.keepassx.org/releases/2.0.3/KeePassX-2.0.3.dmg) ([sig](https://www.keepassx.org/releases/2.0.3/KeePassX-2.0.3.dmg.sig))
+`59d7530625866c3d7d5cfa753e12dee0f052f79e1a7572f8e5633ad915369228`  KeePassXC-2.3.4.dmg
 `0d6d03b6d5b13e0916f18d156dd83a5b46d9f6b25625af8723f211ad39d261cb`  [Keybase.dmg](https://keybase.io/docs/the_app/install_macos) [1]
 `5521bcf0dccc8394fbb95b1bd70c85abc2e704474b3d6da465b327a865c8002c`  [macosupd10.12.1.dmg](http://support.apple.com/downloads/DL1897/en_US/macosupd10.12.1.dmg) macOS Sierra
 `b46e5786343f236d203037a7ace8f1b28145a51a3f84fa527efcf62f47b5b8de`  meld-1.8.4.tar.xz
@@ -31,6 +32,7 @@ A collection of SHA-256 software hashes I have verified
 
 ## LINUX
 
+`d8f40bb712aff6aecf5b24bf08a100ce67c98ddcec9461af6b418190be0b39aa`  debian-live-9.5.0-amd64-xfce.iso
 `4915473265d58720fd8f019e536c2b7fb02648ab51a8087e84aa1e2434788452`  [monero-gui-linux-x64-v0.10.3.1.tar.bz2](https://github.com/monero-project/monero-core/releases/download/v0.10.3.1/monero-gui-linux-x64-v0.10.3.1.tar.bz2) [2]
 `8db80f8cc4f80d4106db807432828df730a59eac78972ea81652aa6b9bac04ad`  [monero-linux-x64-v0.10.3.1.tar.bz2](https://github.com/monero-project/monero/releases/download/v0.10.3.1/monero-linux-x64-v0.10.3.1.tar.bz2) [2]
 `f3f31634c05243e33a82a96e82c3cd691958057489e47eebe8ac3b0c0e6dd3b4`  sublime-text_build-3126_amd64.deb
