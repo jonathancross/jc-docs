@@ -1,5 +1,6 @@
 # Documentation, demos and examples from [Jonathan Cross](https://jonathancross.com).
 
+* [Homebrew and OpenPGP signatures](Homebrew_GPG.md) - Information about how the MacOs `brew` command verifies packages.
 * [Using an ssh tunnel to connect to a full node](ssh_tunnel_to_full_node.md) - Connect to a remote Monero or Bitcoin node through a secure tunnel.
 * [Bitcoin mobile privacy](Bitcoin_mobile_privacy.md) - Improve your mobile client privacy & security via Tor and a Bitcoin full node.
 * [Java strong crypto test](java-strong-crypto-test) - Test if you have strong crypto support for Java enabled.
