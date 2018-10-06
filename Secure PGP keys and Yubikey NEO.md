@@ -6,11 +6,12 @@ Secure PGP keys and YubiKey NEO
 Below is a collection of notes and info that helped me navigate through a jungle of new concepts, jargon, bad UI decisions, broken software, bugs and other obstacles to reach the above goal. – [Jonathan](https://jonathancross.com)
 
 ## About the YubiKey NEO
-<img align="right" src="images/yubikey-neo-n.jpg" alt="yubikey neo-n"> This is an elegant device with many functions including the ability to store OpenPGP keys and use them to sign, encrypt and / or authenticate.  The keys cannot be extracted from the device.  The OpenPGP java apps that do the signing are Open Source.  **NOTE:** Yubico has released the "upgraded" **YubiKey 4** -- [which I discovered is not open source](https://github.com/Yubico/ykneo-openpgp/issues/2#issuecomment-218436213) and is phasing out the NEO-n which I use.  The maximum key size for the YubiKey NEO is 2048 bits, which is fine for subkeys.  You can of course create a 4096 bit master key which stays offline.
+<img align="right" src="images/yubikey-neo-n.jpg" alt="yubikey neo-n"> This is an elegant device with many functions including the ability to store OpenPGP keys and use them to sign, encrypt and / or authenticate.  The keys cannot be extracted from the device.  The OpenPGP java apps that do the signing are Open Source.  **NOTE:** Yubico has released the "upgraded" **YubiKey 4** -- [which I discovered is not open source](https://github.com/Yubico/ykneo-openpgp/issues/2#issuecomment-218436213) and is phasing out the NEO-n.  The maximum key size for the YubiKey NEO is 2048 bits, which is fine for subkeys.  You can of course create a 4096 bit master key which stays offline.
 
 Please note that YubiKey NEO devices issued before 2015-04-14 [contain an insecure OpenPGP applet](https://developers.yubico.com/ykneo-openpgp/SecurityAdvisory%202015-04-14.html).
 
 #### Tutorials and troubleshooting:
+
 * [PGP and SSH keys on a YubiKey NEO](https://www.esev.com/blog/post/2015-01-pgp-ssh-key-on-yubikey-neo/) (Eric Severance) - Primary guide used for this setup.
 * [Offline GnuPG Master Key and Subkeys on YubiKey NEO Smartcard](http://blog.josefsson.org/2014/06/23/offline-gnupg-master-key-and-subkeys-on-yubikey-neo-smartcard/) (Simon Josefsson)
 * [How to import an existing PGP key to a YubiKey](https://developers.yubico.com/PGP/Importing_keys.html)
@@ -21,7 +22,8 @@ Please note that YubiKey NEO devices issued before 2015-04-14 [contain an insecu
 * [OpenPGP Best Practices ](https://riseup.net/en/gpg-best-practices) (riseup) - Good tips from those who need to do security right.
 * [Problems with apps sharing the same token on the Mac](https://gpgtools.tenderapp.com/discussions/problems/50028-macgpg2-scdaemon-pcsc-open-failed-sharing-violation-0x8010000b) (Error: `pcsc_connect failed: sharing violation (0x8010000b)`)
 
-#### Things that confused me
+### Things that confused me
+
 *  *Primary Key* = "Master Key"
 *  `--armor` = This option causes the key to be output as ASCII (instead of the default binary format).  Why not use `--ascii`?  Furthermore, users will encounter plenty of nonsense if you forget this option while trying to encrypt a message.  ALL of these will fail without a useful error message for example:
 
@@ -33,7 +35,11 @@ Please note that YubiKey NEO devices issued before 2015-04-14 [contain an insecu
 * The command `gpg --armor --export=2FFA7695` will export *ALL* public keys, not just `2FFA7695` as one might expect.  Unlike many other gnu programs, gpg doesn't support the `=` (equals sign) as separator, so it just silently assumes you want everything.
 *  By default, `gpg -k` will **not** list fingerprints or the recomended longer key ID format experts agree should be used.  Instead, it lists the [unsafe 8-character "short" format](http://www.asheesh.org/note/debian/short-key-ids-are-bad-news.html).  Why is the default the less secure option?  Use `gpg -k --fingerprint --keyid-format long` instead.
 * When you use `gpg --search-keys KEYID`, the command will often not find perfectly valid keys (eg: those on pool.sks-keyservers.net or pgp.mit.edu).  There is a bunch of keyservers, so the key you are looking for *may* be on any of them, or *none of them*, or maybe it is there, but the search algo doesn't find it.
-* If you add a picture (must be a jpg!), add a default keyserver, etc. it will be stored as part of your Public key.  Your pub key will be changing often and should be republished.  It is still not clear to me which actions change your Public key:
+* If you add a picture (must be a jpg!), add a default keyserver, etc. it will be stored as part of your Public key.  Your pub key will be changing often and should be republished.
+
+#### Which actions change your pubkey?
+
+In gpg, your public key is actually a collection of many pieces of metadata user IDs, subkeys and the actual master public key.  After making changes, it was unclear to me which actions changed my Public key.  Here is a list:
   * `YES` Adding a jpg photo.
   * `YES` Adding / revoking an identity. (NOTE: identities cannot be *modified*)
   * `YES` Updating the expiration date on keys.
@@ -44,6 +50,7 @@ Please note that YubiKey NEO devices issued before 2015-04-14 [contain an insecu
   * `NO` Publishing your Public key to a keyserver.
 
 #### gpg will use various cryptic symbols and abbreviations noting the properties of the key
+
 When listing Secret keys (`gpg --list-secret-keys` or `gpg -K`) you may see:
 * `sec` = Secret (aka Private) and Public key exists for the Master key.
 * `sec#` = Master key secret is not present, only a "stub" of the private key.  This is normal when using subkeys without their Master key being present.
@@ -57,7 +64,7 @@ When listing Public keys (`gpg --list-keys` or `gpg -k`) you may see:
 
 When editing a key (`gpg --edit-key KEYID`) you may see:
 * `sub*` = The star indicates the particular Subkey is selected for editing.
-* `sig!3` = You see this after running the `check` command. The number explains the quality of the ID check (see below).
+* `sig!3` = You see this after running the `check` command. The number explains the type of signature (see below).
 
 When listing signatures (`gpg --list-sigs KEYID`) you may see:
 * `sig `, `sig 1`, `sig 2`, `sig 3` = How thoroughly was the identity claim verified (`sig`=unknown ... `sig 3`=extremely thorough).
@@ -115,19 +122,19 @@ Unfortunately `gpg2` still reports an error unless `sudo` is used:
     gpg: selecting openpgp failed: Unsupported certificate
     gpg: OpenPGP card not available: Unsupported certificate
 
-Hope to figure out the issue soon.
-
 
 #### Web Of Trust
 
 Signing another person's key:
 
 1. Import your current Secret key to the air-gapped machine (if necessary).
-2. Import the key to be signed (I simply bring over the entire public keyring).
-3. Sign the person's public key.
-4. `export` the signed key for them.
+2. Import the public key to be signed: `gpg --import KEYID_unsigned.asc`
+3. Sign the person's public key: `gpg --ask-cert-level --sign-key KEYID`
+4. Export the signed key for them: `gpg -a --export KEYID > KEYID_signed.asc`
 5. Transport that signed key file back to the online system.
-6. `import` and email the key to owner. Encrypt the file / email to be sure that they have the means to decrypt with the key you signed.
+6. Import the signed key: `gpg --import KEYID_signed.asc`
+7. Verify your signature on their key: `gpg --check-sigs KEYID`
+8. Email the key (`KEYID_signed.asc`) to the owner. Encrypt the email to be sure that they have the means to decrypt with the key you signed.  This should be done separately for each email address to verify those independently.
 
 #### Useful commands
     gpg --list-sigs --list-options show-keyserver-urls
