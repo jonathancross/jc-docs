@@ -24,9 +24,9 @@ LOCAL_KEY_FILE=~/${GPG_ID}_pub.asc
 # Upload to one or more public key servers:
 ENABLE_PUBLIC_KEY_SERVERS=1 # Change to 0 (zero) to disable.
 PUBLIC_KEY_SERVERS=(
-  "x-hkp://pool.sks-keyservers.net"
-  "pgp.mit.edu"
-  "hkp://keys.gnupg.net"
+  "hkps://pgp.surfnet.nl"
+  "hkps://hkps.pool.sks-keyservers.net"
+  "hkps://pgp.mit.edu"
 )
 
 
@@ -71,7 +71,7 @@ echo " • Exporting key to file: ${LOCAL_KEY_FILE}"
 echo "   Last modified: ${LASTMOD_DATE}"
 
 # Confirm GPG_ID is correct:
-if ${GPG_COMMAND} --list-secret-keys ${GPG_ID} 2&>1 /dev/null; then
+if ${GPG_COMMAND} --list-secret-keys ${GPG_ID} > /dev/null 2>&1; then
   ${GPG_COMMAND} --armor --export ${GPG_ID} > ${LOCAL_KEY_FILE}
   LASTMOD_DATE="$(ls -al ${LOCAL_KEY_FILE} | awk '{print $6,$7, $8}')"
   echo "   Updated now:   ${LASTMOD_DATE}"
@@ -96,7 +96,7 @@ fi
 
 # Send keys to public keyserver:
 if [[ "${ENABLE_PUBLIC_KEY_SERVERS}" == "1" ]]; then
-  for S in ${PUBLIC_KEY_SERVERS[@]};do
+  for S in "${PUBLIC_KEY_SERVERS[@]}";do
     printf " • ";
     ${GPG_COMMAND} --keyid-format long --keyserver ${S} --send-key ${GPG_ID}
   done
