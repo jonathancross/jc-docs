@@ -43,3 +43,11 @@ This git commit was signed with my PGP key so I also certify the information you
 **What about future releases?**
 
 Once you have verified one key, you can install OpenBSD which contains keys used in the following release. In this way the verification process for all releases going forward can be bootstrapped from a single verified key like that one above.
+
+### Disclaimer
+
+This document comes with no guarantees, do your own homework. [Feedback](https://github.com/jonathancross/jc-docs/issues/new?title=Feedback:%20OpenBSD%20release%20key) is welcome.
+
+### License
+
+WTFPL - See [LICENSE](LICENSE) for more info.
