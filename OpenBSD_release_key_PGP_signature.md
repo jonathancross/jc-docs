@@ -8,29 +8,29 @@ No.
 
 **Can the PGP web of trust be used to verify the key somehow?**
 
-I have not found a way to verify the signing key except by meeting a developer or maintainer in person.  So I did that on 2018-10-23.  The message below was signed by Theo Bühler `<tb@openbsd.org>` (PGP: `0x582F9C0EAA32139A`) and verified visually letter by letter by Reyk Flöter `<reyk@openbsd.org>` (PGP: `0x1A12678032292F9D`).
+I have not found a way to verify the signing key except by meeting a developer or maintainer in person.  So I did that on 2018-10-23.  The message below was signed by Theo Bühler `<tb@openbsd.org>` (PGP: `0x582F9C0EAA32139A`) and the key you see was also verified visually letter by letter by Reyk Flöter `<reyk@openbsd.org>` (PGP: `0x1A12678032292F9D`).
 
 ```
 -----BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+Hash: SHA256
 
 untrusted comment: openbsd 6.4 base public key
 RWQq6XmS4eDAcQW4KsT5Ka0KwTQp2JMOP9V/DR4HTVOL5Bc0D7LeuPwA
 -----BEGIN PGP SIGNATURE-----
 
-iQIcBAEBAgAGBQJbz1fyAAoJEFgvnA6qMhOa2moQANMBA03ZYnOEhdiA613wEZIb
-lV4/YE7Ma8PMtn0NFQe86a2Dj0Gwxo8qkXQjuWX+SA3y5Tnv7NBnHED44vNmAwDM
-Nu+bzkLF5HbsVe+Rn1vwR6XqvcGblB3NVPEmpS+b/aG5uAV65AeEuxNFljCuP5LL
-UH4QDg4nbFuZ8on0zt0oo3KALuxk6EGK7eNbef7BehWTc67MBQVxCPsoR5ZKRm5J
-poUwLkXVSrEr2hD72hwG8D0CnHPnYwTQFsM52QlEeSFEhETN1dB/PMnIrxuMZSIh
-6O8qz8x11yJdOxbQbxe+4PMST6PUURM6J3ZSawpPgFtxh/UUN8uMSZyOrZLOXWD8
-C8CxIgje2KmwrbRWcPJ+KKOJJ+XMIeipwmCQj38zk1k1rzWdt+zTj3gxzpApXUlr
-4Uz4IgnxdDuzMNdClspJ4tb6/kAnpvMQQ4svL5jG27+NcOIQONH2fZhD0eSX8WHF
-8ktp0Yrw6+OfKgyG7936aobstH33RxJv5sCRvTNge4ny33I5zSJniinQFH+f9bNJ
-3bhRnIZ+dCixIWDIIeq86CMI35hfafa6rVeEEynyUr+35TvW4AKWddfc5r/eqMkI
-s69AuXIjeeIAZxfNHPUAsp9uVxH98MXPrgQG9Lr2fwQek7JRvHLDUEbuVjR5qLcL
-0X/8/SxTaKnxk6bJaYK6
-=eiQF
+iQIcBAEBCAAGBQJb0IKaAAoJEFgvnA6qMhOan0sP/1WR5fozYWbwHVQDSHKXP5yD
+jjDjhW5T2jAFC4MWXJybdmGTkxEz1wYC9k0aen0hzWTz3M/e1Chcb0aVVql4MAjf
+mTECSbr3493jXiYBWmhZC7Qce7nmgdR1KmAcvI3jffBetwrDpaUow9TuXy7U2JB2
+zJQI0kT1oKNxg911s1R02uNcW5/Wrvx7UoIhqmn0DLvB+u81Y0JOC2R0JMRxVtqi
+sX2g3HaZGwgDoPkfT+KeGQXG2OTwzRG2XFEpuX/2qc05z3MG24GnddwX66WlCGb1
+o31qUjviPOBJsq6VGSRycGTalsz+1yPCQ5O3s4WRKebAAoG/nozSdQq2h3Pfgkle
+ynsPX5yDS5tYbJERhyVBet4qDM+JXse6FXRl3LxOSkEKfi5Ved6LSf6/WbOXCTxO
+R3OQqgp0FO30Tp+mRI0qSoYKQswUOox2TGCKlqWnZurNcEnJ64Zzo7hRtDj16vXa
+7XUGo1FOfEfQb5RoHHmj6jfAenhOORb5iMyWi/9MQdb6k/Bj7srS3mKEllZoqLzH
+4iFq7XaERNnCGQNUDPusmkqPDOsrl4oec82kCBHxFzYfSkwIZgFn5YBgtuj8vG+5
+tmLcYQYH3O4ob0GaOws8Jg+CjUvNJGowWyOnxoqzZxpQRldT8yPdd4qyrYtZdsZz
+UTghTbNqVsg6QzN9Xr2z
+=irX3
 -----END PGP SIGNATURE-----
 ```
 
