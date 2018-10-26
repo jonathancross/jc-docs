@@ -11,6 +11,9 @@ Git can be challenging to learn and often _**makes the easy complicated**_ in it
 # Usage: git-changes
 alias git-changes='git commit -a --verbose --dry-run'
 
+# Show last commit with filenames and type of change
+alias git-last='git log -1 --name-status'
+
 # Revert uncommitted changes in a file:
 # Usage: git-revert <file.ext>
 alias git-revert='git checkout'
@@ -60,7 +63,7 @@ function git-fixup () {
 
 ### git aliases
 ```bash
-# Opposit of `git add`, not to be confused with `git rm`
+# Opposite of `git add`, not to be confused with `git rm`
 git config --global alias.unadd 'reset HEAD --'
 git config --global alias.unstage 'reset HEAD --'
 ```
