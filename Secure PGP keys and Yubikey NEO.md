@@ -137,9 +137,8 @@ Signing another person's key:
 8. Email the key (`KEYID_signed.asc`) to the owner. Encrypt the email to be sure that they have the means to decrypt with the key you signed.  This should be done separately for each email address to verify those independently.
 
 #### Useful commands
-    gpg --list-sigs --list-options show-keyserver-urls
-    gpg -k --fingerprint --keyid-format long
-
+    gpg --list-sigs --list-options show-keyserver-urls DEAFABBA
+    gpg -k --fingerprint --keyid-format long DEAFABBA
 
 ## GPG Configuration file
 
@@ -153,7 +152,7 @@ Signing another person's key:
 * Can be [setup to use a Gmail account via IMAP](https://support.google.com/mail/answer/78892?hl=en).
 
 #### Android
-* Use [K9 Mail](https://k9mail.github.io/) and [Open Keychain](https://www.openkeychain.org/) -- [Here is a tutorial](https://www.openkeychain.org/howto/#/).
+* Use [K9 Mail](https://k9mail.github.io/) and [Open Keychain](https://www.openkeychain.org/) -- [Here is a tutorial](https://www.openpgp.org/software/openkeychain/).
 
 #### Linux or Windows
 * [Enigmail PGP plugin](https://enigmail.net/index.php/en/)
