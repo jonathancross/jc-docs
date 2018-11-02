@@ -1,12 +1,14 @@
 # OpenBSD release key PGP signature
 
+**GOAL:** Use the PGP Web Of Trust to verify an Open BSD Release.
+
 **ISSUE:** Open BSD releases are not signed using PGP keys. Instead the project uses a [custom built tool called signify](https://www.openbsd.org/papers/bsdcan-signify.html) to sign releases.  The key used to sign is [available on the project website](https://www.openbsd.org/64.html) and used to be printed on official install CDs (which are no longer created).  This however requires you to trust the website creator, their hosting provider, certificate authorities, your browser and many others entities.
 
-**Do the project maintainers publish a PGP signed message indicating the correct key?**
+**Do the project maintainers publish a PGP signed message indicating the correct signify key?**
 
 No.
 
-**Can the PGP web of trust be used to verify the key somehow?**
+**Can the PGP web of trust be used to verify the signify key somehow?**
 
 I have not found a way to verify the signing key except by meeting a developer or maintainer in person.  So I did that on 2018-10-23.  The message below was signed by Theo Bühler `<tb@openbsd.org>` (PGP: `0x582F9C0EAA32139A`) and the key you see was also verified visually letter by letter by Reyk Flöter `<reyk@openbsd.org>` (PGP: `0x1A12678032292F9D`).
 
@@ -36,7 +38,7 @@ UTghTbNqVsg6QzN9Xr2z
 
 **How can I verify that the OpenPGP key used above (0x582F9C0EAA32139A) is legit?**
 
-I (Jonathan Cross) have verified it in person, including checking a government-issued ID and we have exchanged key signatures.  My key (`0xC0C076132FFA7695`) is part of the PGP web-of-trust "Strong Set", therefore you should be able to [find a trust path](https://pgp.cs.uu.nl/) to it once your key is in the Strong Set.
+I (Jonathan Cross) have verified it in person, including checking a government-issued ID and we have exchanged key signatures.  My key (`0xC0C076132FFA7695`) is part of the PGP web-of-trust "Strong Set", therefore you should be able to [find a trust path](https://pgp.cs.uu.nl/) to it once your key is in the "Strong Set".  Because I exchanged key signatures with Theo Bühler `<tb@openbsd.org>`, his key is also part of the Strong Set.
 
 This git commit was signed with my PGP key so I also certify the information you are reading.
 
