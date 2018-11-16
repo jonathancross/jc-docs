@@ -10,6 +10,10 @@
 * [Secure PGP keys and Yubikey NEO](Secure%20PGP%20keys%20and%20Yubikey%20NEO.md) - Notes on GPG and YubiKey NEO setup.
 * [Software Hashes](Software_Hashes.md) - A collection of SHA-256 software hashes I have verified.
 * [gpg.conf](gpg.conf) - Example "hardened" configuration file for GnuPG with secure defaults.
+
+### Scripts
+
+* [gpg-keys-signed-by.sh](gpg-keys-signed-by.sh) - Search for PGP keys signed by a given key.
 * [send-pgp-keys.sh](send-pgp-keys.sh) - Upload your GPG public key to multiple services after a change.  Supports [keybase](https://keybase.io), public keyservers and / or your own web server.
 * [upgrade-monero.sh](upgrade-monero.sh) - Script used to upgrade installed version of the [Monero](https://getmonero.org) daemon.
 
