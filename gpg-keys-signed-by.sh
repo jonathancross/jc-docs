@@ -28,27 +28,39 @@ GPG_DATA_FILE=/tmp/gpg-key-data.txt
 alias errcho='>&2 printf'
 
 # Validate commandline parameter:
-if [[ "${#1}" -lt "16" ]]; then
-  echo "Please supply the long key ID (or full fingerprint with no spaces) of the key whose signatures we are to search for."
+keyid="${1}"
+
+# Remove '0x' prefix if needed
+keyid="${keyid#0x}"
+
+# Check length
+if [[ "${#keyid}" -lt "16" ]]; then
+  echo "Please supply the long key ID (or full fingerprint with no spaces) of"\
+       "the key whose signatures we are to search for."
   echo "Examples:"
   echo "${0} C0C076132FFA7695"
   echo "${0} 9386A2FB2DA9D0D31FAF0818C0C076132FFA7695"
   exit 1
 else
-  keyid="${1}"
   keyid="${keyid:(-16)}" # Take the last 16 chars
 fi
 
-# Build the gpg database
+# TODO: Check if hex: [[ "${keyid}" =~ ^[a-fA-F0-9]+$ ]]
+#       Also check if keyid is in keyring
 
 # Cache the gpg data:
 if [ ! -f "${GPG_DATA_FILE}" ]; then
   errcho "Creating keyring database (${GPG_DATA_FILE})..."
-  gpg --with-colons --fingerprint --list-sigs > ${GPG_DATA_FILE} 2> /dev/null
+  # Export gpg signature data
+  gpg --with-colons --fingerprint --list-sigs 2> /dev/null |
+    # Filter out sigs for keys we don't have
+    grep --fixed-strings --invert-match '[User ID not found]' > ${GPG_DATA_FILE}
   errcho " [DONE]\n"
+else
+  errcho "Using cached database: ${GPG_DATA_FILE}\n"
 fi
 
-errcho "Searching for signed keys"
+errcho "Searching for keys signed by ${keyid}"
 
 # Counter
 let I=0
