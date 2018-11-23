@@ -24,6 +24,8 @@
 # This file can be deleted at any time and will be rebuilt if needed:
 GPG_DATA_FILE=/tmp/gpg-key-data.txt
 
+ERRORS=0
+
 # Echo to stderr rather than stdout
 alias errcho='>&2 printf'
 
@@ -33,23 +35,30 @@ keyid="${1}"
 # Remove '0x' prefix if needed
 keyid="${keyid#0x}"
 
-# Check length
-if [[ "${#keyid}" -lt "16" ]]; then
+# Truncate keys to last 16 chars.
+# TODO: Should work with full fingerprint internally when possible.
+[[ "${#keyid}" -gt "16" ]] && keyid="${keyid:(-16)}"
+
+# Check if key is in our local keyring, if so, normalize to 16 char version:
+keyid_test=$(gpg --list-keys --keyid-format long ${keyid} 2> /dev/null |
+   grep --extended-regexp --only-matching "[0-9A-Fa-f]*${keyid}")
+
+if [[ "x${keyid}" != "x${keyid_test}" ]]; then
+   ERRORS=1
+   echo "ERROR: key '${keyid}' not found in local keyring."
+fi
+
+if [[ "${ERRORS}" == "1" ]]; then
   echo "Please supply the long key ID (or full fingerprint with no spaces) of"\
        "the key whose signatures we are to search for."
   echo "Examples:"
   echo "${0} C0C076132FFA7695"
   echo "${0} 9386A2FB2DA9D0D31FAF0818C0C076132FFA7695"
   exit 1
-else
-  keyid="${keyid:(-16)}" # Take the last 16 chars
 fi
 
-# TODO: Check if hex: [[ "${keyid}" =~ ^[a-fA-F0-9]+$ ]]
-#       Also check if keyid is in keyring
-
 # Cache the gpg data:
-if [ ! -f "${GPG_DATA_FILE}" ]; then
+if [[ ! -f "${GPG_DATA_FILE}" ]]; then
   errcho "Creating keyring database (${GPG_DATA_FILE})..."
   # Export gpg signature data
   gpg --with-colons --fingerprint --list-sigs 2> /dev/null |
