@@ -13,7 +13,7 @@
 
 ### Scripts
 
-* [gpg-keys-signed-by.sh](gpg-keys-signed-by.sh) - Search for PGP keys signed by a given key.
+* gpg-keys-signed-by - Search for PGP keys signed by a given key (versions: [Bash](gpg-keys-signed-by.sh) and [Perl](gpg-keys-signed-by.pl)).
 * [send-pgp-keys.sh](send-pgp-keys.sh) - Upload your GPG public key to multiple services after a change.  Supports [keybase](https://keybase.io), public keyservers and / or your own web server.
 * [upgrade-monero.sh](upgrade-monero.sh) - Script used to upgrade installed version of the [Monero](https://getmonero.org) daemon.
 
