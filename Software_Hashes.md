@@ -1,5 +1,8 @@
-A collection of SHA-256 software hashes I have verified
-=======================================================
+A collection of SHA-256 software hashes
+=======================================
+
+Many projects do not digitally sign their releases.  I have hashed the files below and provided the SHA256 checksum here so that others may _attempt_ to verify authenticity based on the fact that at least 1 other person received the same file as they did.  Hopefully others will also begin doing this so we can cross-verify the checksums and crowd-source a bit of security.
+
 
 ## Mac OSX
 
