@@ -1,6 +1,7 @@
 # Documentation, demos and examples from [Jonathan Cross](https://jonathancross.com).
 
 * [OpenBSD release key PGP signature](OpenBSD_release_key_PGP_signature.md) - How to verify the OpenBSD 6.4 release signing key using PGP web of trust.
+* [OpenBSD verification](OpenBSD_verification.md) - Verify OpenBSD install files from Linux or Mac.
 * [Homebrew and OpenPGP signatures](Homebrew_GPG.md) - Information about how the MacOs `brew` command verifies packages.
 * [Using an ssh tunnel to connect to a full node](ssh_tunnel_to_full_node.md) - Connect to a remote Monero or Bitcoin node through a secure tunnel.
 * [Bitcoin mobile privacy](Bitcoin_mobile_privacy.md) - Improve your mobile client privacy & security via Tor and a Bitcoin full node.
