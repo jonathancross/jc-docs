@@ -16,13 +16,12 @@ OpenBSD project only signs releases using `signify`, not OpenPGP.
 
 The OpenBSD "base" release key for [v6.4](https://www.openbsd.org/64.html) is `RWQq6XmS4eDAcQW4KsT5Ka0KwTQp2JMOP9V/DR4HTVOL5Bc0D7LeuPwA`.  This can be [verified via the PGP "Web Of Trust" using my instructions here](OpenBSD_release_key_PGP_signature.md).
 
-Now, create a file called `openbsd-64-base.pub` containing these 2 lines:
+Download the [openbsd-64-base.pub](https://raw.githubusercontent.com/jpouellet/signify-osx/513db1035eb26e9b8ceb4110c54afcfc045c0730/keys/openbsd-64-base.pub) key and ensure it contains the correct key (second line):
 ```
-untrusted comment: OpenBSD 6.4 release key blah blah blah.
+untrusted comment: openbsd 6.4 base public key
 RWQq6XmS4eDAcQW4KsT5Ka0KwTQp2JMOP9V/DR4HTVOL5Bc0D7LeuPwA
 ```
-
-See [why we need to create openbsd-64-base.pub](#why-we-need-to-create-openbsd-64-basepub) for explanation as to why this is necessary.
+(See [Why download openbsd-64-base.pub](#why-download-openbsd-64-basepub) for more info)
 
 ### Download the release, hashes & signatures
 
@@ -59,14 +58,12 @@ Result:
     install64.iso: OK
 
 
-### Why we need to create openbsd-64-base.pub
+### Why download openbsd-64-base.pub
 
 Debian has a package called `signify-openbsd-keys` containing the key we need, but it doesn't help much.
 
 1. The current "stable" version ("stretch") is hopelessly out of date, however debian "buster" [version](https://packages.debian.org/buster/signify-openbsd-keys) has the key we need.
 2. The tool `signify-openbsd` (as it is called in debian) is configured to look for keys (eg `openbsd-64-base.pub`) in `/etc/signify/` instead of the actual location: `/usr/share/signify-openbsd-keys/`.  So we need to specify the key location anyway.
-
-On macOS, the signify-osx project has a [list of OpenBSD keys](https://github.com/jpouellet/signify-osx/tree/master/keys) which is also super old.  I submitted a [pull request](https://github.com/jpouellet/signify-osx/pull/7) to update that list.
 
 ## Disclaimer
 
