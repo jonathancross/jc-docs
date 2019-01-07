@@ -131,7 +131,7 @@ Signing another person's key:
 2. Import the public key to be signed: `gpg --import KEYID_unsigned.asc`
 3. Sign the person's public key: `gpg --ask-cert-level --sign-key KEYID`
 4. Export the signed key for them: `gpg -a --export KEYID > KEYID_signed.asc`
-5. Transport that signed key file back to the online system.
+5. Transport that signed key file back from the air-gapped machine to the online system.
 6. Import the signed key: `gpg --import KEYID_signed.asc`
 7. Verify your signature on their key: `gpg --check-sigs KEYID`
 8. Email the key (`KEYID_signed.asc`) to the owner. Encrypt the email to be sure that they have the means to decrypt with the key you signed.  This should be done separately for each email address to verify those independently.
