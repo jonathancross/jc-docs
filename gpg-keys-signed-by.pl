@@ -5,10 +5,21 @@
 # USAGE:
 #   ./gpg-keys-signed-by.pl C0C076132FFA7695
 #
+# TODO:
+#  • Filter out keys whose sigs have been revoked.
+#  • Filter out subkeys owned by the requested key.
+#
 # Key database structure:
-#   pub:u:4096:1:C0C076132FFA7695:... etc
-#   fpr:::::::::9386A2FB2DA9D0D31FAF0818C0C076132FFA7695:
-#   various: sub, sig, rev, uid, uat.
+#   pub::::C0C076132FFA7695
+#     fpr:::::::::9386A2FB2DA9D0D31FAF0818C0C076132FFA7695
+#     uid...
+#       sig...
+#         (sig):[^:]*:[^:]*:[^:]*:([A-F0-9]{16}):([0-9]+):.*
+#       rev...
+#     (uat):[^:]*:[^:]*:[^:]*:[^:]*:([0-9]{10}):.*:([0-9]{10}):[^:]*:   <-- exp date $1 $2 $3
+#     (uat):[^:]*:[^:]*:[^:]*:[^:]*:([0-9]{10}):.*                      <-- NO exp date $1 $2
+#     (sub.*\n +)(fpr):::::::::([A-F0-9]{40}):.*                        <-- subkey fpr indent
+#
 #   (each sub has a fpr as well)
 ################################################################################
 
@@ -18,10 +29,10 @@ use warnings;
 my $GPG_DATA_FILE = "/tmp/gpg-key-data.txt";
 
 my $ERROR = 0;
-my @raw_data;
-my @signed_keys;
-my $KEY_ID = '';
-my $SIGNED_KEY_TMP;
+my @raw_data;       # Data dump from gpg keychain.
+my @signed_keys;    # Array of key fingerprints representing signed keys.
+my $KEY_ID = '';    # Source key whose sigs we are looking for on other keys.
+my $SIGNED_KEY_TMP; # Current key whose sigs we are checking.
 
 validate_key_args();
 @raw_data = get_raw_data();
