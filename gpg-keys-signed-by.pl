@@ -2,6 +2,9 @@
 #
 # Search for keys signed by the provided key ID.
 #
+# USAGE:
+#   ./gpg-keys-signed-by.pl C0C076132FFA7695
+#
 # Key database structure:
 #   pub:u:4096:1:C0C076132FFA7695:... etc
 #   fpr:::::::::9386A2FB2DA9D0D31FAF0818C0C076132FFA7695:
