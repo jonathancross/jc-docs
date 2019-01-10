@@ -1,26 +1,26 @@
 Using GNU Privacy Guard (gpg) / OpenPGP
 =======================================
 
-GNU Privacy Guard is very powerful software, but can be VERY challenging to use.
-This document attempts to give you the tools needed to answer questions and explain the mysteries of gpg so that you too can take advantage of this tool.
+GNU Privacy Guard is very powerful software with a terrible interface.
 
-This page assumes you already have an OpenPGP key, if not please see [Secure PGP keys and Yubikey NEO.md](Secure PGP keys and Yubikey NEO.md) for information on how to create an offline master key and then transfer subkeys onto a YubiKey hardware device for daily use.
+This document attempts to give you the tools needed to answer questions and explain the mysteries of gpg so that you too can take advantage of this tool and stop making excuses.
 
+This page assumes you already have basic familiarity with `gpg` and have created an OpenPGP key already. If not, please see [Secure PGP keys and Yubikey NEO.md](https://github.com/jonathancross/jc-docs/blob/master/Secure%20PGP%20keys%20and%20Yubikey%20NEO.md) for information on how to create an offline master key and then transfer subkeys onto a YubiKey hardware device for daily use.
 
 ### Get started
 
-* [Example config file](../master/gpg.conf) (`~/.gnupg/gpg.conf`) - Some better defaults.
+* [Example config file](https://raw.githubusercontent.com/jonathancross/jc-docs/master/gpg.conf) (`~/.gnupg/gpg.conf`) - Some better defaults.
 * [My key signing policy](https://jonathancross.com/C0C076132FFA7695.policy.txt) - to learn about different signature types and what they mean to me.
 
 # Web Of Trust
 
-The [OpenPGP Web Of Trust](https://en.wikipedia.org/wiki/Web_of_trust) is a way to establish the authenticity of the binding between a public key and its owner without relying on centralized authorities. Participants can chose to sign each other's keys, then publish those signatures so that others may use that trust path when attempting to verify the authenticity of a key.  Once your key is in the "Strong Set" (set of cross-signed keys), anyone can use a tool such as [the PGP pathfinder](https://pgp.cs.uu.nl/) to easily calculate trust paths from one key to another.  This can be especially helpful when verifying digital signatures on software for example.
+The [OpenPGP Web Of Trust](https://en.wikipedia.org/wiki/Web_of_trust) is a way to establish the authenticity of the binding between a public key and its owner without relying on centralized authorities. Participants can chose to verify, then sign each other's keys, then publish those signatures for other people to use.  Once your key is in the "Strong Set" (set of cross-signed keys), anyone can use a tool such as [the PGP pathfinder](https://pgp.cs.uu.nl/) to easily calculate _trust paths_ from one key to another (modern software will do this automatically).  This can be especially helpful when verifying digital signatures on software for example.
 
-"Siging" someone's key means that you use your Master key's `C` (Certify) capability to make a digital signature on one or more ID's in their public key.  This indicates to what degree you checked the data in that ID.  Ideally the checking should be done in-person, government issued ID should be used to check the name and the key fingerprint should be provided on paper to be taken home and verified + signed later.
+"Siging" someone's key means that you use your Master key's `C` (Certify) capability to make a digital signature on one or more ID's of their public key.  This indicates to what degree you verified the data in that specific UID (usually name and email address).  Ideally the checking should be done in-person, government issued ID should be compared to the name listed in the key UID, and the key fingerprint should be provided by the owner on paper to be taken home and verified + signed later.
 
 ### Signing keys offline
 
-Signing another person's key with your "offline" master key is far more secure than keeping the key on a normal Internet-connected computer.  It is also a bit more complex, but instructions below should easily guide you through the process.  Replace `KEYID` below with the actual long ID of the key you want to sign:
+Signing another person's key with your "offline" master key is far more secure than keeping the master key on a normal Internet-connected computer.  It is also a bit more complex, but instructions below should easily guide you through the process.  Replace `KEYID` below with the actual long ID of the key you want to sign:
 
 1. Locate the key you want to sign, eg: `gpg --search KEYID`.  Then type the number of the key you want to import into Gnupg's database.
 2. Check the master key fingerprint, eg: `gpg --fingerprint KEYID`
@@ -85,13 +85,7 @@ Feel free to use [this script](https://raw.githubusercontent.com/jonathancross/j
 
 Generally speaking, you should not send other people's keys to keyservers unless you really know what you are doing.  Better to email to them and have them upload (if they choose).
 
-#### Useful commands
-    gpg --list-sigs --list-options show-keyserver-urls DEAFABBA
-    gpg -k --fingerprint --keyid-format long DADACAFE
-
-
-
-### Random things that confused me about gpg
+## Random things that confused me about gpg
 
 * Many options re not listed in the `--help` or man pages.  See [Esoteric Options](https://www.gnupg.org/documentation/manuals/gnupg/GPG-Esoteric-Options.html) for a few interesting ones.
 * The term *Primary Key* = "Master Key"
