@@ -23,7 +23,9 @@ LOCAL_KEY_FILE=~/${GPG_ID}_pub.asc
 
 # Upload to one or more public key servers:
 ENABLE_PUBLIC_KEY_SERVERS=1 # Change to 0 (zero) to disable.
+# You can add / remove servers as needed:
 PUBLIC_KEY_SERVERS=(
+  "hkps://keyserver.ubuntu.com"
   "hkps://pgp.surfnet.nl"
   "hkps://hkps.pool.sks-keyservers.net"
   "hkps://pgp.mit.edu"
@@ -96,7 +98,7 @@ fi
 
 # Send keys to public keyserver:
 if [[ "${ENABLE_PUBLIC_KEY_SERVERS}" == "1" ]]; then
-  for S in "${PUBLIC_KEY_SERVERS[@]}";do
+  for S in "${PUBLIC_KEY_SERVERS[@]}"; do
     printf " • ";
     ${GPG_COMMAND} --keyid-format long --keyserver ${S} --send-key ${GPG_ID}
   done
