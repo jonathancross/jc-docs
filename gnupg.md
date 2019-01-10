@@ -1,11 +1,11 @@
-Using GNU Privacy Guard (gpg) / OpenPGP
+Using GNU Privacy Guard - [gpg.wtf](http://gpg.wtf)
 =======================================
 
 GNU Privacy Guard is very powerful software with a terrible interface.
 
 This document attempts to give you the tools needed to answer questions and explain the mysteries of gpg so that you too can take advantage of this tool and stop making excuses.
 
-This page assumes you already have basic familiarity with `gpg` and have created an OpenPGP key already. If not, please see [Secure PGP keys and Yubikey NEO.md](https://github.com/jonathancross/jc-docs/blob/master/Secure%20PGP%20keys%20and%20Yubikey%20NEO.md) for information on how to create an offline master key and then transfer subkeys onto a YubiKey hardware device for daily use.
+This page assumes you have basic familiarity with `gpg` and have already created an OpenPGP key. If not, please see [Secure PGP keys and Yubikey NEO.md](https://github.com/jonathancross/jc-docs/blob/master/Secure%20PGP%20keys%20and%20Yubikey%20NEO.md) for information on how to create an offline master key and then transfer the sub keys onto a YubiKey hardware device for daily use.
 
 ### Get started
 
@@ -13,6 +13,9 @@ This page assumes you already have basic familiarity with `gpg` and have created
 * [My key signing policy](https://jonathancross.com/C0C076132FFA7695.policy.txt) - to learn about different signature types and what they mean to me.
 
 # Web Of Trust
+
+<img align="center" src="https://imgs.xkcd.com/comics/responsible_behavior.png" alt="xkcd : web of trust + responsible behavior"><br>[xkcd.com](https://xkcd.com)
+
 
 The [OpenPGP Web Of Trust](https://en.wikipedia.org/wiki/Web_of_trust) is a way to establish the authenticity of the binding between a public key and its owner without relying on centralized authorities. Participants can chose to verify, then sign each other's keys, then publish those signatures for other people to use.  Once your key is in the "Strong Set" (set of cross-signed keys), anyone can use a tool such as [the PGP pathfinder](https://pgp.cs.uu.nl/) to easily calculate _trust paths_ from one key to another (modern software will do this automatically).  This can be especially helpful when verifying digital signatures on software for example.
 
@@ -31,7 +34,8 @@ Signing another person's key with your "offline" master key is far more secure t
 7. Check your key is available with: `gpg -K` (big 'K') or `gpg --list-secret-keys`
 8. Import the public key to be signed: `gpg --import KEYID_unsigned.asc`
 9. Sign the person's public key: `gpg --ask-cert-level --sign-key KEYID`
-   - You will be prompted to specify which IDs you want to sign and asked how thoroughly you checked the key information.  Here is a copy of [my key signing policy](https://jonathancross.com/C0C076132FFA7695.policy.txt) which might be helpful place to start.
+   - You will be prompted to specify which IDs you want to sign and asked how thoroughly you checked the identity info.  Here is a copy of [my key signing policy](https://jonathancross.com/C0C076132FFA7695.policy.txt) which might be helpful place to start.
+   - I recommend signing all IDs here (default) and later deleting any signatures you don't want to send.
 10. Export the signed key as a file: `gpg -a --export KEYID > KEYID_signed.asc`
 11. Transport that signed key file back from the air-gapped machine to the online system.
 12. Import the signed key: `gpg --import KEYID_signed.asc`
@@ -40,7 +44,7 @@ Signing another person's key with your "offline" master key is far more secure t
 
 #### Ensuring that your signature goes to the right UID
 
-It is tempting to just upload the key directly to a keyserver, but this is considered bad form because the data you signed is not verified and it irrevocably publishes data that the user may not want to make public (see section below about what can be changed on a keyserver).
+It is tempting to just upload the key directly to a keyserver, but this is considered bad form because the data you signed is not verified and uploading irrevocably publishes data that the user may not want to make public (see section below about what can be changed on a keyserver).
 
 Instead, we will send each signed UID to the email address listed in an **encrypted email**.
 
@@ -48,7 +52,7 @@ This ensures that:
 1. They still control that email address. (can read the email)
 2. They control the private key for the public key you are signing. (can decrypt the message)
 
-If there is only 1 email address listed in the key, then this is easy -- just sent the `KEYID_signed.asc` file to the email address listed.  If there is more than one email address, then I recommend importing their key with all sigs, then deleting the extra signatures via:
+If there is only 1 email address listed in the key, then this is easy -- just send the `KEYID_signed.asc` file to the email address listed (encrypted email of course).  If there is more than one email address, then I recommend importing their key with all sigs, then deleting the extra signatures via:
  * `gpg --import KEYID_signed.asc`
  * `gpg --edit-key KEYID`
  * Type the number of the UID you want to _delete_ your sig from.
@@ -84,6 +88,14 @@ You can also upload your key to a server:
 Feel free to use [this script](https://raw.githubusercontent.com/jonathancross/jc-docs/master/send-pgp-keys.sh) I made to automate the upload of your key to keyservers, your website and / or Keybase.io.
 
 Generally speaking, you should not send other people's keys to keyservers unless you really know what you are doing.  Better to email to them and have them upload (if they choose).
+
+#### Concerns about the Web of Trust
+
+The OpenPGP Web Of Trust is not perfect.  Publishing keys and personal information on public servers may open you up to receiving more spam, being contacted by strangers and possible analysis of your social graph.  These are all concerns that might prevent someone from participating.  In my mind, the overall benefits outweigh the dangers, so I participate, but many do not agree and are waiting for better options.
+
+#### PGP is dead
+
+Many people have [declared PGP dead](https://blog.cryptographyengineering.com/2014/08/13/whats-matter-with-pgp/) because it is hard to use, doesn't protect metadata in encrypted emails and supports to much legacy crypto.  Although there are very good arguments against it, I still think it is undeniable that it works well for verifying digital signatures, has wide support (hardware, software and people) and does a decent job at encrypting email once you have a properly setup client.  Could this be done better? Absolutely!  But this is the best we have right now and attempts to replace it have always fallen short of the features needed.
 
 ## Random things that confused me about gpg
 
@@ -137,7 +149,7 @@ Examples representations of my key:
 [1] _Long_ and _Short_ Key IDs can be prefixed with `0x` to indicate they are hex.<br>
 [2] _Short_ Key IDs are deprecated as they are **[VERY EASY to brute-force](https://evil32.com/)**.
 
-#### gpg will use various cryptic symbols and abbreviations noting the properties of the key
+### Cryptic symbols and key properties
 
 When listing Secret keys (`gpg --list-secret-keys` or `gpg -K`) you may see:
 * `sec` = Secret (aka Private) and Public key exists for the Master key.
@@ -164,11 +176,11 @@ There are different types of keys, you can see this on the right as "usage":
 * `usage: E` = **Encrypt** messages to other people.  This can be a Subkey.
 * `usage: A` = **Authenticate** yourself, for example when using SSH to log into a server.  This can be a Subkey.
 
-#### Using gnupg offline
+### Using gnupg offline
 
 The recommended way to use gpg in a secure manner is to keep the master key offline and only use it on an air-gapped computer. Booting into [Tails OS](https://tails.boum.org/) is a convenient way to work with this kind of sensitive material as it will "forget" anything you do on the system as soon as it is restarted.  Installing Tails on a USB stick works well on my MacBook Air as there is no functioning WiFi driver and furthermore it is easy to disable networking from the welcome screen.  Tails now contains a modern version of Gnupg 2.1+ which fixes many known bugs in previous versions.
 
-#### Creating stubs on a new computer
+### Creating stubs on a new computer
 
 When you are on a new computer and want to use a hardware device (like the YubiKey or the [NitroKey](https://www.nitrokey.com/)), you will need to create on-disk "stubs" of the keys that reside on your hardware device.
 
@@ -179,7 +191,7 @@ When you are on a new computer and want to use a hardware device (like the YubiK
         sudo chown $USER ~/.gnupg/secring.gpg
 4. Check your work by running `gpg --list-secret-keys`.  If you see `ssb>` for the subkeys, then all is good.
 
-##### Permissions problems
+### Permissions problems
 
 Symptom: `gpg --card-status` works as root, but not as an unprivileged user.
 
@@ -196,7 +208,7 @@ Same with signing, but you need to explicitly add -S
     sudo git commit -a -S
 
 
-##### Linux git commit signing
+### Linux git commit signing
 
 I have been able to fix `gpg` and `git` signing in Linux Mint 17.3 using `udev` rules:
 
