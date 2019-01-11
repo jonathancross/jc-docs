@@ -19,7 +19,7 @@ This page assumes you have basic familiarity with `gpg` and have already created
 
 The [OpenPGP Web Of Trust](https://en.wikipedia.org/wiki/Web_of_trust) is a way to establish the authenticity of the binding between a public key and its owner without relying on centralized authorities. Participants can chose to verify, then sign each other's keys, then publish those signatures for other people to use.  Once your key is in the "Strong Set" (set of cross-signed keys), anyone can use a tool such as [the PGP pathfinder](https://pgp.cs.uu.nl/) to easily calculate _trust paths_ from one key to another (modern software will do this automatically).  This can be especially helpful when verifying digital signatures on software for example.
 
-"Siging" someone's key means that you use your Master key's `C` (Certify) capability to make a digital signature on one or more ID's of their public key.  This indicates to what degree you verified the data in that specific UID (usually name and email address).  Ideally the checking should be done in-person, government issued ID should be compared to the name listed in the key UID, and the key fingerprint should be provided by the owner on paper to be taken home and verified + signed later.
+"Signing" someone's key means that you use your Master key's `C` (Certify) capability to make a digital signature on one or more ID's of their public key.  This indicates to what degree you verified the data in that specific UID (usually name and email address).  Ideally the checking should be done in-person, government issued ID should be compared to the name listed in the key UID, and the key fingerprint should be provided by the owner on paper to be taken home and verified + signed later.
 
 ### Signing keys offline
 
