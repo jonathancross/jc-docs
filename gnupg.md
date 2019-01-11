@@ -101,7 +101,7 @@ Many people have [declared PGP dead](https://blog.cryptographyengineering.com/20
 
 * Many options re not listed in the `--help` or man pages.  See [Esoteric Options](https://www.gnupg.org/documentation/manuals/gnupg/GPG-Esoteric-Options.html) for a few interesting ones.
 * The term *Primary Key* = "Master Key"
-* The term *subkey* refers to a key which is certifies by the *Primary Key*
+* The term *subkey* refers to a key which is certified by the *Primary Key*
 * `--armor` = This option causes the key to be output as ASCII (instead of the default binary format).  Why not use `--ascii`?  Furthermore, users will encounter plenty of nonsense if you forget this option while trying to encrypt a message.  ALL of these will fail without a useful error message for example:
 
         gpg --encrypt
