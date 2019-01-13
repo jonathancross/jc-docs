@@ -55,7 +55,7 @@ This ensures that:
 If there is only 1 email address listed in the key, then this is easy -- just send the `KEYID_signed.asc` file to the email address listed (encrypted email of course).  If there is more than one email address, then I recommend importing their key with all sigs, then deleting the extra signatures via:
  * `gpg --import KEYID_signed.asc`
  * `gpg --edit-key KEYID`
- * Type the number of the UID you want to _delete_ your sig from.
+ * Type the number of the UID(s) you want to _delete_ your sig from.
  * Type the command `delsig` and follow the prompts to delete the sig you made.
  * Repeat for all but 1 email address UID.
  * Type `save`
@@ -191,7 +191,27 @@ When you are on a new computer and want to use a hardware device (like the YubiK
         sudo chown $USER ~/.gnupg/secring.gpg
 4. Check your work by running `gpg --list-secret-keys`.  If you see `ssb>` for the subkeys, then all is good.
 
-### Permissions problems
+
+# Using OpenPGP with git
+
+### Configure git to sign all commits with an OpenPGP key
+```bash
+git config --global user.email [EMAIL ADDRESS OF YOUR PGP IDENTITY]
+git config --global user.signingkey [YOUR KEY HERE]
+git config --global commit.gpgsign true  # Only works in git >= 2
+```
+
+You should also [add your OpenPGP public key to GitHub](https://github.com/settings/keys) so that verification info is displayed to users.
+
+NOTE: Both `git` and GitHub will show that code was signed with your signing **subkey** (rather than primary key).  This may be confusing for users because normally the primary key is used / publicly shared by devs and subkeys are selected quietly in the background as needed.  See [example here](https://github.com/jonathancross/j-renamer/commit/e93093aa5d87a33b0758b1614c31d70aae7999ed) and click on the green "Verified" button.
+
+### Show commit signature info ([more info](https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work))
+```bash
+git log --show-signature -1               # Details of last commit sig.
+git log --pretty="format:%h %G? %aN  %s"  # Log of last commits. The "G" means good signature, "N" means no sig.
+```
+
+### Permissions problems (Yubikey)
 
 Symptom: `gpg --card-status` works as root, but not as an unprivileged user.
 
