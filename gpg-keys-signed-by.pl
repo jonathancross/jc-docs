@@ -10,6 +10,7 @@
 #  • Test if sigs on expired UIDs are handled correctly.
 #  • BUG: Need to filter out sigs from expired keys.
 #  • Optimize: If signed_keys was a hash instead of array, we wouldn't need uniq()
+#  • Optimize: If ... we would no need to sort if qualified_uid was reversed
 #
 # Key database structure:
 #   pub
@@ -28,7 +29,6 @@ use warnings;
 
 my $GPG_DATA_FILE = "/tmp/gpg-key-data.txt";
 
-my $ERROR = 0;      # TODO: Move to function.
 my @raw_data;       # Data dump from gpg keychain.
 my @signed_keys;    # Array of key fingerprints representing signed keys.
 my $KEY_ID = '';    # Source key whose sigs we are looking for on other keys.
@@ -38,7 +38,7 @@ my $UID_TMP;        # Current UID (uid|uat) whose sigs we are checking.
 my $SIG_REV_TIME;   # Timestamp to determine if sig is revoked
 my %signed_uids;    # KEY:UID: {boolean} true if signed by non-revoked sig.
 
-validate_key_args();
+validate_args();
 @raw_data = get_raw_data();
 parse_raw_data();
 verify_signed_uids();
@@ -52,13 +52,13 @@ foreach my $key (sort(uniq(@signed_keys))) {
 ################################################################################
 
 # Commandline args
-sub validate_key_args {
-
+sub validate_args {
+  my $error = 0;
   if (defined($ARGV[0]) && ($ARGV[0] ne '') ) {
     $KEY_ID = $ARGV[0];
     print STDERR "DEBUG: KEY_ID: $KEY_ID\n";
   } else {
-    $ERROR = 1;
+    $error = 1;
   }
 
   # Remove '0x' prefix if needed:
@@ -78,15 +78,15 @@ sub validate_key_args {
     chomp( my $keyid_test = `$command` );
 
     if ($KEY_ID ne $keyid_test) {
-       $ERROR = 1;
+       $error = 1;
        print STDERR "ERROR: key '${KEY_ID}' not found in your local keyring.\n";
     }
   } elsif ($KEY_ID ne '') {
     print STDERR "ERROR: key '${KEY_ID}' has wrong format or length.\n";
-    $ERROR = 1;
+    $error = 1;
   }
 
-  if ($ERROR) {
+  if ($error) {
     print STDERR
         "Please supply the long key ID (or full fingerprint with no ".
         "spaces) of the key whose signatures we are to search for.\n".
@@ -134,7 +134,6 @@ sub verify_signed_uids {
     # All signed_uids were signed, but here we filter out any that were revoked.
     # Remember: if *any* UID is signed, then the whole key is "signed".
     if ($signed_uids{$qualified_uid}) {
-      # Remove KEY prefix (everything before the colon):
       my ( $signed_key, $uid ) = split(/:/, $qualified_uid);
       # print STDERR "signed_key=$signed_key: qualified_uid=$qualified_uid signed=$signed_uids{$qualified_uid}\n";
       push(@signed_keys, $signed_key);
