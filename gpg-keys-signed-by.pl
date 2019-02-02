@@ -9,7 +9,6 @@
 #  • Filter out the requested key itself.
 #  • Test if sigs on expired UIDs are handled correctly.
 #  • BUG: Need to filter out sigs from expired keys.
-#  • Optimize: replace signed_keys with signed_uids, then remove uniq() & verify_signed_uids()
 #
 # Key database structure:
 #   pub
@@ -29,10 +28,9 @@ use warnings;
 my $GPG_DATA_FILE = "/tmp/gpg-key-data.txt";
 
 my @raw_data;       # Data dump from gpg keychain.
-my @signed_keys;    # Array of key fingerprints representing signed keys.
 my $KEY_ID = '';    # Source key whose sigs we are looking for on other keys.
 my $SIGNED_KEY_TMP; # Current key whose sigs we're checking for a $KEY_ID match.
-my $IS_PRIMARY;     # {boolean} Is SIGNED_KEY_TMP the PRIMARY key (not a subkey)?
+my $IS_PRIMARY;     # {boolean} Is SIGNED_KEY_TMP the PRIMARY key (not a subkey)
 my $UID_TMP;        # Current UID (uid|uat) whose sigs we are checking.
 my $SIG_REV_TIME;   # Timestamp to determine if sig is revoked
 my %signed_uids;    # KEY:UID: {boolean} true if signed by non-revoked sig.
@@ -40,11 +38,7 @@ my %signed_uids;    # KEY:UID: {boolean} true if signed by non-revoked sig.
 validate_args();
 @raw_data = get_raw_data();
 parse_raw_data();
-verify_signed_uids();
-
-foreach my $key (sort(uniq(@signed_keys))) {
-  print "$key\n"
-}
+print_signed_keys();
 
 ################################################################################
 # FUNCTIONS
@@ -127,19 +121,6 @@ sub parse_raw_data {
   }
 }
 
-sub verify_signed_uids {
-  # Filter through signed_uids and add the key for each signed ID to signed_keys
-  foreach my $qualified_uid (keys %signed_uids) {
-    # All signed_uids were signed, but here we filter out any that were revoked.
-    # Remember: if *any* UID is signed, then the whole key is "signed".
-    if ($signed_uids{$qualified_uid}) {
-      my ( $signed_key, $uid ) = split(/:/, $qualified_uid);
-      # print STDERR "signed_key=$signed_key: qualified_uid=$qualified_uid signed=$signed_uids{$qualified_uid}\n";
-      push(@signed_keys, $signed_key);
-    }
-  }
-}
-
 sub parse_raw_data_line {
   my ($line) = @_;
   my @items = split(/:/, $line);
@@ -185,8 +166,19 @@ sub parse_raw_data_line_sig {
   }
 }
 
-sub uniq {
-  my %seen;
-  return grep { !$seen{$_}++ } @_;
+sub print_signed_keys {
+  my $prev_signed_key = '';
+  foreach my $qualified_uid (sort keys %signed_uids) {
+    # All signed_uids were signed, but here we filter out any that were revoked.
+    # Remember: if *any* UID is signed, then the whole key is "signed".
+    if ($signed_uids{$qualified_uid}) {
+      my ( $signed_key, $uid ) = split(/:/, $qualified_uid);
+      # Only print unique key fingerprints (remove duplicates caused by multiple
+      # signed UIDs)
+      if ($signed_key ne $prev_signed_key) {
+        print $signed_key."\n";
+        $prev_signed_key = $signed_key;
+      }
+    }
+  }
 }
-
