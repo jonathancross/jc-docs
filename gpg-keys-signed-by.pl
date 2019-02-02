@@ -6,17 +6,21 @@
 #   ./gpg-keys-signed-by.pl C0C076132FFA7695
 #
 # TODO:
-#  • Filter out subkeys owned by the requested key.
+#  • Filter out the requested key itself.
 #  • Test if sigs on expired UIDs are handled correctly.
-#  • If signed_keys was a hash instead of array, we wouldn't need uniq()
+#  • BUG: Need to filter out sigs from expired keys.
+#  • Optimize: If signed_keys was a hash instead of array, we wouldn't need uniq()
 #
 # Key database structure:
 #   pub
 #     fpr
-#     uid|uid
+#     uid
 #       sig
 #       rev
 #     sub
+#       fpr
+#         sig
+#         rev
 ################################################################################
 
 use strict;
@@ -24,15 +28,15 @@ use warnings;
 
 my $GPG_DATA_FILE = "/tmp/gpg-key-data.txt";
 
-my $ERROR = 0;
+my $ERROR = 0;      # TODO: Move to function.
 my @raw_data;       # Data dump from gpg keychain.
 my @signed_keys;    # Array of key fingerprints representing signed keys.
 my $KEY_ID = '';    # Source key whose sigs we are looking for on other keys.
 my $SIGNED_KEY_TMP; # Current key whose sigs we're checking for a $KEY_ID match.
+my $IS_PRIMARY;     # {boolean} Is SIGNED_KEY_TMP the PRIMARY key (not a subkey)?
 my $UID_TMP;        # Current UID (uid|uat) whose sigs we are checking.
 my $SIG_REV_TIME;   # Timestamp to determine if sig is revoked
-my %signed_uids;    # UID: boolean indicating if signed by non-revoked sig.
-my %keys_by_uid;    # UID: mapped to key fingerprint.
+my %signed_uids;    # KEY:UID: {boolean} true if signed by non-revoked sig.
 
 validate_key_args();
 @raw_data = get_raw_data();
@@ -46,6 +50,7 @@ foreach my $key (sort(uniq(@signed_keys))) {
 ################################################################################
 # FUNCTIONS
 ################################################################################
+
 # Commandline args
 sub validate_key_args {
 
@@ -125,11 +130,14 @@ sub parse_raw_data {
 
 sub verify_signed_uids {
   # Filter through signed_uids and add the key for each signed ID to signed_keys
-  foreach my $uid (sort keys %signed_uids) {
-    print STDERR "$keys_by_uid{$uid}: $uid = $signed_uids{$uid}\n";
+  foreach my $qualified_uid (sort keys %signed_uids) {
     # All signed_uids were signed, but here we filter out any that were revoked.
-    if ($signed_uids{$uid}) {
-      push(@signed_keys, $keys_by_uid{$uid});
+    # Remember: if *any* UID is signed, then the whole key is "signed".
+    if ($signed_uids{$qualified_uid}) {
+      # Remove KEY prefix (everything before the colon):
+      my ( $signed_key, $uid ) = split(/:/, $qualified_uid);
+      # print STDERR "signed_key=$signed_key: qualified_uid=$qualified_uid signed=$signed_uids{$qualified_uid}\n";
+      push(@signed_keys, $signed_key);
     }
   }
 }
@@ -138,26 +146,44 @@ sub parse_raw_data_line {
   my ($line) = @_;
   my @items = split(/:/, $line);
   my $packet_type = $items[0];
-  if ($packet_type eq 'fpr') { # Key fingerprint.  This also includes subkeys.
+
+  if ($packet_type eq 'pub') {
+    # Primary key.
+    $IS_PRIMARY = 1;
+  } elsif ($packet_type eq 'sub') {
+    # Subkey.
+    $IS_PRIMARY = 0;
+  } elsif ($IS_PRIMARY && $packet_type eq 'fpr') {
+    # Primary key fingerprint.
     $SIGNED_KEY_TMP = $items[9];
-  } elsif ($packet_type =~ /^(sig|rev)$/) { # Signature or revocation.
-    my $issued_by = $items[4];
-    my $sig_time = $items[5];
-    if ($issued_by eq $KEY_ID) {
-      if ($sig_time > $SIG_REV_TIME) {
-        # New value for latest sig / rev timestamp:
-        $SIG_REV_TIME = $sig_time;
-        # Set key to UID and value to 1 if signed, otherwise 0 if revoked.
-        # Because there may be multiple sigs and rev from the same key, this
-        # will be overwritten until the last one wins (by date signed).
-        $signed_uids{$UID_TMP} = ($packet_type eq 'sig') ? 1 : 0;
-      }
-    }
-  } elsif ($packet_type =~ /^(uid|uat)$/) { # User ID or picture.
+  } elsif ($IS_PRIMARY && $packet_type =~ /^(sig|rev)$/) {
+    # Signature or revocation on primary key.
+    parse_raw_data_line_sig($packet_type, $items[4], $items[5]);
+  } elsif ($packet_type =~ /^(uid|uat)$/) {
+    # User ID or picture.
     # Reset these values as we begin a new UID with sigs.
     $SIG_REV_TIME = 0;
     $UID_TMP = $items[7];
-    $keys_by_uid{$UID_TMP} = $SIGNED_KEY_TMP;
+  }
+}
+
+#   parse_raw_data_line_sig($packet_type, $issued_by, $sig_time)
+sub parse_raw_data_line_sig {
+  my ($packet_type, $issued_by, $sig_time) = @_;
+  if ($issued_by eq $KEY_ID) {
+    # print STDERR "Filtering: $SIGNED_KEY_TMP: $UID_TMP : $packet_type: $sig_time\n";
+    if ($sig_time > $SIG_REV_TIME) {
+      # New value for latest sig / rev timestamp:
+      $SIG_REV_TIME = $sig_time;
+
+      # Prefix the UID with the key it belongs to:
+      my $qualified_uid = "${SIGNED_KEY_TMP}:${UID_TMP}";
+
+      # Set key to UID and value to 1 if signed, otherwise 0 if revoked.
+      # Because there may be multiple sigs and rev from the same key on a UID,
+      # this will be overwritten until the last one wins (by date signed).
+      $signed_uids{$qualified_uid} = ($packet_type eq 'sig') ? 1 : 0;
+    }
   }
 }
 
