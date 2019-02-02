@@ -9,8 +9,7 @@
 #  • Filter out the requested key itself.
 #  • Test if sigs on expired UIDs are handled correctly.
 #  • BUG: Need to filter out sigs from expired keys.
-#  • Optimize: If signed_keys was a hash instead of array, we wouldn't need uniq()
-#  • Optimize: If ... we would no need to sort if qualified_uid was reversed
+#  • Optimize: replace signed_keys with signed_uids, then remove uniq() & verify_signed_uids()
 #
 # Key database structure:
 #   pub
@@ -130,7 +129,7 @@ sub parse_raw_data {
 
 sub verify_signed_uids {
   # Filter through signed_uids and add the key for each signed ID to signed_keys
-  foreach my $qualified_uid (sort keys %signed_uids) {
+  foreach my $qualified_uid (keys %signed_uids) {
     # All signed_uids were signed, but here we filter out any that were revoked.
     # Remember: if *any* UID is signed, then the whole key is "signed".
     if ($signed_uids{$qualified_uid}) {
