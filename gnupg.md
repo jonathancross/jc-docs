@@ -133,7 +133,7 @@ In gpg, your "public key" is actually a collection of many pieces of metadata, u
 Generally, no.
 
 You can **add** information such as valid signatures or new UIDs, but not delete anything.
-You an also update expiration dates.
+You an also update expiration dates (ie _adding_ a signature with a later expiration date).
 
 #### Many ways to represent a public key...
 
@@ -175,6 +175,22 @@ There are different types of keys, you can see this on the right as "usage":
 * `usage: S` = **Sign** messages so people know it was sent from you.  This can be a Subkey.
 * `usage: E` = **Encrypt** messages to other people.  This can be a Subkey.
 * `usage: A` = **Authenticate** yourself, for example when using SSH to log into a server.  This can be a Subkey.
+
+#### Multiple private keys
+
+The _local user_ option allows you specify the key used for signing / encryption if you have multiple private keys.
+
+````
+gpg --sign-key 0xBAADABBA --local-user 0xDEADBEEF
+````
+
+#### Re-signing a key
+
+In some circumstances you may want to re-sign a certain UID, eg using a stronger hash function like SHA512, adding a notation or a new expiration date.  In most cases, you will need to add the `--expert` option in order to force gpg to sign the UID again.
+
+````
+gpg --ask-cert-level --expert --sign-key 0xBAADABBA
+````
 
 ### Using gnupg offline
 
