@@ -6,7 +6,7 @@
 #   ./gpg-keys-signed-by.pl C0C076132FFA7695
 #
 # TODO:
-#  • Filter out the requested key itself.
+#  • May not need to check if key is in keyring anymore, check database instead.
 #  • Test if sigs on expired UIDs are handled correctly.
 #  • BUG: Need to filter out sigs from expired keys.
 #
@@ -29,6 +29,7 @@ my $GPG_DATA_FILE = "/tmp/gpg-key-data.txt";
 
 my @raw_data;       # Data dump from gpg keychain.
 my $KEY_ID = '';    # Source key whose sigs we are looking for on other keys.
+my $KEY_FPR = '';   # Full fingerprint of source key.
 my $SIGNED_KEY_TMP; # Current key whose sigs we're checking for a $KEY_ID match.
 my $IS_PRIMARY;     # {boolean} Is SIGNED_KEY_TMP the PRIMARY key (not a subkey)
 my $UID_TMP;        # Current UID (uid|uat) whose sigs we are checking.
@@ -59,6 +60,10 @@ sub validate_args {
 
   # Uppercase
   $KEY_ID = uc $KEY_ID;
+
+  if ($KEY_ID =~ /^[0-9A-F]{40}$/) {
+    $KEY_FPR = $KEY_ID;
+  }
 
   # Reduce fingerprint to last 16 chars (gpg's "long" key ID) if needed:
   $KEY_ID =~ s/.*([0-9A-F]{16})$/$1/;
@@ -101,6 +106,7 @@ sub create_database {
 }
 
 # Load data from database and create it if needed.
+# returns @raw_data
 sub get_raw_data {
   # Create the database if it doesn't exist yet.
   if (! -e $GPG_DATA_FILE) {
@@ -139,6 +145,11 @@ sub parse_raw_data_line {
   } elsif ($IS_PRIMARY && $packet_type eq 'fpr') {
     # Primary key fingerprint.
     $SIGNED_KEY_TMP = $items[9];
+    # Here we expand KEY_ID into the full fingerprint KEY_FPR:
+    if ($KEY_FPR eq '' && $SIGNED_KEY_TMP =~ /${KEY_ID}$/) {
+      $KEY_FPR = $SIGNED_KEY_TMP;
+      print STDERR "Expanded: ${KEY_ID} into ${KEY_FPR}\n";
+    }
   } elsif ($IS_PRIMARY && $packet_type =~ /^(sig|rev)$/) {
     # Signature or revocation on primary key.
     parse_raw_data_line_sig($packet_type, $items[4], $items[5]);
@@ -179,8 +190,8 @@ sub print_signed_keys {
     if ($signed_uids{$qualified_uid}) {
       my ( $signed_key, $uid ) = split(/:/, $qualified_uid);
       # Only print unique key fingerprints (remove duplicates caused by multiple
-      # signed UIDs)
-      if ($signed_key ne $prev_signed_key) {
+      # signed UIDs).  Also filter out the key provided by the user.
+      if ($signed_key ne $prev_signed_key && $signed_key ne $KEY_FPR) {
         print $signed_key."\n";
         $prev_signed_key = $signed_key;
       }
