@@ -44,7 +44,7 @@ print_signed_keys();
 # FUNCTIONS
 ################################################################################
 
-# Commandline args
+# Parse command line arguments. Show help if needed.
 sub validate_args {
   my $error = 0;
   if (defined($ARGV[0]) && ($ARGV[0] ne '') ) {
@@ -90,6 +90,7 @@ sub validate_args {
   }
 }
 
+# Create the database file.
 sub create_database {
   # Export gpg signature data
   my $command = "gpg --with-colons --fast-list-mode --fingerprint --list-sigs ".
@@ -99,6 +100,7 @@ sub create_database {
   print STDERR " [DONE]\n";
 }
 
+# Load data from database and create it if needed.
 sub get_raw_data {
   # Create the database if it doesn't exist yet.
   if (! -e $GPG_DATA_FILE) {
@@ -114,6 +116,7 @@ sub get_raw_data {
   return @raw_data;
 }
 
+# Parse each line of the database file.
 sub parse_raw_data {
   # Process the database contents.
   foreach my $line (@raw_data) {
@@ -121,6 +124,7 @@ sub parse_raw_data {
   }
 }
 
+# Parses a line of data from our database.
 sub parse_raw_data_line {
   my ($line) = @_;
   my @items = split(/:/, $line);
@@ -139,14 +143,14 @@ sub parse_raw_data_line {
     # Signature or revocation on primary key.
     parse_raw_data_line_sig($packet_type, $items[4], $items[5]);
   } elsif ($packet_type =~ /^(uid|uat)$/) {
-    # User ID or picture.
-    # Reset these values as we begin a new UID with sigs.
-    $SIG_REV_TIME = 0;
+    # User ID or picture UID will be saved for use in parse_raw_data_line_sig().
     $UID_TMP = $items[7];
+    # Reset current revocation time as we begin a new UID with its sigs.
+    $SIG_REV_TIME = 0;
   }
 }
 
-#   parse_raw_data_line_sig($packet_type, $issued_by, $sig_time)
+# Parses a single line of data containing signature / revocation data.
 sub parse_raw_data_line_sig {
   my ($packet_type, $issued_by, $sig_time) = @_;
   if ($issued_by eq $KEY_ID) {
@@ -166,6 +170,7 @@ sub parse_raw_data_line_sig {
   }
 }
 
+# Print out the final list of keys that were signed by the provided key.
 sub print_signed_keys {
   my $prev_signed_key = '';
   foreach my $qualified_uid (sort keys %signed_uids) {
