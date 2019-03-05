@@ -1,12 +1,12 @@
 #!/bin/bash
 # Bash script used to install a new version of the Monero daemon on Linux.
 # You must configure the variables below to match your version.
-# Tested with v0.11.1 which changed the format of hashes.txt
+# Tested with v0.11.1 - v0.14.0
 #
 # Jonathan Cross jonathancross.com
 
 # File containing release hashes.  This tells us the version number as well:
-HASHES_URL="https://getmonero.org/downloads/hashes.txt"
+HASHES_URL="https://www.getmonero.org/downloads/hashes.txt"
 
 # egrep pattern for download file:
 NEW_VERSION_PATTERN='monero-linux-x64-v[0-9.]+.tar.bz2'
@@ -53,6 +53,14 @@ else
   echo "  • Downloading Hashes: ${HASHES_URL}"
   if curl --silent "${HASHES_URL}" --output "${HASHES_FILE}"; then
     echo "    Saved as: ${LOC}/${HASHES_FILE}"
+    # Check if HASHES_FILE actually downloaded (they keep changing location)
+    echo -n "    Signature data?: "
+    if grep -q "BEGIN PGP SIGNED MESSAGE" "${HASHES_FILE}"; then
+      echo " [CONFIRMED]"
+    else
+      echo " [ERROR: Not a GPG signature]"
+      exit 1
+    fi
   else
     echo "ERROR: Could not download ${LOC}/${HASHES_FILE}"
     exit 1
