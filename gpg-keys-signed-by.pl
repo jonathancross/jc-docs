@@ -10,9 +10,8 @@
 # TODO:
 #  • Add option to show all keys with expired sigs.
 #  • BUG: Must exclude signatures on UIDs which have been revoked by the owner.
-#  • BUG: Must exclude signatures from a subkey which was revoked by the owner.
 #  • BUG: Must exclude keys which were properly signed, but now have expired.
-#  • BUG: Must exclude keys which were properly signed, but are revoked.
+#  • BUG: Must exclude keys which were properly signed, but now are revoked.
 #
 # Handled:
 #  • Signatures that have expired on another key's UID.
@@ -34,21 +33,24 @@
 # NOTES: Revoked keys and revoked sigs (on other people's keys) will be in the
 #        database and should be handled.
 #        Also, the revocation is listed BEFORE the key signature being revoked!
+#
+# AUTHOR:  Jonathan Cross 0xC0C076132FFA7695 (jonathancross.com)
+# LICENSE: WTFPL - https://github.com/jonathancross/jc-docs/blob/master/LICENSE
 ################################################################################
 
 use strict;
 use warnings;
 
-my $GPG_DATA_FILE = "/tmp/gpg-key-data.txt";
-my $IS_DEBUG = 0;   # Flag for verbose debug mode.TODO: Make commandline option.
-my @raw_data;       # Data dump from gpg keychain.
+my $IS_DEBUG = 0;   # Verbose debug info flag.  TODO: Make commandline option.
+my $GPG_DATA_FILE = "/tmp/gpg-key-data.txt"; # Cache file of gpg keyring data.
+my @raw_data;       # Colon-delimited data from $GPG_DATA_FILE
 my $KEY_ID = '';    # Source key whose sigs we are looking for on other keys.
-my $KEY_FPR = '';   # Full fingerprint of source key.
-my $SIGNED_KEY_TMP; # Current key whose sigs we're checking for a $KEY_ID match.
+my $KEY_FPR = '';   # Full fingerprint of $KEY_ID.
+my $SIGNED_KEY_TMP; # {str} Key fpr whose sigs we're checking for $KEY_ID match.
 my $IS_PRIMARY;     # {boolean} Is SIGNED_KEY_TMP the PRIMARY key (not a subkey)
 my $UID_TMP;        # Current UID (uid|uat) whose sigs we are checking.
 my $LATEST_SIG_REV_TIME; # Timestamp of latest sig or rev found so far.
-my $NOW = time();   # Current timestamp used to check for sig expiration.
+my $NOW = time();   # {int} Current timestamp used to check for sig expiration.
 my $NO_EXPIRE = $NOW + 999999999; # A date guaranteed to be in the future.
 my %SIGNED_UIDS;    # "KeyFpr:UID" : {bool} true if signed by non-revoked sig.
 my %UIDS;           # "UID hash": "UID string" Mapping of UID hashes to strings.
