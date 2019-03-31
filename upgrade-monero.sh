@@ -1,9 +1,59 @@
 #!/bin/bash
+#
 # Bash script used to install a new version of the Monero daemon on Linux.
 # You must configure the variables below to match your version.
-# Tested with v0.11.1 - v0.14.0
+# Tested with v0.11 - v0.14.0.2
+################################################################################
+# AUTHOR:  Jonathan Cross 0xC0C076132FFA7695 (jonathancross.com)
+# LICENSE: WTFPL - https://github.com/jonathancross/jc-docs/blob/master/LICENSE
+################################################################################
 #
-# Jonathan Cross jonathancross.com
+# EXAMPLE USAGE:
+# ./upgrade-monero.sh
+#
+# Upgrading the Monero daemon
+# ===========================
+#   • Downloading Hashes: https://www.getmonero.org/downloads/hashes.txt
+#     Saved as: /home/user/tmp/monero_hashes_19813.txt
+#     Signature data?:  [CONFIRMED]
+#   • New version: v0.14.0.2
+#   • Destination: /home/user/bin/
+#   • Downloading Release: https://downloads.getmonero.org/cli/monero-linux-x64-v0.14.0.2.tar.bz2
+#     Saved as: /home/user/tmp/monero-linux-x64-v0.14.0.2.tar.bz2
+#
+# Verifying signature in monero_hashes_19813.txt:
+# gpg: Signature made Fri 08 Mar 2019 08:48:10 PM CET
+# gpg:                using RSA key 94B738DD350132F5ACBEEA1D55432DF31CCD4FCD
+# gpg: Good signature from "Riccardo Spagni <ric@spagni.net>" [unknown]
+# Primary key fingerprint: BDA6 BD70 42B7 21C4 67A9  759D 7455 C5E3 C0CD CEB9
+#      Subkey fingerprint: 94B7 38DD 3501 32F5 ACBE  EA1D 5543 2DF3 1CCD 4FCD
+#
+# Verifying hashes:
+#   • Expected: 4dd5cd9976eda6b33b16821e79e671527b78a1c9bfb3d973efe84b824642dd21
+#   • Actual:   4dd5cd9976eda6b33b16821e79e671527b78a1c9bfb3d973efe84b824642dd21
+# Hashes match.
+#
+# Extracting files from monero-linux-x64-v0.14.0.2.tar.bz2... Done.
+#
+# Moving extracted folder to /home/user/bin... Done.
+# Replacing soft links:
+#   'monerod' -> 'monero-v0.14.0.2/monerod'
+#   'monero-wallet-cli' -> 'monero-v0.14.0.2/monero-wallet-cli'
+#   'monero-wallet-rpc' -> 'monero-v0.14.0.2/monero-wallet-rpc'
+#
+# Confirming installation... CONFIRMED: Monero 'Boron Butterfly' (v0.14.0.2-release)
+# You can now delete the downloaded files in /home/user/tmp
+#
+# DONE.
+################################################################################
+
+# Folder locations, please change as needed:
+LOC=~/Downloads # Folder (without trailing slash) where files downloaded to.
+DEST=~/bin      # Destination (without trailing slash) where we will install.
+
+# TODO: Add configuration options for commands needed such as openssl.
+
+# Items below can be modified, but in most cases should work fine as-is.
 
 # File containing release hashes.  This tells us the version number as well:
 HASHES_URL="https://www.getmonero.org/downloads/hashes.txt"
@@ -13,11 +63,6 @@ NEW_VERSION_PATTERN='monero-linux-x64-v[0-9.]+.tar.bz2'
 
 # URL prefix containing the release (without filename):
 BZIP_URL_PREFIX="https://downloads.getmonero.org/cli/"
-
-LOC=~/Downloads # Folder (without trailing slash) where files downloaded to
-DEST=~/bin      # Destination (without trailing slash) where we will install
-
-# TODO: Add configuration options for commands needed such as openssl.
 
 ################################################################################
 # END CONFIGURATION
