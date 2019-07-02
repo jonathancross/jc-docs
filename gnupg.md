@@ -71,19 +71,17 @@ Some UID may not contain an email address, but rather a photo, website or other 
 
 A keyserver is a repository of keys.  Anyone can upload their own key there or another person's key and the key there could be manipulated by the owner of the server.  DO NOT BLINDLY TRUST THE KEYS.  You can use a keyserver as a convenient way to locate a key from a fingerprint, but always verify the key after downloading.
 
-Here is a list of well known keyservers, they may or may not work on the day you try to use one:
-* `keyserver.ubuntu.com`
-* `pgp.surfnet.nl`
-* `hkps.pool.sks-keyservers.net`
-* `pgp.mit.edu`
+**2019-07-02** It is [strongly recommended](https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f#mitigations) to use this keyserver:
+* `hkps://keys.openpgp.org`
 
-You can use them to **search** for a key via the web by prefixing with `https://` or on the commandline with the prefix `hkps://` like this:
 
-    gpg --keyserver hkps://keyserver.ubuntu.com --search 0xC0C076132FFA7695
+One can use a keyserver to **search** for a key via the web by prefixing with `https://` or on the commandline with the prefix `hkps://` like this:
+
+    gpg --keyserver hkps://keys.openpgp.org --search 0xC0C076132FFA7695
 
 You can also upload your key to a server:
 
-    gpg --keyserver hkps://keyserver.ubuntu.com --send-key YOUR_KEY_ID
+    gpg --keyserver hkps://keys.openpgp.org --send-key YOUR_KEY_ID
 
 Feel free to use [this script](https://raw.githubusercontent.com/jonathancross/jc-docs/master/send-pgp-keys.sh) I made to automate the upload of your key to keyservers, your website and / or Keybase.io.
 

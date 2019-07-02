@@ -25,6 +25,7 @@ LOCAL_KEY_FILE=~/${GPG_ID}_pub.asc
 ENABLE_PUBLIC_KEY_SERVERS=1 # Change to 0 (zero) to disable.
 # You can add / remove servers as needed:
 PUBLIC_KEY_SERVERS=(
+  "hkps://keys.openpgp.org"
   "hkps://keyserver.ubuntu.com"
   "hkps://pgp.surfnet.nl"
   "hkps://hkps.pool.sks-keyservers.net"
