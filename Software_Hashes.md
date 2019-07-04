@@ -28,6 +28,7 @@ Many projects do not digitally sign their releases.  I have hashed the files bel
 `fe46c69d783f2aa290d18caec30b3f17481c47def9c271dc66db1b7bbd3074c5`  [sudo-1.8.19p2.pkg](https://www.sudo.ws/sudo/dist/packages/macOS/10.11/sudo-1.8.19p2.pkg)
 `04db58b737c05bb6b0b83f1cb37a29edec844b59ff223b9e213ee1f4e287f586`  TrueCrypt 7.1a Mac OS X.dmg
 `d957b207b13b705f9ef5e4f54942af0b41fb335219ca0833c34627ce95e968f9`  [tuxerantfs_2016.1.dmg](http://www.tuxera.com/products/tuxera-ntfs-for-mac/download/)
+`8c5ba5e8a19de5a33461f3cd84617140736d7cb38e306d0ac4b1c058940227f3`  [VeraCrypt_1.23.dmg](https://launchpad.net/veracrypt/trunk/1.23/+download/VeraCrypt_1.23.dmg)
 `51a6cc75841ed60e01ea62974907049fd3d39be7a916f30e77d842c1a8354655`  [VirtualBox-5.1.26-117224-OSX.dmg](http://download.virtualbox.org/virtualbox/5.1.26/VirtualBox-5.1.26-117224-OSX.dmg) [4]
 `c9b3a373b7fd989331117acb9696fffd6b9ee1a08ba838b02ed751b184005211`  XQuartz-2.7.7.dmg
 
