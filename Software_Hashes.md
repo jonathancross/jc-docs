@@ -21,6 +21,7 @@ Many projects do not digitally sign their releases.  I have hashed the files bel
 `db3572c5c6905b09f4fc28415a7f6f223014391492dd2165ed1bc8512ac4e6fd`  meld-3.12.3.tar.xz
 `0f31b7d8f00779969e339bec89163b573c9c9e9ce10cdbbe0c4acfc11fcb527b`  Mumble-1.2.15.dmg
 `b35a56cafa4403fcb941422e4975c843018965282571d05a660485a21fde1bbe`  OpenSC-0.17.0.dmg
+`de45388f6aceb547f08112e24f2ed49a2160725ed4590adcc8488a5d5d3f0067`  osxfuse-3.9.2.dmg
 `59a2549913f523dac5a51859de135d92e434c1801ca571eb2d74664d19d6b627`  picasamac39.dmg [2]
 `e3d0d74242f25a7c8b097cedf7cb9ccb67b11db8764166748f3f793c41e6199d`  [picasamac39.dmg](https://www.macupdate.com/app/mac/30131/picasa/download) [3]
 `dda519484075ce455f91962d04ca57535c50604b30e886e5025ab97a4e5be1df`  qbittorrent-3.3.11.dmg
