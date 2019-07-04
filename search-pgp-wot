@@ -1,0 +1,53 @@
+#!/bin/sh
+# Check all signatures on a given PGP key looking for any in the Web Of Trust.
+# Then outputs a link to see the connection.
+#
+# USAGE:
+#   search-pgp-wot 0xC0C076132FFA7695
+#
+# STATUS:  Alpha
+# AUTHOR:  Jonathan Cross 0xC0C076132FFA7695 (jonathancross.com)
+# LICENSE: WTFPL - https://github.com/jonathancross/jc-docs/blob/master/LICENSE
+################################################################################
+
+KEYSERVER_URL="https://keyserver.ubuntu.com/pks/lookup?op=vindex&search="
+# TODO: Plot from my key to their key: https://pgp.cs.uu.nl/paths/c0c076132ffa7695/to/a485a0ed51b8b7c4.html
+PATHFINDER_URL="https://pgp.cs.uu.nl/mk_path.cgi?PATHS=trust+paths&FROM=&TO="
+PATHFINDER_FAIL_STR='Good luck'
+KEY_NUM_IN_WOT=0
+
+if [[ "x$1" != "x" ]]; then
+  KEY=$1
+else
+  echo "USAGE: search-pgp-wot 0xC0C076132FFA7695"
+  exit 1
+fi
+
+echo "Getting data for ${KEY}..."
+
+# TODO: Need to remove all subkeys.
+SIG_KEYS=$(curl -s "${KEYSERVER_URL}${KEY}"| perl -ne 'if(m/^sig.+search=(0x[0-9A-F]{16}).*/) {print "$1\n"}' | sort -u | grep --invert-match ${KEY})
+
+if [[ "${#SIG_KEYS[@]}" -ge "1" ]]; then
+  echo "FOUND some keys that signed ${KEY}:"
+else
+  echo "No usable signatures found on this key."
+  exit 0
+fi
+
+for SIG_KEY in ${SIG_KEYS[@]}; do
+  if $(curl -s "${PATHFINDER_URL}${SIG_KEY}" | grep -q "${PATHFINDER_FAIL_STR}"); then
+    echo " × $SIG_KEY"
+  else
+    let KEY_NUM_IN_WOT++
+    echo " ✓ https://pgp.cs.uu.nl/stats/$SIG_KEY.html"
+  fi
+done
+
+if [[ "$KEY_NUM_IN_WOT" -gt 0 ]]; then
+  echo "Found $KEY_NUM_IN_WOT keys in the PGP Web Of Trust."
+  echo "Use the links above to plot a path to one of those keys."
+else
+# TODO: print link to see the path if found.  Maybe later offer way to download keys in path.
+  echo "Non of the keys signing $SIG_KEY are in the PGP Web Of Trust."
+fi
