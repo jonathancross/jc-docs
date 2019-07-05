@@ -91,6 +91,22 @@ Generally speaking, you should not send other people's keys to keyservers unless
 
 The OpenPGP Web Of Trust is not perfect.  Publishing keys and personal information on public servers may open you up to receiving more spam, being contacted by strangers and possible analysis of your social graph.  These are all concerns that might prevent someone from participating.  In my mind, the overall benefits outweigh the dangers, so I participate, but many do not agree and are waiting for better options.
 
+#### More details about the OpenPGP trust model in gpg
+
+When attempting to determine to what degree a key is "trusted", gpg will offer various pieces of information explaining how the trust level is being calculated.  Example:
+
+```
+gpg: checking the trustdb
+gpg: marginals needed: 3  completes needed: 1  trust model: pgp
+gpg: depth: 0  valid:   4  signed: 115  trust: 0-, 0q, 0n, 0m, 0f, 4u
+gpg: depth: 1  valid: 115  signed:  67  trust: 3-, 0q, 0n, 2m, 110f, 0u
+gpg: depth: 2  valid:  50  signed:  39  trust: 35-, 2q, 1n, 5m, 7f, 0u
+gpg: depth: 3  valid:   3  signed:   6  trust: 0-, 0q, 0n, 3m, 0f, 0u
+gpg: next trustdb check due at 2019-07-09
+```
+
+Please see [this excellent explanation](https://security.stackexchange.com/a/41209/16036) from [Jens Erat](https://security.stackexchange.com/users/19837/jens-erat) of the values and meanings seen above.
+
 #### PGP is dead
 
 Many people have [declared PGP dead](https://blog.cryptographyengineering.com/2014/08/13/whats-matter-with-pgp/) because it is hard to use, doesn't protect metadata in encrypted emails and supports to much legacy crypto.  Although there are very good arguments against it, I still think it is undeniable that it works well for verifying digital signatures, has wide support (hardware, software and people) and does a decent job at encrypting email once you have a properly setup client.  Could this be done better? Absolutely!  But this is the best we have right now and attempts to replace it have always fallen short of the features needed.
