@@ -71,8 +71,15 @@ Some UID may not contain an email address, but rather a photo, website or other 
 
 A keyserver is a repository of keys.  Anyone can upload their own key there or another person's key and the key there could be manipulated by the owner of the server.  DO NOT BLINDLY TRUST THE KEYS.  You can use a keyserver as a convenient way to locate a key from a fingerprint, but always verify the key after downloading.
 
-**2019-07-02** It is [strongly recommended](https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f#mitigations) to use this keyserver:
+**2019-07-02** It is [strongly recommended](https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f#mitigations) to use this keyserver when retrieving keys:
 * `hkps://keys.openpgp.org`
+
+When sharing your key (uploading), I suggest using these keyservers because they allow upload of signature data:
+* `keyserver.ubuntu.com`
+* `keys2.kfwebs.net`
+* `hkps.pool.sks-keyservers.net`
+
+(NOTE: uploading keys does not expose you to the above mentioned attack vector)
 
 
 One can use a keyserver to **search** for a key via the web by prefixing with `https://` or on the commandline with the prefix `hkps://` like this:
@@ -111,9 +118,9 @@ Please see [this excellent explanation](https://security.stackexchange.com/a/412
 
 Many people have [declared PGP dead](https://blog.cryptographyengineering.com/2014/08/13/whats-matter-with-pgp/) because it is hard to use, doesn't protect metadata in encrypted emails and supports to much legacy crypto.  Although there are very good arguments against it, I still think it is undeniable that it works well for verifying digital signatures, has wide support (hardware, software and people) and does a decent job at encrypting email once you have a properly setup client.  Could this be done better? Absolutely!  But this is the best we have right now and attempts to replace it have always fallen short of the features needed.
 
-## Random things that confused me about gpg
+## RANT: Random things that confused me about gpg
 
-* Many options re not listed in the `--help` or man pages.  See [Esoteric Options](https://www.gnupg.org/documentation/manuals/gnupg/GPG-Esoteric-Options.html) for a few interesting ones.
+* Many options are not listed in the `--help` or man pages.  See [Esoteric Options](https://www.gnupg.org/documentation/manuals/gnupg/GPG-Esoteric-Options.html) for a few interesting ones.
 * The term *Primary Key* = "Master Key"
 * The term *subkey* refers to a key which is certified by the *Primary Key*
 * `--armor` = This option causes the key to be output as ASCII (instead of the default binary format).  Why not use `--ascii`?  Furthermore, users will encounter plenty of nonsense if you forget this option while trying to encrypt a message.  ALL of these will fail without a useful error message for example:
