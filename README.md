@@ -11,6 +11,7 @@
 * [Secure PGP keys and Yubikey NEO](Secure%20PGP%20keys%20and%20Yubikey%20NEO.md) - Notes on GPG and YubiKey NEO setup.
 * [Software Hashes](Software_Hashes.md) - A collection of SHA-256 software hashes.
 * [gpg.conf](gpg.conf) - Example "hardened" configuration file for GnuPG with secure defaults.
+* [gnupg.md](gnupg.md) - Everything you ever wanted to know about gpg.  Source for https://gpg.wtf
 
 ### Scripts
 
