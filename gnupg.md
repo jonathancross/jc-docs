@@ -3,7 +3,7 @@ Using GNU Privacy Guard - [gpg.wtf](http://gpg.wtf)
 
 GNU Privacy Guard is very powerful software with a terrible interface.
 
-This document attempts to give you the tools needed to answer questions and explain the mysteries of gpg so that you too can take advantage of this tool and stop making excuses.
+This document attempts to give you the tools needed to answer questions and explain the mysteries of gpg and PGP so that you too can take advantage of this tool and stop making excuses.
 
 This page assumes you have basic familiarity with `gpg` and have already created an OpenPGP key. If not, please see [Secure PGP keys and Yubikey NEO.md](https://github.com/jonathancross/jc-docs/blob/master/Secure%20PGP%20keys%20and%20Yubikey%20NEO.md) for information on how to create an offline master key and then transfer the sub keys onto a YubiKey hardware device for daily use.
 
