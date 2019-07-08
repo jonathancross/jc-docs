@@ -2,7 +2,7 @@
 #
 # Bash script used to install a new version of the Monero daemon on Linux.
 # You must configure the variables below to match your version.
-# Tested with v0.11 - v0.14.0.2
+# Tested with v0.11 - v0.14.1.0
 ################################################################################
 # AUTHOR:  Jonathan Cross 0xC0C076132FFA7695 (jonathancross.com)
 # LICENSE: WTFPL - https://github.com/jonathancross/jc-docs/blob/master/LICENSE
@@ -125,7 +125,7 @@ echo "  • Destination: ${DEST}/"
 
 # Download BZIP file:
 if [[ -f "${LOC}/${NEW_BZIP}" ]]; then
-  echo "  • Release file: ${LOC}/${NEW_BZIP}"
+  echo "  • Release file already downloaded: ${LOC}/${NEW_BZIP}"
 else
   echo "  • Downloading Release: ${BZIP_URL}"
   printf "    "
@@ -166,7 +166,25 @@ fi
 
 echo -en "
 Extracting files from ${NEW_BZIP}... "
-if tar --extract --bzip2 --file "${NEW_BZIP}"; then
+# Handle v0.14.1 release which is a gzip pretending to be a bzip2.
+# https://repo.getmonero.org/monero-project/monero-site/issues/964
+if file "${NEW_BZIP}" | grep -q gzip; then
+  echo -n '(trying to extract malformed gzip) '
+  if tar -z --extract --file "${NEW_BZIP}"; then
+    echo "Done."
+    # 14.1 also renamed for extracted folder:
+    echo -n "  - Fixing broken 14.1 naming..."
+    if mv -f "monero-x86_64-linux-gnu" ${NEW_VERSION_FOLDER}; then
+      echo "Done."
+    else
+      echo "ERROR: Failed to rename monero-x86_64-linux-gnu to ${NEW_VERSION_FOLDER}"
+      exit 1
+    fi
+  else
+    echo "ERROR: Failed to extract gzip named as bzip (release v.0.14.1)."
+    exit 1
+  fi
+elif tar --extract --bzip2 --file "${NEW_BZIP}"; then
   echo "Done."
 else
   echo "ERROR: Failed to expand ${NEW_BZIP}"
