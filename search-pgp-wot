@@ -15,10 +15,26 @@ KEYSERVER_URL="https://keyserver.ubuntu.com/pks/lookup?op=vindex&search="
 PATHFINDER_URL="https://pgp.cs.uu.nl/mk_path.cgi?PATHS=trust+paths&FROM=&TO="
 PATHFINDER_FAIL_STR='Good luck'
 KEY_NUM_IN_WOT=0
+KEY_IS_VALID=0
 
+# Validate the key handle:
 if [[ "x$1" != "x" ]]; then
   KEY=$1
+  if [[ "${KEY:0:2}" == "0x" ]]; then
+    if [[ "${#KEY}" -eq "18" ]]; then
+      KEY_IS_VALID=1
+    else
+      echo "ERROR: Key must have '0x' prefix and be 16 hex chars (18 characters total). Yours is only ${#KEY} characters."
+    fi
+  else
+    echo "ERROR: Key handle must begin with '0x'."
+  fi
 else
+  echo "ERROR: You must supply a long key handle as shown below."
+fi
+
+# Exit if key is invalid:
+if [[ "$KEY_IS_VALID" != "1" ]]; then
   echo "USAGE: search-pgp-wot 0xC0C076132FFA7695"
   exit 1
 fi
@@ -27,9 +43,10 @@ echo "Getting data for ${KEY}..."
 
 # TODO: Need to remove all subkeys.
 SIG_KEYS=$(curl -s "${KEYSERVER_URL}${KEY}"| perl -ne 'if(m/^sig.+search=(0x[0-9A-F]{16}).*/) {print "$1\n"}' | sort -u | grep --invert-match ${KEY})
+SIG_KEYS=( ${SIG_KEYS[@]} )
 
 if [[ "${#SIG_KEYS[@]}" -ge "1" ]]; then
-  echo "FOUND some keys that signed ${KEY}:"
+  echo "FOUND ${#SIG_KEYS[@]} keys that signed ${KEY}:"
 else
   echo "No usable signatures found on this key."
   exit 0
@@ -49,5 +66,5 @@ if [[ "$KEY_NUM_IN_WOT" -gt 0 ]]; then
   echo "Use the links above to plot a path to one of those keys."
 else
 # TODO: print link to see the path if found.  Maybe later offer way to download keys in path.
-  echo "Non of the keys signing $SIG_KEY are in the PGP Web Of Trust."
+  echo "None of the keys signing $SIG_KEY are in the PGP Web Of Trust."
 fi
