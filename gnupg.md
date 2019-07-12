@@ -221,12 +221,14 @@ The recommended way to use gpg in a secure manner is to keep the master key offl
 
 When you are on a new computer and want to use a hardware device (like the YubiKey or the [NitroKey](https://www.nitrokey.com/)), you will need to create on-disk "stubs" of the keys that reside on your hardware device.
 
-1. Import public key.
-2. Run `sudo gpg --card-status`
-3. May need to change owner of secure keyring to yourself if it was just created:
+1. On Linux, you need to add [these udev rules](https://github.com/Yubico/libu2f-host/blob/master/70-u2f.rules) to `/etc/udev/rules.d/`.
+2. Run `sudo gpg --card-edit`
+3. Get your key stubs: `fetch`
+4. Quit: `q`
+5. May need to change the keyring owner to yourself if it was just created with sudo above:
 
-        sudo chown $USER ~/.gnupg/secring.gpg
-4. Check your work by running `gpg --list-secret-keys`.  If you see `ssb>` for the subkeys, then all is good.
+        sudo chown -R $USER ~/.gnupg/*
+6. Check your work by running `gpg --list-secret-keys`.  If you see `ssb>` for the subkeys, then all is good.
 
 
 # Using OpenPGP with git
