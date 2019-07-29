@@ -1,5 +1,6 @@
 # Documentation, demos and examples from [Jonathan Cross](https://jonathancross.com).
 
+* [Diceware Entropy Improvement](Diceware-Entropy-Improvement.md) - Add entropy to offline passphrase generation -- don't trust your dice!
 * [OpenBSD release key PGP signature](OpenBSD_release_key_PGP_signature.md) - How to verify the OpenBSD 6.4 release signing key using PGP web of trust.
 * [OpenBSD verification](OpenBSD_verification.md) - Verify OpenBSD install files from Linux or Mac.
 * [Homebrew and OpenPGP signatures](Homebrew_GPG.md) - Information about how the MacOs `brew` command verifies packages.
