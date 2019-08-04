@@ -180,8 +180,8 @@ git checkout new-branch
 ### To checkout a pull request locally:
 Eg: Pull this locally to test: https://github.com/monero-project/monero-core/pull/786 (branch name is `android_dockerfile`)
 
-  cd monero-project
-  git fetch upstream pull/786/head:android_dockerfile
+    cd monero-project
+    git fetch upstream pull/786/head:android_dockerfile
 
 Can probably then push to my fork, then submit a PR to them. Need to test.
 
