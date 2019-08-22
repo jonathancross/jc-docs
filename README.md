@@ -16,7 +16,8 @@
 
 ### Scripts
 
-* gpg-keys-signed-by - Search for PGP keys signed by a given key (versions: [Bash](gpg-keys-signed-by.sh) and [Perl](gpg-keys-signed-by.pl)).
+* [BIP39_Seed_Phrase_Checksum.py](BIP39_Seed_Phrase_Checksum.py) - Calculate the final word (checksum) of a 24 word BIP39 seed phrase.  Useful in combination with [diceware](https://github.com/taelfrinn/Bip39-diceware).
+* [gpg-keys-signed-by.pl](gpg-keys-signed-by.pl) - Search for PGP keys in your local keychain signed by a given key.
 * [send-pgp-keys.sh](send-pgp-keys.sh) - Upload your GPG public key to multiple services after a change.  Supports [keybase](https://keybase.io), public keyservers and / or your own web server.
 * [upgrade-monero.sh](upgrade-monero.sh) - Script used to upgrade installed version of the [Monero](https://getmonero.org) daemon.
 * [search-pgp-wot](search-pgp-wot) - Check all signatures on a given PGP key looking for any in the Web Of Trust.
