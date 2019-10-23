@@ -174,8 +174,10 @@ sub parse_raw_data_line {
     # Handle line of database containing signature OR revocation data.
     dispatch_sig_rev_packets($packet_type, $items[4], $items[5], $items[6]);
   } elsif ($packet_type =~ /^(uid|uat)$/) {
+    # uat are photos, so nothing human readable.
+    my $uid_string = ($packet_type eq 'uat') ? '[photo]' : $items[9];
     # Add to map of UID hash => human-readable UID:
-    $UIDS{$items[7]} = $items[9];
+    $UIDS{$items[7]} = $uid_string;
     # User ID or picture UID will be saved for use in handle_sig_packet().
     $UID_TMP = $items[7];
     # Reset current signature timestamp as we begin a new UID with its sigs.
@@ -251,8 +253,9 @@ sub print_signed_keys {
       # Only print unique key fingerprints (remove duplicates caused by multiple
       # signed UIDs).  Also filter out the key provided by the user.
       if ($signed_key ne $prev_signed_key && $signed_key ne $KEY_FPR) {
-        print $signed_key."\n";
-        print_debug(" ↑ from UID: $UIDS{$uid}\n");
+        print $signed_key;
+        $IS_DEBUG && print " (signed UID: $UIDS{$uid})";
+        print "\n";
         $prev_signed_key = $signed_key;
       }
     }
