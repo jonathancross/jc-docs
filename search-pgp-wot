@@ -23,6 +23,7 @@ if [[ "x$1" != "x" ]]; then
   if [[ "${KEY:0:2}" == "0x" ]]; then
     if [[ "${#KEY}" -eq "18" ]]; then
       KEY_IS_VALID=1
+      KEYSERVER_URL_FULL="${KEYSERVER_URL}${KEY}"
     else
       echo "ERROR: Key must have '0x' prefix and be 16 hex chars (18 characters total). Yours is only ${#KEY} characters."
     fi
@@ -39,19 +40,44 @@ if [[ "$KEY_IS_VALID" != "1" ]]; then
   exit 1
 fi
 
-echo "Getting data for ${KEY}..."
+printf "Getting data for ${KEY}..."
 
-# TODO: Need to remove all subkeys.
-SIG_KEYS=$(curl -s "${KEYSERVER_URL}${KEY}"| perl -ne 'if(m/^sig.+search=(0x[0-9A-F]{16}).*/) {print "$1\n"}' | sort -u | grep --invert-match ${KEY})
+# Load html for key info:
+RAW_HTML=$(curl -s ${KEYSERVER_URL_FULL})
+
+# Check that at least our own key is in the page to validate response:
+if $(echo "${RAW_HTML}" | grep --silent --ignore-case ${KEY}); then
+  echo ' [OK]'
+else
+  echo ' [ERROR]'
+  echo "
+Could not load data from ${KEYSERVER_URL_FULL}
+Please check the URL.
+If it is working, please file a bug here:
+https://github.com/jonathancross/jc-docs/issues/new?title=search-pgp-wot:%20URL%20Format
+"
+  exit 1
+fi
+
+# Filter website output to extract list of unique key IDs:
+SIG_KEYS=$(echo "${RAW_HTML}" | perl -ne 'if(m/^sig  sig  .+search=(0x[0-9a-f]{16}).*/) {print "$1\n"}' | sort -u | grep --invert-match ${KEY})
 SIG_KEYS=( ${SIG_KEYS[@]} )
 
+# Check if one or more signatures were found:
 if [[ "${#SIG_KEYS[@]}" -ge "1" ]]; then
   echo "FOUND ${#SIG_KEYS[@]} keys that signed ${KEY}:"
 else
-  echo "No usable signatures found on this key."
+  echo "
+  No usable signatures found on this key.
+  Please check the URL: ${KEYSERVER_URL_FULL}
+  If you see signatures other than the owner, please file a bug here:
+  https://github.com/jonathancross/jc-docs/issues/new?title=search-pgp-wot:%20Update%20Scraper
+"
   exit 0
 fi
 
+# Check each key to see if it is in the WOT:
+# TODO: Filter out PGP Directory key? 0x9710B89BCA57AD7C
 for SIG_KEY in ${SIG_KEYS[@]}; do
   if $(curl -s "${PATHFINDER_URL}${SIG_KEY}" | grep -q "${PATHFINDER_FAIL_STR}"); then
     echo " × $SIG_KEY"
@@ -62,9 +88,9 @@ for SIG_KEY in ${SIG_KEYS[@]}; do
 done
 
 if [[ "$KEY_NUM_IN_WOT" -gt 0 ]]; then
-  echo "Found $KEY_NUM_IN_WOT keys in the PGP Web Of Trust."
+  echo "Found $KEY_NUM_IN_WOT keys in the PGP Web Of Trust Strong Set."
   echo "Use the links above to plot a path to one of those keys."
 else
 # TODO: print link to see the path if found.  Maybe later offer way to download keys in path.
-  echo "None of the keys signing $SIG_KEY are in the PGP Web Of Trust."
+  echo "None of the keys signing $SIG_KEY seem to be in the PGP Web Of Trust Strong Set."
 fi
