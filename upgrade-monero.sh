@@ -1,50 +1,59 @@
 #!/bin/bash
 #
-# Bash script used to install a new version of the Monero daemon on Linux.
-# You must configure the variables below to match your version.
-# Tested with v0.11 - v0.14.1.0
-################################################################################
-# AUTHOR:  Jonathan Cross 0xC0C076132FFA7695 (jonathancross.com)
-# LICENSE: WTFPL - https://github.com/jonathancross/jc-docs/blob/master/LICENSE
-################################################################################
+# Bash script used to install the newest version of the Monero cli on Linux.
+# Tested with v0.11 - v0.15.0.0
+#
+# REQUIREMENTS:
+#
+# 1. You will need to have Ricardo's OpenPGP key installed:
+#    gpg --keyserver keyserver.ubuntu.com --recv-key 0xBDA6BD7042B721C467A9759D7455C5E3C0CDCEB9
+#
+# 2. Configure the settings below (see CONFIGURATION) to match your system.
 #
 # EXAMPLE USAGE:
+#
 # ./upgrade-monero.sh
 #
 # Upgrading the Monero daemon
 # ===========================
-#   • Downloading Hashes: https://www.getmonero.org/downloads/hashes.txt
-#     Saved as: /home/user/tmp/monero_hashes_19813.txt
+#   * Downloading Hashes: https://www.getmonero.org/downloads/hashes.txt
+#     Saved as: /home/USER/tmp/monero_hashes_19374.txt
 #     Signature data?:  [CONFIRMED]
-#   • New version: v0.14.0.2
-#   • Destination: /home/user/bin/
-#   • Downloading Release: https://downloads.getmonero.org/cli/monero-linux-x64-v0.14.0.2.tar.bz2
-#     Saved as: /home/user/tmp/monero-linux-x64-v0.14.0.2.tar.bz2
+#   * New version: v0.15.0.0
+#   * Destination: /home/USER/bin/
+#   * Downloading Release: https://downloads.getmonero.org/cli/monero-linux-x64-v0.15.0.0.tar.bz2
 #
-# Verifying signature in monero_hashes_19813.txt:
-# gpg: Signature made Fri 08 Mar 2019 08:48:10 PM CET
+# Verifying signature in monero_hashes_19374.txt:
+# gpg: Signature made Sat 09 Nov 2019 02:56:55 AM CET
 # gpg:                using RSA key 94B738DD350132F5ACBEEA1D55432DF31CCD4FCD
 # gpg: Good signature from "Riccardo Spagni <ric@spagni.net>" [unknown]
 # Primary key fingerprint: BDA6 BD70 42B7 21C4 67A9  759D 7455 C5E3 C0CD CEB9
 #      Subkey fingerprint: 94B7 38DD 3501 32F5 ACBE  EA1D 5543 2DF3 1CCD 4FCD
 #
 # Verifying hashes:
-#   • Expected: 4dd5cd9976eda6b33b16821e79e671527b78a1c9bfb3d973efe84b824642dd21
-#   • Actual:   4dd5cd9976eda6b33b16821e79e671527b78a1c9bfb3d973efe84b824642dd21
+#   * Expected: 53d9da55137f83b1e7571aef090b0784d9f04a980115b5c391455374729393f3
+#   * Actual:   53d9da55137f83b1e7571aef090b0784d9f04a980115b5c391455374729393f3
 # Hashes match.
 #
-# Extracting files from monero-linux-x64-v0.14.0.2.tar.bz2... Done.
+# Extracting files from monero-linux-x64-v0.15.0.0.tar.bz2... Done.
 #
-# Moving extracted folder to /home/user/bin... Done.
+# Moving extracted folder to /home/USER/bin... Done.
 # Replacing soft links:
-#   'monerod' -> 'monero-v0.14.0.2/monerod'
-#   'monero-wallet-cli' -> 'monero-v0.14.0.2/monero-wallet-cli'
-#   'monero-wallet-rpc' -> 'monero-v0.14.0.2/monero-wallet-rpc'
+#   'monerod' -> 'monero-x86_64-linux-gnu-v0.15.0.0/monerod'
+#   'monero-wallet-cli' -> 'monero-x86_64-linux-gnu-v0.15.0.0/monero-wallet-cli'
+#   'monero-wallet-rpc' -> 'monero-x86_64-linux-gnu-v0.15.0.0/monero-wallet-rpc'
 #
-# Confirming installation... CONFIRMED: Monero 'Boron Butterfly' (v0.14.0.2-release)
-# You can now delete the downloaded files in /home/user/tmp
+# Confirming installation... CONFIRMED: Monero 'Carbon Chamaeleon' (v0.15.0.0-release)
+# You can now delete the downloaded files in /home/USER/tmp
 #
 # DONE.
+################################################################################
+# AUTHOR:  Jonathan Cross 0xC0C076132FFA7695 (jonathancross.com)
+# LICENSE: WTFPL - https://github.com/jonathancross/jc-docs/blob/master/LICENSE
+################################################################################
+
+################################################################################
+# BEGIN CONFIGURATION
 ################################################################################
 
 # Folder locations, please change as needed:
@@ -56,13 +65,13 @@ DEST=~/bin      # Destination (without trailing slash) where we will install.
 # Items below can be modified, but in most cases should work fine as-is.
 
 # File containing release hashes.  This tells us the version number as well:
-HASHES_URL="https://www.getmonero.org/downloads/hashes.txt"
+HASHES_URL='https://www.getmonero.org/downloads/hashes.txt'
 
 # egrep pattern for download file:
 NEW_VERSION_PATTERN='monero-linux-x64-v[0-9.]+.tar.bz2'
 
 # URL prefix containing the release (without filename):
-BZIP_URL_PREFIX="https://downloads.getmonero.org/cli/"
+BZIP_URL_PREFIX='https://downloads.getmonero.org/cli/'
 
 ################################################################################
 # END CONFIGURATION
@@ -93,9 +102,9 @@ HASHES_FILE="monero_hashes_$$.txt"
 
 # Get HASHES_FILE from HASHES_URL:
 if [[ -f "${LOC}/${HASHES_FILE}" ]]; then
-  echo "  • Signed Hashes:  ${LOC}/${HASHES_FILE}"
+  echo "  * Signed Hashes:  ${LOC}/${HASHES_FILE}"
 else
-  echo "  • Downloading Hashes: ${HASHES_URL}"
+  echo "  * Downloading Hashes: ${HASHES_URL}"
   if curl --silent "${HASHES_URL}" --output "${HASHES_FILE}"; then
     echo "    Saved as: ${LOC}/${HASHES_FILE}"
     # Check if HASHES_FILE actually downloaded (they keep changing location)
@@ -117,17 +126,18 @@ NEW_BZIP=$(egrep --only-matching "${NEW_VERSION_PATTERN}" "${HASHES_FILE}")
 NEW_VER=${NEW_BZIP##*-}     # Strip off prefix
 NEW_VER=${NEW_VER%.tar.bz2} # Strip off suffix
 NEW_TAR="${NEW_VER}.tar"    # Add back the .tar suffix
+EXTRACTED_FOLDER_NAME="monero-x86_64-linux-gnu-${NEW_VER}" # v0.15.0.0 version
 NEW_VERSION_FOLDER="monero-${NEW_VER}"
 BZIP_URL="${BZIP_URL_PREFIX}${NEW_BZIP}"
 
-echo "  • New version: $NEW_VER"
-echo "  • Destination: ${DEST}/"
+echo "  * New version: $NEW_VER"
+echo "  * Destination: ${DEST}/"
 
 # Download BZIP file:
 if [[ -f "${LOC}/${NEW_BZIP}" ]]; then
-  echo "  • Release file already downloaded: ${LOC}/${NEW_BZIP}"
+  echo "  * Release file already downloaded: ${LOC}/${NEW_BZIP}"
 else
-  echo "  • Downloading Release: ${BZIP_URL}"
+  echo "  * Downloading Release: ${BZIP_URL}"
   printf "    "
   if curl --progress-bar "${BZIP_URL}" --output "${LOC}/${NEW_BZIP}"; then
     echo "    Saved as: ${LOC}/${NEW_BZIP}"
@@ -152,10 +162,10 @@ fi
 echo -e "\nVerifying hashes:"
 
 HASH_EXPECTED="$(grep "${NEW_BZIP}" "${HASHES_FILE}" | cut -d ' ' -f 2)"
-echo "  • Expected: ${HASH_EXPECTED}"
+echo "  * Expected: ${HASH_EXPECTED}"
 
 HASH_ACTUAL="$(openssl dgst -sha256 "${NEW_BZIP}" | cut -d ' ' -f 2)"
-echo "  • Actual:   ${HASH_ACTUAL}"
+echo "  * Actual:   ${HASH_ACTUAL}"
 
 if [[ "${HASH_EXPECTED}" == "${HASH_ACTUAL}" ]]; then
   echo "Hashes match."
@@ -175,7 +185,7 @@ if file "${NEW_BZIP}" | grep -q gzip; then
     # 14.1 also renamed for extracted folder:
     echo -n "  - Fixing broken 14.1 naming..."
     if mv -f "monero-x86_64-linux-gnu" ${NEW_VERSION_FOLDER}; then
-      echo "Done."
+      echo " Done."
     else
       echo "ERROR: Failed to rename monero-x86_64-linux-gnu to ${NEW_VERSION_FOLDER}"
       exit 1
@@ -186,6 +196,14 @@ if file "${NEW_BZIP}" | grep -q gzip; then
   fi
 elif tar --extract --bzip2 --file "${NEW_BZIP}"; then
   echo "Done."
+  echo -n "  - Fixing v15+ naming..."
+  if mv -f "${EXTRACTED_FOLDER_NAME}" "${NEW_VERSION_FOLDER}"; then
+    echo " Done."
+  else
+    echo "ERROR: Failed to rename ${EXTRACTED_FOLDER_NAME} to ${NEW_VERSION_FOLDER}."
+    echo "       Script probably needs to be updated with new folder name."
+    exit 1
+  fi
 else
   echo "ERROR: Failed to expand ${NEW_BZIP}"
   exit 1
