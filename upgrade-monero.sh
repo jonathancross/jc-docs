@@ -1,14 +1,12 @@
 #!/bin/bash
 #
 # Bash script used to install the newest version of the Monero cli on Linux.
+# Script will properly validate downloads, verify gpg signatures and checksums.
 # Tested with v0.11 - v0.15.0.0
 #
 # REQUIREMENTS:
 #
-# 1. You will need to have Ricardo's OpenPGP key installed:
-#    gpg --keyserver keyserver.ubuntu.com --recv-key 0xBDA6BD7042B721C467A9759D7455C5E3C0CDCEB9
-#
-# 2. Configure the settings below (see CONFIGURATION) to match your system.
+# Configure the settings below (see CONFIGURATION) to match your system.
 #
 # EXAMPLE USAGE:
 #
@@ -23,12 +21,16 @@
 #   * Destination: /home/USER/bin/
 #   * Downloading Release: https://downloads.getmonero.org/cli/monero-linux-x64-v0.15.0.0.tar.bz2
 #
+# Checking for Fluffy's gpg key in keyring... [key NOT found]
+# Importing from keyserver... [OK]
+#
 # Verifying signature in monero_hashes_19374.txt:
 # gpg: Signature made Sat 09 Nov 2019 02:56:55 AM CET
 # gpg:                using RSA key 94B738DD350132F5ACBEEA1D55432DF31CCD4FCD
 # gpg: Good signature from "Riccardo Spagni <ric@spagni.net>" [unknown]
 # Primary key fingerprint: BDA6 BD70 42B7 21C4 67A9  759D 7455 C5E3 C0CD CEB9
 #      Subkey fingerprint: 94B7 38DD 3501 32F5 ACBE  EA1D 5543 2DF3 1CCD 4FCD
+# Signature VERIFIED.
 #
 # Verifying hashes:
 #   * Expected: 53d9da55137f83b1e7571aef090b0784d9f04a980115b5c391455374729393f3
@@ -37,7 +39,7 @@
 #
 # Extracting files from monero-linux-x64-v0.15.0.0.tar.bz2... Done.
 #
-# Moving extracted folder to /home/USER/bin... Done.
+# Moving extracted folder to /home/USER/bin/... Done.
 # Replacing soft links:
 #   'monerod' -> 'monero-x86_64-linux-gnu-v0.15.0.0/monerod'
 #   'monero-wallet-cli' -> 'monero-x86_64-linux-gnu-v0.15.0.0/monero-wallet-cli'
@@ -50,6 +52,7 @@
 ################################################################################
 # AUTHOR:  Jonathan Cross 0xC0C076132FFA7695 (jonathancross.com)
 # LICENSE: WTFPL - https://github.com/jonathancross/jc-docs/blob/master/LICENSE
+# BUGS:    https://github.com/jonathancross/jc-docs/issues/new
 ################################################################################
 
 ################################################################################
@@ -57,8 +60,8 @@
 ################################################################################
 
 # Folder locations, please change as needed:
-LOC=~/Downloads # Folder (without trailing slash) where files downloaded to.
-DEST=~/bin      # Destination (without trailing slash) where we will install.
+TMP=/tmp    # Folder (without trailing slash) where files are downloaded to.
+DEST=~/bin  # Destination (without trailing slash) where we will install.
 
 # TODO: Add configuration options for commands needed such as openssl.
 
@@ -67,15 +70,32 @@ DEST=~/bin      # Destination (without trailing slash) where we will install.
 # File containing release hashes.  This tells us the version number as well:
 HASHES_URL='https://www.getmonero.org/downloads/hashes.txt'
 
-# egrep pattern for download file:
+# egrep pattern for Linux archive file (unfortunately this changes regularly):
 NEW_VERSION_PATTERN='monero-linux-x64-v[0-9.]+.tar.bz2'
+
+# Prefix (without version number) of the folder extracted from the bzip archive:
+EXTRACTED_FOLDER_PREFIX="monero-x86_64-linux-gnu-" # v0.15.0.0 version
 
 # URL prefix containing the release (without filename):
 BZIP_URL_PREFIX='https://downloads.getmonero.org/cli/'
 
+# Fluffy's PGP key fingerprint:
+GPG_KEY_FPR='BDA6 BD70 42B7 21C4 67A9  759D 7455 C5E3 C0CD CEB9'
+
+# Hard code expected UID in gpg key to check for fakes:
+FLUFFY_UID='Riccardo Spagni <ric@spagni.net>'
+
+# URL for Gitian signatures built reproducibly:
+GITIAN_URL='https://github.com/monero-project/gitian.sigs'
+
 ################################################################################
 # END CONFIGURATION
 ################################################################################
+
+WARNING_MSG="
+--------------------------------------------------------------------------------
+This may be the result of a download error, dev mistake or foul play.
+DO NOT PROCEED until you determine the cause."
 
 echo "
 Upgrading the Monero daemon
@@ -88,25 +108,25 @@ if [[ ! -d "${DEST}/" ]]; then
   exit 1;
 fi
 
-# Make sure LOC exists:
-if [[ ! -d "${LOC}/" ]]; then
-  echo "ERROR: Could not find LOC ($LOC).
-  You must configure this as a full path to the location of the new archive.";
+# Make sure TMP exists:
+if [[ ! -d "${TMP}/" ]]; then
+  echo "ERROR: Could not find TMP ($TMP).
+  You must configure this as a full path to the directory used for temp files.";
   exit 1;
 fi
 
-cd "${LOC}"
+cd "${TMP}"
 
 # Temporary file name for hashes to make sure unique.
 HASHES_FILE="monero_hashes_$$.txt"
 
 # Get HASHES_FILE from HASHES_URL:
-if [[ -f "${LOC}/${HASHES_FILE}" ]]; then
-  echo "  * Signed Hashes:  ${LOC}/${HASHES_FILE}"
+if [[ -f "${TMP}/${HASHES_FILE}" ]]; then
+  echo "  * Signed Hashes: ${TMP}/${HASHES_FILE}"
 else
   echo "  * Downloading Hashes: ${HASHES_URL}"
   if curl --silent "${HASHES_URL}" --output "${HASHES_FILE}"; then
-    echo "    Saved as: ${LOC}/${HASHES_FILE}"
+    echo "    Saved as: ${TMP}/${HASHES_FILE}"
     # Check if HASHES_FILE actually downloaded (they keep changing location)
     echo -n "    Signature data?: "
     if grep -q "BEGIN PGP SIGNED MESSAGE" "${HASHES_FILE}"; then
@@ -116,17 +136,27 @@ else
       exit 1
     fi
   else
-    echo "ERROR: Could not download ${LOC}/${HASHES_FILE}"
+    echo "ERROR: Could not download ${TMP}/${HASHES_FILE}"
     exit 1
   fi
 fi
 
 # Extract version number and file name:
+NEW_VERSION_PATTERN_PREFIX="${NEW_VERSION_PATTERN%[*}"
 NEW_BZIP=$(egrep --only-matching "${NEW_VERSION_PATTERN}" "${HASHES_FILE}")
+# Check if we got something:
+if [[ "${NEW_BZIP}" != *"${NEW_VERSION_PATTERN_PREFIX}"* ]]; then
+  echo "ERROR: Could not extract new version info from hashes.txt using NEW_VERSION_PATTERN.
+       NEW_VERSION_PATTERN = ${NEW_VERSION_PATTERN}
+       HASHES_FILE = ${TMP}/${HASHES_FILE}
+       Maybe file name format changed?"
+  exit 1
+fi
+# Continue now that we know we have something:
 NEW_VER=${NEW_BZIP##*-}     # Strip off prefix
 NEW_VER=${NEW_VER%.tar.bz2} # Strip off suffix
 NEW_TAR="${NEW_VER}.tar"    # Add back the .tar suffix
-EXTRACTED_FOLDER_NAME="monero-x86_64-linux-gnu-${NEW_VER}" # v0.15.0.0 version
+EXTRACTED_FOLDER_NAME="${EXTRACTED_FOLDER_PREFIX}${NEW_VER}"
 NEW_VERSION_FOLDER="monero-${NEW_VER}"
 BZIP_URL="${BZIP_URL_PREFIX}${NEW_BZIP}"
 
@@ -134,31 +164,80 @@ echo "  * New version: $NEW_VER"
 echo "  * Destination: ${DEST}/"
 
 # Download BZIP file:
-if [[ -f "${LOC}/${NEW_BZIP}" ]]; then
-  echo "  * Release file already downloaded: ${LOC}/${NEW_BZIP}"
+if [[ -f "${TMP}/${NEW_BZIP}" ]]; then
+  echo "  * Release file already downloaded: ${TMP}/${NEW_BZIP}"
 else
   echo "  * Downloading Release: ${BZIP_URL}"
   printf "    "
-  if curl --progress-bar "${BZIP_URL}" --output "${LOC}/${NEW_BZIP}"; then
-    echo "    Saved as: ${LOC}/${NEW_BZIP}"
+  if curl --progress-bar "${BZIP_URL}" --output "${TMP}/${NEW_BZIP}"; then
+    echo "    Saved as: ${TMP}/${NEW_BZIP}"
   else
-    echo "ERROR: Could not download ${LOC}/${NEW_BZIP}"
+    echo "ERROR: Could not download ${TMP}/${NEW_BZIP}"
+    exit 1
+  fi
+fi
+echo ''
+
+# Check if we have fluffy's key in the local keyring:
+GPG_KEY_HANDLE="${GPG_KEY_FPR:30}"      # Extract last 64 bits
+GPG_KEY_HANDLE="${GPG_KEY_HANDLE// /}"  # Remove spaces
+echo -n "Checking for Fluffy's gpg key in keyring..."
+if gpg -k 0x${GPG_KEY_HANDLE} &> /dev/null; then
+  echo " [key found]"
+else
+  echo " [key NOT found]"
+  echo -n "Importing from keyserver..."
+  if gpg --keyserver keyserver.ubuntu.com --recv-key "${GPG_KEY_FPR}" &> /dev/null; then
+    echo " [OK]"
+  else
+    echo "
+    ERROR: Could not import this key from the keyserver:
+    ${GPG_KEY_FPR}
+    Please import manually and try this script again."
     exit 1
   fi
 fi
 
-echo -e "\nVerifying signature in ${HASHES_FILE}:"
-RESULT="$(gpg --verify ${HASHES_FILE} 2>&1)"
-# TODO: Better sig check
-if ( echo "$RESULT" | grep -q 'Good signature from'; ); then
-  # Just remove some noise.
-  echo "$RESULT" | grep --invert-match --perl-regexp '(This key is not certified with a trusted signature|There is no indication that the signature belongs to the owner.)'
-else
-  echo "ERROR: Bad signature."
-  echo "$RESULT"
+# Use Fluffy's key to verify hashes.txt:
+echo -e "\nVerifying gpg signature in ${HASHES_FILE}:"
+SIG_ERROR=1
+SIG_RESULT="$(gpg --verbose --verify ${HASHES_FILE} 2>&1)"
+# Did the command complete successfully?
+if [[ "$?" == '0' ]]; then
+  # Is the signature valid?
+  if [[ "${SIG_RESULT}" == *"Good signature from"* ]]; then
+    # Was the signature made with the correct key?
+    if [[ "${SIG_RESULT}" == *"${GPG_KEY_FPR}"* ]]; then
+      SIG_ERROR=0
+      # Print simplified results:
+      echo "${SIG_RESULT}" | grep --perl-regexp '(Signature made|Good signature from|Primary key fingerprint)'
+      echo "Signature VERIFIED."
+    fi
+  fi
+fi
+
+# Check the results of the signature verification:
+if [[ "${SIG_ERROR}" == "1" ]]; then
+  echo "ERROR: Bad signature for Fluffy's key:
+       ${GPG_KEY_FPR}"
+  if [[ "${SIG_RESULT}" == *"primary key ${GPG_KEY_HANDLE}"* ]]; then
+    echo "Key was correct, but signature is invalid (file may have been modified?)."
+  elif [[ "${SIG_RESULT}" == *"no signature found"* ]]; then
+    echo "Signature is invalid / modified or doesn't exist."
+  else
+    echo "WARNING: File signed using incorrect key."
+    if [[ "${SIG_RESULT}" == *"${FLUFFY_UID}"* ]]; then
+      echo "         Key looks like an impostor pretending to be ${FLUFFY_UID}."
+    fi
+  fi
+echo "
+Signature debugging info:
+${SIG_RESULT}
+${WARNING_MSG}"
   exit 1
 fi
 
+# Verify file checksums against those in hashes.txt
 echo -e "\nVerifying hashes:"
 
 HASH_EXPECTED="$(grep "${NEW_BZIP}" "${HASHES_FILE}" | cut -d ' ' -f 2)"
@@ -170,7 +249,13 @@ echo "  * Actual:   ${HASH_ACTUAL}"
 if [[ "${HASH_EXPECTED}" == "${HASH_ACTUAL}" ]]; then
   echo "Hashes match."
 else
-  echo "ERROR: Hashes DO NOT match."
+  echo "
+ERROR: Hashes DO NOT match.
+You can manually verify by comparing with hashes found here:
+  ${HASHES_URL}
+And / or here:
+  ${GITIAN_URL}
+${WARNING_MSG}"
   exit 1
 fi
 
@@ -211,7 +296,7 @@ fi
 
 # Create softlinks if possible:
 if [[ -d "${NEW_VERSION_FOLDER}" ]]; then
-  echo -en "\nMoving extracted folder to ${DEST}... "
+  echo -en "\nMoving extracted folder to ${DEST}/... "
   cp -Rf "${NEW_VERSION_FOLDER}" "${DEST}/"
   cd "${DEST}/"
   echo -e "Done.\nReplacing soft links:"
@@ -225,7 +310,7 @@ if [[ -d "${NEW_VERSION_FOLDER}" ]]; then
   PATH_VER="$(monerod --version)"
   if [[ "$INSTALLED_VER" == "$PATH_VER" ]]; then
     echo " CONFIRMED: $PATH_VER"
-    echo "You can now delete the downloaded files in $LOC"
+    echo "You can now delete the downloaded files in $TMP"
   else
     echo -e "\nWARNING: ${DEST}/monerod doesn't seem to be in your PATH."
     echo -e "           Instead we found $(which monerod)"
