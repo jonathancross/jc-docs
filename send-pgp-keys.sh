@@ -5,6 +5,7 @@
 
 ################################################################################
 # YOU MUST CHANGE THE SETTINGS BELOW BEFORE RUNNING                            #
+# Check each of the 3 ENABLE_* options to make sure they are what you want.    #
 ################################################################################
 
 GPG_ID=XXXXXXXXXXXXXXXX     # (required) Your 16 character GPG key ID without 0x
@@ -26,8 +27,8 @@ ENABLE_PUBLIC_KEY_SERVERS=1 # Change to 0 (zero) to disable.
 # You can add / remove servers as needed:
 PUBLIC_KEY_SERVERS=(
   "hkps://keys.openpgp.org"
+  "hkps://keys2.kfwebs.net"
   "hkps://keyserver.ubuntu.com"
-  "hkps://pgp.surfnet.nl"
   "hkps://hkps.pool.sks-keyservers.net"
   "hkps://pgp.mit.edu"
 )
@@ -46,7 +47,7 @@ PERSONAL_KEY_SERVER_DEST_FOLDER=webroot/foo # Eg: folder name on remote server.
 # Upload your key to Keybase?
 # Note: You must have an account on keybase.io and the `keybase` commandline
 # program installed on your computer. Test that `keybase login` command works.
-ENABLE_KEBASE=0 # Change to 1 (one) to enable.
+ENABLE_KEYBASE=0 # Change to 1 (one) to enable.
 
 
 ################################################################################
@@ -83,24 +84,34 @@ else
   exit 128
 fi
 
-# Send new public key to my server:
+# Send new public key to personal server:
 if [[ "${ENABLE_PERSONAL_KEY_SERVER}" == "1" ]]; then
-  # Build the destination used by scp
-  PERSONAL_KEY_SERVER="${PERSONAL_KEY_SERVER_USER}@${PERSONAL_KEY_SERVER_DOMAIN}:${PERSONAL_KEY_SERVER_DEST_FOLDER}"
-  printf " • Sending key to ${PERSONAL_KEY_SERVER}... "
-  scp -q ${LOCAL_KEY_FILE} ${PERSONAL_KEY_SERVER}/ && echo " DONE."
+  if which scp > /dev/null; then
+    # Build the destination used by scp
+    PERSONAL_KEY_SERVER="${PERSONAL_KEY_SERVER_USER}@${PERSONAL_KEY_SERVER_DOMAIN}:${PERSONAL_KEY_SERVER_DEST_FOLDER}"
+    printf " • Sending key to ${PERSONAL_KEY_SERVER}... "
+    scp -q ${LOCAL_KEY_FILE} ${PERSONAL_KEY_SERVER}/ && echo " DONE."
+  else
+    echo " • ERROR: Could not find 'scp' in your PATH."
+    exit 128
+  fi
 fi
 
-# Send to keybase:
-if [[ "${ENABLE_KEBASE}" == "1" ]]; then
-  echo " • Sending key to keybase.io..."
-  keybase pgp update
+# Send key to Keybase.io:
+if [[ "${ENABLE_KEYBASE}" == "1" ]]; then
+  if which keybase > /dev/null; then
+    echo " • Sending key to keybase.io..."
+    keybase pgp update
+  else
+    echo " • ERROR: Could not find 'keybase' in your PATH."
+    exit 128
+  fi
 fi
 
 # Send keys to public keyserver:
 if [[ "${ENABLE_PUBLIC_KEY_SERVERS}" == "1" ]]; then
   for S in "${PUBLIC_KEY_SERVERS[@]}"; do
     printf " • ";
-    ${GPG_COMMAND} --keyid-format long --keyserver ${S} --send-key ${GPG_ID}
+    ${GPG_COMMAND} --keyid-format long --keyserver "${S}" --send-key ${GPG_ID}
   done
 fi
