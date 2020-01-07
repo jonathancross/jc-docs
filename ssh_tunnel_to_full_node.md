@@ -130,12 +130,14 @@ Match User sshtunnel
 
 You can configure [Orbot](https://guardianproject.info/apps/orbot/)'s VPN mode on your Android device to capture and route Connectbot traffic over the Tor network.  This will allow the ssh tunnel connections to your full node to route through Tor.  This only offers limited privacy if the server is in your name, but still helps. You do not need to configure a Tor hidden service for this to work.
 
+See also [Connecting your local wallet to your own daemon over Tor](https://web.getmonero.org/resources/user-guides/tor_wallet.html).
+  
 # Conclusion
 
 ### Other options
 
-- Monerujo is [working on adding Tor support](https://github.com/m2049r/xmrwallet/issues/100).  This could allow us to potentially remove Connectbot from the setup above, and instead run our node as a Tor hidden service. Here is a guide explaining how to [setup a Monero node at hidden service](https://garlicgambit.wordpress.com/2017/01/15/monero-how-to-connect-wallet-to-tor-onion-service-node/).
-- Eventually we expect to have Monero nodes integrated with I2P via [Kovri](https://getkovri.org).  This may eventually allow us to use an I2P tunnel to connect to a node instead of ssh.  This probably won't be stable until 2020 or so.
+- Monerujo is [working on adding Tor support](https://github.com/m2049r/xmrwallet/issues/100).  This could allow us to potentially remove Connectbot from the setup above, and instead run our node as a Tor hidden service. Connecting your local wallet to your own daemon over Tor: https://web.getmonero.org/resources/user-guides/tor_wallet.html
+- I2P might become an option in the future.
 
 ### Disclaimer
 
