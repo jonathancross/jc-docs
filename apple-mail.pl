@@ -21,6 +21,7 @@
 # Support for attachments added by Jonathan Cross (jonathancross.com)
 
 use strict;
+use Cwd 'abs_path';
 $|++;
 
 my ($verbose, $gui);
@@ -61,7 +62,7 @@ while (@ARGV) {
     @bcc = split /\s*,\s*/, $list;
   }
   elsif ($arg eq '-a') {
-    $attachment = shift @ARGV || &usage("missing attachment path");
+    $attachment = abs_path(shift @ARGV) || &usage("missing attachment path");
   }
   elsif ($arg =~ /^-/) {
     &usage("invalid option $arg");
@@ -122,6 +123,8 @@ $script .= <<"EOS";
 end tell
 EOS
 
+$script .= &plain_text_hack();
+
 if ($verbose >= 1) {
   print "From: $from\n" if $from;
   print "Reply-To: $replyto\n" if $replyto;
@@ -140,6 +143,17 @@ if ($verbose >= 1) {
 
 exec("osascript -e '$script' > /dev/null");
 exit 0;
+
+sub plain_text_hack {
+  return <<"EOS";
+  -- Delay allows mail to finish attachment before conversion:
+  delay 0.9
+  -- Set message format to "plain text":
+  tell application "System Events" to keystroke "t" using {command down, shift down}
+  -- For some reason, this causes errors:
+  -- tell application "System Events" to click menu item "Make Plain Text" of process "Mail"'s menu bar 1's menu bar item "Format"'s menu 1
+EOS
+}
 
 sub get_formatted_body {
   my ($body, $attachment) = @_;
