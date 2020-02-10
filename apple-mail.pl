@@ -17,12 +17,14 @@
 #
 # Author: Nathaniel Nystrom <nystrom@cs.cornell.edu>
 # This software is in the public domain.
+#
+# Support for attachments added by Jonathan Cross (jonathancross.com)
 
 use strict;
 $|++;
 
 my ($verbose, $gui);
-my ($from, $replyto, @to, @cc, @bcc, $subject, $body);
+my ($from, $replyto, @to, @cc, @bcc, $subject, $body, $attachment);
 my $prog;
 ($prog = $0) =~ s|.*/||;
 
@@ -58,6 +60,9 @@ while (@ARGV) {
     my $list = shift @ARGV || &usage("missing Bcc list");
     @bcc = split /\s*,\s*/, $list;
   }
+  elsif ($arg eq '-a') {
+    $attachment = shift @ARGV || &usage("missing attachment path");
+  }
   elsif ($arg =~ /^-/) {
     &usage("invalid option $arg");
   }
@@ -65,6 +70,10 @@ while (@ARGV) {
     @to = ($arg, @ARGV);
     last;
   }
+}
+
+if ($attachment && ! -f $attachment) {
+  &usage("attachment file '$attachment' does not exist")
 }
 
 &usage("missing recipients") unless @to;
@@ -88,8 +97,9 @@ tell application "Mail"
   set newMessage to make new outgoing message
   tell newMessage
     set subject to "$subject"
-    set content to "$body"
 EOS
+
+$script .= &get_formatted_body($body, $attachment);
 
 for (@to)  { $script .= &recipient('to', $_); }
 for (@cc)  { $script .= &recipient('cc', $_); }
@@ -131,6 +141,18 @@ if ($verbose >= 1) {
 exec("osascript -e '$script' > /dev/null");
 exit 0;
 
+sub get_formatted_body {
+  my ($body, $attachment) = @_;
+  if ($attachment) {
+    return <<"EOS";
+    set content to "$body" & return & return
+    make new attachment with properties {file name:"$attachment"} at after the last word of the last paragraph
+EOS
+  }
+  return <<"EOS";
+    set content to "$body"
+EOS
+}
 
 sub recipient {
   my ($type,$addr) = @_;
@@ -145,12 +167,13 @@ sub usage {
   print STDERR <<"EOS";
 usage: $prog [<options>] <recipients>
   options:
-    -v       be verbose
-    -g       activate Mail.app to approve the message
-    -F <from>  specify the From: address
+    -v           be verbose
+    -g           activate Mail.app to approve the message
+    -a <path>    full path to a file attachment
+    -F <from>    specify the From: address
     -R <replyto> specify the Reply-To: address
-    -b <bcc>   specify Bcc: recipients in a comma-separated list
-    -c <cc>    specify Cc: recipients in a comma-separated list
+    -b <bcc>     specify Bcc: recipients in a comma-separated list
+    -c <cc>      specify Cc: recipients in a comma-separated list
     -s <subject> specify the message subject
 EOS
   exit 1;
