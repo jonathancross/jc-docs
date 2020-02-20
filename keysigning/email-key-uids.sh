@@ -38,6 +38,9 @@
 EXPORT_IMAGE_UIDS=0  # Photos embedded in the key.
 EXPORT_STRING_UIDS=0 # Eg names, web sites, keybase, other text, etc.
 
+# Enable debugging messages:
+DEBUG=0
+
 ################################################################################
 # END CONFIGURATION
 ################################################################################
@@ -58,7 +61,7 @@ if [[ $IN_FILE =~ ([0-9]{3})_([0-9A-F]+)_SIGNED.asc ]]; then
   NUM="${BASH_REMATCH[1]}"
   KEY_FPR="${BASH_REMATCH[2]}"
   KEY_HANDLE="${KEY_FPR: -16}"
-  echo "DEBUG: NUM=$NUM, KEY_FPR=$KEY_FPR" > /dev/stderr
+  debug "NUM=$NUM, KEY_FPR=$KEY_FPR"
   if [[ "${IN_FILE}" != "${NUM}_${KEY_FPR}_SIGNED.asc" ]]; then
     echo "ERROR: FILE name has the wrong structure: '${IN_FILE}'."
     exit 1
@@ -85,14 +88,14 @@ elif (( ! ${EXPORT_IMAGE_UIDS} )) && (( ! ${EXPORT_STRING_UIDS} )); then
   UID_FILTER=""
 fi
 
-# I am now importing before this script runs, so commenting this out for speed:
-# if gpg -q --import "${IN_FILE}"; then
-#   echo "DEBUG: Imported key from '${IN_FILE}'" > /dev/stderr
-# else
-#   echo "ERROR: Could not import key from '${IN_FILE}'."
-#   exit 1
-# fi
+# Print a debug message to stderr.
+# debug $MESSAGE
+function debug {
+  (( "$DEBUG" )) && echo "DEBUG: $1" > /dev/stderr
+}
 
+# get_email_body $NUM $UID_NAME $UID_EMAIL_ADDRESS $KEY_FPR
+# returns the formatted body of the email message.
 function get_email_body {
   NUM="${1}"
   UID_NAME="${2}"
@@ -136,22 +139,22 @@ IFS=$'\n'
 for KEY_UID_RAW in $(gpg -k ${KEY_FPR} | egrep '^uid'); do
   KEY_UID="${KEY_UID_RAW##*] }" # Remove gpg debugging prefix.
   if [[ ! $KEY_UID =~ $KEY_UID_IS_EMAIL_REGEX ]]; then
-    echo "   - Skipping '$KEY_UID'"
+    debug "   - Skipping '$KEY_UID'"
     continue
   fi
-  echo "DEBUG: Found email address UID: '$KEY_UID'" > /dev/stderr
+  debug "Found email address UID: '$KEY_UID'"
   # Split UID into name and email address:
   if [[ $KEY_UID =~ $KEY_UID_REGEX ]]; then
     UID_NAME="${BASH_REMATCH[1]}"
     UID_EMAIL_ADDRESS="${BASH_REMATCH[2]}"
-    echo "DEBUG: UID_NAME=$UID_NAME, UID_EMAIL_ADDRESS=$UID_EMAIL_ADDRESS" > /dev/stderr
+    debug "UID_NAME=$UID_NAME, UID_EMAIL_ADDRESS=$UID_EMAIL_ADDRESS"
   else
     echo "ERROR: Could not parse KEY_UID: '$KEY_UID'."
     exit 1
   fi
   # Create an export filter for this UID + any other UIDs we want to keep:
   UID_FILTER_FULL="uid = ${KEY_UID}${UID_FILTER}"
-  echo "DEBUG: UID_FILTER_FULL: '${UID_FILTER_FULL}'" > /dev/stderr
+  debug "UID_FILTER_FULL: '${UID_FILTER_FULL}'"
   OUT_FILE="${NUM}/${KEY_HANDLE}_${UID_EMAIL_ADDRESS}.asc"
   printf "   + '$KEY_UID':"
   # Import from file version:
