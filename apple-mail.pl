@@ -18,7 +18,8 @@
 # Author: Nathaniel Nystrom <nystrom@cs.cornell.edu>
 # This software is in the public domain.
 #
-# Support for attachments added by Jonathan Cross (jonathancross.com)
+# Support for attachments added by Jonathan Cross (jonathancross.com) - WTFPL
+# https://github.com/jonathancross/jc-docs/blob/master/apple-mail.pl
 
 use strict;
 use Cwd 'abs_path';
@@ -146,12 +147,9 @@ exit 0;
 
 sub plain_text_hack {
   return <<"EOS";
-  -- Delay allows mail to finish attachment before conversion:
   delay 0.9
-  -- Set message format to "plain text":
+  -- Set message format to plain text:
   tell application "System Events" to keystroke "t" using {command down, shift down}
-  -- For some reason, this causes errors:
-  -- tell application "System Events" to click menu item "Make Plain Text" of process "Mail"'s menu bar 1's menu bar item "Format"'s menu 1
 EOS
 }
 
