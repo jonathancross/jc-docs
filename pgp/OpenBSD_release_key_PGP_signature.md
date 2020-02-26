@@ -44,7 +44,7 @@ This git commit was signed with my PGP key so I also certify the information you
 
 ## How can this be used to verify the OpenBSD 6.4 iso before installing?
 
-See [OpenBSD_verification.md](https://github.com/jonathancross/jc-docs/blob/master/OpenBSD_verification.md).
+See [OpenBSD_verification.md](https://github.com/jonathancross/jc-docs/blob/master/pgp/OpenBSD_verification.md).
 
 **What about future releases?**
 

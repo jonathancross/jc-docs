@@ -6,7 +6,7 @@ Secure PGP keys and YubiKey NEO
 Below is a collection of notes and info that helped me navigate through a jungle of new concepts, jargon, bad UI decisions, broken software, bugs and other obstacles to reach the above goal. – [Jonathan](https://jonathancross.com)
 
 ## About the YubiKey NEO
-<img align="right" src="images/yubikey-neo-n.jpg" alt="yubikey neo-n"> This is an elegant device with many functions including the ability to store OpenPGP keys and use them to sign, encrypt and / or authenticate.  The keys cannot be extracted from the device.  The OpenPGP java apps that do the signing are Open Source.  **NOTE:** Yubico has released the "upgraded" **YubiKey 4** -- [which I discovered is not open source](https://github.com/Yubico/ykneo-openpgp/issues/2#issuecomment-218436213) and is phasing out the NEO-n.  The maximum RSA key size for the YubiKey NEO 3 was 2048 bits, which is fine for subkeys.  You can of course create a 4096 bit master key which stays offline.  Newer YubiKey 4+ support 4096 bit keys.  The YubiKey 5 now supports Curve25519 which is recommended for security and speed.
+<img align="right" src="../images/yubikey-neo-n.jpg" alt="yubikey neo-n"> This is an elegant device with many functions including the ability to store OpenPGP keys and use them to sign, encrypt and / or authenticate.  The keys cannot be extracted from the device.  The OpenPGP java apps that do the signing are Open Source.  **NOTE:** Yubico has released the "upgraded" **YubiKey 4** -- [which I discovered is not open source](https://github.com/Yubico/ykneo-openpgp/issues/2#issuecomment-218436213) and is phasing out the NEO-n.  The maximum RSA key size for the YubiKey NEO 3 was 2048 bits, which is fine for subkeys.  You can of course create a 4096 bit master key which stays offline.  Newer YubiKey 4+ support 4096 bit keys.  The YubiKey 5 now supports Curve25519 which is recommended for security and speed.
 
 Please note that YubiKey NEO devices issued before 2015-04-14 [contain an insecure OpenPGP applet](https://developers.yubico.com/ykneo-openpgp/SecurityAdvisory%202015-04-14.html).
 
@@ -24,7 +24,7 @@ Please note that YubiKey NEO devices issued before 2015-04-14 [contain an insecu
 
 ## Using GNU Privacy Guard (gpg) / OpenPGP
 
-See [gnupg.md](https://github.com/jonathancross/jc-docs/blob/master/gnupg.md) for general info about Gnupg, tricks, configuration and usability options.  Also info about the OpenPGP Web Of Trust and signing keys.
+See [gnupg.md](https://github.com/jonathancross/jc-docs/blob/master/pgp/gnupg.md) for general info about Gnupg, tricks, configuration and usability options.  Also info about the OpenPGP Web Of Trust and signing keys.
 
 ### License
 

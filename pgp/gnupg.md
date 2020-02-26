@@ -5,11 +5,11 @@ GNU Privacy Guard is very powerful software with a terrible interface.
 
 This document attempts to give you the tools needed to answer questions and explain the mysteries of gpg and PGP so that you too can take advantage of this tool and stop making excuses.
 
-This page assumes you have basic familiarity with `gpg` and have already created an OpenPGP key. If not, please see [Secure PGP keys and Yubikey NEO.md](https://github.com/jonathancross/jc-docs/blob/master/Secure%20PGP%20keys%20and%20Yubikey%20NEO.md) for information on how to create an offline master key and then transfer the sub keys onto a YubiKey hardware device for daily use.
+This page assumes you have basic familiarity with `gpg` and have already created an OpenPGP key. If not, please see [Secure PGP keys and Yubikey NEO.md](https://github.com/jonathancross/jc-docs/blob/master/pgp/Secure%20PGP%20keys%20and%20Yubikey%20NEO.md) for information on how to create an offline master key and then transfer the sub keys onto a YubiKey hardware device for daily use.
 
 ### Get started
 
-* [Example config file](https://raw.githubusercontent.com/jonathancross/jc-docs/master/gpg.conf) (`~/.gnupg/gpg.conf`) - Some better defaults.
+* [Example config file](https://raw.githubusercontent.com/jonathancross/jc-docs/master/pgp/gpg.conf) (`~/.gnupg/gpg.conf`) - Some better defaults.
 * [My key signing policy](https://jonathancross.com/C0C076132FFA7695.policy.txt) - to learn about different signature types and what they mean to me.
 
 # Web Of Trust
@@ -90,7 +90,7 @@ You can also upload your key to a server:
 
     gpg --keyserver hkps://keys.openpgp.org --send-key YOUR_KEY_ID
 
-Feel free to use [this script](https://raw.githubusercontent.com/jonathancross/jc-docs/master/send-pgp-keys.sh) I made to automate the upload of your key to keyservers, your website and / or Keybase.io.
+Feel free to use [this script](https://raw.githubusercontent.com/jonathancross/jc-docs/master/pgp/send-pgp-keys.sh) I made to automate the upload of your key to keyservers, your website and / or Keybase.io.
 
 Generally speaking, you should not send other people's keys to keyservers unless you really know what you are doing.  Better to email to them and have them upload (if they choose).
 

@@ -15,7 +15,7 @@
 # The script will cache basic data in /tmp/
 #
 # Latest version:
-# https://github.com/jonathancross/jc-docs/blob/master/gpg-keys-signed-by.sh
+# https://github.com/jonathancross/jc-docs/blob/master/pgp/gpg-keys-signed-by.sh
 #
 # LICENSE: WTFPL
 ################################################################################
