@@ -27,7 +27,7 @@
 # split-and-email.sh 119_9386A2FB2DA9D0D31FAF0818C0C076132FFA7695_SIGNED.asc
 #
 # Or in a loop:
-# for N in 001 002 003; do F=$(ls ${N}_*_SIGNED.asc 2>/dev/null);FPR=${F#*_};FPR=${FPR%*_SIGNED.asc}; if [ -f "${F}" ]; then rm -rf "${N}"; ../split-and-email.sh "${F}" 2>/dev/null; gpg --delete-key "${FPR}";fi ;done
+# for N in 001 002 003; do F=$(ls ${N}_*_SIGNED.asc 2>/dev/null);FPR=${F#*_};FPR=${FPR%*_SIGNED.asc}; if [ -f "${F}" ]; then rm -rf "${N}"; email-key-uids.sh "${F}" 2>/dev/null; gpg --delete-key "${FPR}";fi ;done
 
 ################################################################################
 # BEGIN CONFIGURATION
