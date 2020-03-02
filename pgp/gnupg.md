@@ -21,6 +21,9 @@ The [OpenPGP Web Of Trust](https://en.wikipedia.org/wiki/Web_of_trust) is a way 
 
 "Signing" someone's key means that you use your Master key's `C` (Certify) capability to make a digital signature on one or more ID's of their public key.  This indicates to what degree you verified the data in that specific UID (usually name and email address).  Ideally the checking should be done in-person, government issued ID should be compared to the name listed in the key UID, and the key fingerprint should be provided by the owner on paper to be taken home and verified + signed later.
 
+Here are [slides from a presentation that I did on the OpenPGP Web Of Trust](https://docs.google.com/presentation/d/1bGSWwbFheaxgs35gh3wAOzR1g1Us8U-_Ix_Om1KAXWI/edit) with visual examples.
+
+
 ### Signing keys offline
 
 Signing another person's key with your "offline" master key is far more secure than keeping the master key on a normal Internet-connected computer.  It is also a bit more complex, but instructions below should easily guide you through the process.  Replace `KEYID` below with the actual long ID of the key you want to sign:
@@ -52,18 +55,7 @@ This ensures that:
 1. They still control that email address. (can read the email)
 2. They control the private key for the public key you are signing. (can decrypt the message)
 
-If there is only 1 email address listed in the key, then this is easy -- just send the `KEYID_signed.asc` file to the email address listed (encrypted email of course).  If there is more than one email address, then I recommend importing their key with all sigs, then deleting the extra signatures via:
- * `gpg --import KEYID_signed.asc`
- * `gpg --edit-key KEYID`
- * Type the number of the UID(s) you want to _delete_ your sig from.
- * Type the command `delsig` and follow the prompts to delete the sig you made.
- * Repeat for all but 1 email address UID.
- * Type `save`
- * Check you have just 1 signature on the correct email address: `gpg --check-sigs KEYID`
- * Export to a file: `gpg -a --export KEYID > KEYID_signed_email-1.asc`
- * Email that file in an encrypted email to the specific email address you signed.
-
-Repeat the process for each email address listed as a UID.
+If there is only 1 email address listed in the key, then this is easy -- just send the `KEYID_signed.asc` file to the email address listed (encrypted email of course).  If there is more than one email address, then I recommend [exporting each email address UID separately](#exporting-a-specific-uid) into an asc file and then sending to the corresponding email address.
 
 Some UID may not contain an email address, but rather a photo, website or other metadata.  Personally I leave those sigs intact for all email addresses or don't sign them at all if they cannot be verified.
 
@@ -213,6 +205,19 @@ In some circumstances you may want to re-sign a certain UID, eg using a stronger
 gpg --ask-cert-level --expert --sign-key 0xBAADABBA
 ````
 
+#### Exporting a specific UID
+
+Public keys can contain a variety of UID assertions such as email address, name, photos, websites and arbitrary text.
+Sometimes you might want to only export a particular UID (eg when signing UIDs for a keysigning party and want to email each signed UID to the corresponding email address).  You can use a complex set of [filter expressions](https://www.gnupg.org/documentation/manuals/gnupg/GPG-Examples.html) to achieve this.  Here is an example:
+
+```
+gpg -q --armor --export \
+    --export-filter keep-uid="uid = Jonathan Cross <jcross@gmail.com>" \
+       0xC0C076132FFA7695 > just_his_email.asc
+```
+
+More complex examples can be made using substring match `keep-uid="uid =~ Alfa"`, `&&` or `||` logical connection operators, etc.
+
 ### Using gnupg offline
 
 The recommended way to use gpg in a secure manner is to keep the master key offline and only use it on an air-gapped computer. Booting into [Tails OS](https://tails.boum.org/) is a convenient way to work with this kind of sensitive material as it will "forget" anything you do on the system as soon as it is restarted.  Installing Tails on a USB stick works well on my MacBook Air as there is no functioning WiFi driver and furthermore it is easy to disable networking from the welcome screen.  Tails now contains a modern version of Gnupg 2.1+ which fixes many known bugs in previous versions.
@@ -284,7 +289,20 @@ Unfortunately `gpg2` still reports an error unless `sudo` is used:
     gpg: OpenPGP card not available: Unsupported certificate
 
 
-# GUI Tools to make Open PGP more usable
+## Additional tools / scripts / documentation
+
+I have written a few scripts to help with various PGP / GPG related tasks:
+
+* [Secure PGP keys and Yubikey NEO](https://github.com/jonathancross/jc-docs/blob/master/pgp/Secure%20PGP%20keys%20and%20Yubikey%20NEO.md) - Notes on GPG and YubiKey NEO setup.
+* [gpg.conf](https://github.com/jonathancross/jc-docs/blob/master/pgp/gpg.conf) - Example "hardened" configuration file for GnuPG with secure defaults.
+* [gpg-keys-signed-by.pl](https://github.com/jonathancross/jc-docs/blob/master/pgp/gpg-keys-signed-by.pl) - Search for PGP keys in your local keychain signed by a given key.
+* [send-pgp-keys.sh](https://github.com/jonathancross/jc-docs/blob/master/pgp/send-pgp-keys.sh) - Upload your GPG public key to multiple services after a change.  Supports [keybase](https://keybase.io), public keyservers and / or your own web server.
+* [search-pgp-wot](https://github.com/jonathancross/jc-docs/blob/master/pgp/search-pgp-wot) - Check all signatures on a given PGP key looking for any in the Web Of Trust.
+* [email-key-uids.sh](https://github.com/jonathancross/jc-docs/blob/master/pgp/email-key-uids.sh) - Split a signed OpenPGP key into component UIDs and email each to the owner via Apple's Mail.app.
+* [OpenBSD release key PGP signature](https://github.com/jonathancross/jc-docs/blob/master/pgp/OpenBSD_release_key_PGP_signature.md) - How to verify the OpenBSD 6.4 release signing key using OpenPGP web of trust.
+
+
+# GUI Tools
 
 #### Mac
 * Use Apple's built-in `Mail.app` program with `GPGMail` (part of the fantastic [GPG Suite](https://gpgtools.org/)).
