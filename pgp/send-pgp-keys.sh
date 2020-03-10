@@ -27,7 +27,7 @@ ENABLE_PUBLIC_KEY_SERVERS=1 # Change to 0 (zero) to disable.
 # You can add / remove servers as needed:
 PUBLIC_KEY_SERVERS=(
   "hkps://keys.openpgp.org"
-  "hkps://keys2.kfwebs.net"
+  "hkps://pgpkeys.urown.net"
   "hkps://keyserver.ubuntu.com"
   "hkps://hkps.pool.sks-keyservers.net"
   "hkps://pgp.mit.edu"

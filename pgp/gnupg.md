@@ -63,13 +63,16 @@ Some UID may not contain an email address, but rather a photo, website or other 
 
 A keyserver is a repository of keys.  Anyone can upload their own key there or another person's key and the key there could be manipulated by the owner of the server.  DO NOT BLINDLY TRUST THE KEYS.  You can use a keyserver as a convenient way to locate a key from a fingerprint, but always verify the key after downloading.
 
-**2019-07-02** It is [strongly recommended](https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f#mitigations) to use this keyserver when retrieving keys:
+Due to the design of OpenPGP keys, 3rd party signatures can be embedded into anyone's key.  This unfortunately means that [an attacker can cause a DOS someone by stuffing bogus signatures into a key](https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f#mitigations) and make it too big to effectively use. Most gpg implementations have quietly switched to a specific keyserver based on [Hagrid](https://gitlab.com/hagrid-keyserver/hagrid) which **strips all 3rd party certs** from keys it serves:
+
 * `hkps://keys.openpgp.org`
 
-When sharing your key (uploading), I suggest using these keyservers because they allow upload of signature data:
+Very few people understand that this will make the OpenPGP Web of Trust basically unusable as none of the connection data will be visible.
+
+When sharing your key (uploading), I highly recommend using these keyservers because they allow upload of signature data:
 * `keyserver.ubuntu.com`
-* `keys2.kfwebs.net`
 * `hkps.pool.sks-keyservers.net`
+* `pgpkeys.urown.net`
 
 (NOTE: uploading keys does not expose you to the above mentioned attack vector)
 
