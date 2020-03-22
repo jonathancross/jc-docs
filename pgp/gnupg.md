@@ -61,7 +61,7 @@ Some UID may not contain an email address, but rather a photo, website or other 
 
 ## What is a keyserver?
 
-A keyserver is a repository of keys.  Anyone can upload their own key there or another person's key and the key there could be manipulated by the owner of the server.  DO NOT BLINDLY TRUST THE KEYS.  You can use a keyserver as a convenient way to locate a key from a fingerprint, but always verify the key after downloading.
+A key server is a repository of keys.  Anyone can upload their own key there or another person's key and the key there could be manipulated by the owner of the server.  DO NOT BLINDLY TRUST THE KEYS.  You can use a keyserver as a convenient way to locate a key from a fingerprint, but always verify the key after downloading.
 
 Due to the design of OpenPGP keys, 3rd party signatures can be embedded into anyone's key.  This unfortunately means that [an attacker can cause a DOS someone by stuffing bogus signatures into a key](https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f#mitigations) and make it too big to effectively use. Most gpg implementations have quietly switched to a specific keyserver based on [Hagrid](https://gitlab.com/hagrid-keyserver/hagrid) which **strips all 3rd party certs** from keys it serves:
 
@@ -91,7 +91,7 @@ Generally speaking, you should not send other people's keys to keyservers unless
 
 #### Concerns about the Web of Trust
 
-The OpenPGP Web Of Trust is not perfect.  Publishing keys and personal information on public servers may open you up to receiving more spam, being contacted by strangers and possible analysis of your social graph.  These are all concerns that might prevent someone from participating.  In my mind, the overall benefits outweigh the dangers, so I participate, but many do not agree and are waiting for better options.
+The OpenPGP Web Of Trust is not perfect.  Publishing keys and personal information on public servers may open you up to receiving more spam and analysis of your social graph via key signatures.  These are all concerns that might prevent someone from participating.  In my mind, the overall benefits outweigh the dangers, so I participate, but many do not agree and are waiting for better options.
 
 #### More details about the OpenPGP trust model in gpg
 
@@ -111,7 +111,7 @@ Please see [this excellent explanation](https://security.stackexchange.com/a/412
 
 #### PGP is dead
 
-Many people have [declared PGP dead](https://blog.cryptographyengineering.com/2014/08/13/whats-matter-with-pgp/) because it is hard to use, doesn't protect metadata in encrypted emails and supports to much legacy crypto.  Although there are very good arguments against it, I still think it is undeniable that it works well for verifying digital signatures, has wide support (hardware, software and people) and does a decent job at encrypting email once you have a properly setup client.  Could this be done better? Absolutely!  But this is the best we have right now and attempts to replace it have always fallen short of the features needed.
+Many people have [declared PGP dead](https://blog.cryptographyengineering.com/2014/08/13/whats-matter-with-pgp/) because it is hard to use, doesn't protect metadata in encrypted emails and supports too much legacy crypto.  Although there are very good arguments against it, I still think it is undeniable that it works well for verifying digital signatures, has wide support (hardware, software and people) and does a decent job at encrypting email once you have a properly setup client.  The [Web Of Trust](#web-of-trust) has huge problems, but for those who take the effort to participate, it provides one of the few functioning examples of decentralized key verification.  Could this be done better? Absolutely!  But this is the best we have right now and attempts to replace it have always fallen short of the features needed.
 
 ## RANT: Random things that confused me about gpg
 
@@ -225,6 +225,12 @@ More complex examples can be made using substring match `keep-uid="uid =~ Alfa"`
 
 The recommended way to use gpg in a secure manner is to keep the master key offline and only use it on an air-gapped computer. Booting into [Tails OS](https://tails.boum.org/) is a convenient way to work with this kind of sensitive material as it will "forget" anything you do on the system as soon as it is restarted.  Installing Tails on a USB stick works well on my MacBook Air as there is no functioning WiFi driver and furthermore it is easy to disable networking from the welcome screen.  Tails now contains a modern version of Gnupg 2.1+ which fixes many known bugs in previous versions.
 
+For everyday use, it is recommended to separate the primary (master) key from encryption, signing, and / or authentication subkeys and keep those subkeys on a hardware device (see below) while keeping the primary key offline.  This allows you to use gpg easily, while ensuring that if the hardware device is lost / compromised, you can always revoke the subkeys and issue new ones without losing certification signatures on your key.
+
+## Hardware devices
+
+Securing your keys using a hardware device that is independent from your computer is highly recommended.  This will drastically reduce the attack surface and help ensure that you are in control of the keys.  Here is [a spreadsheet](https://docs.google.com/spreadsheets/d/1zbuGucuAmum1UuUw1cozMNVz1VfKTLdSYlCv-6AEYyk/edit#gid=0) which compares the various properties of different hardware devices.
+
 ### Creating stubs on a new computer
 
 When you are on a new computer and want to use a hardware device (like the YubiKey or the [NitroKey](https://www.nitrokey.com/)), you will need to create on-disk "stubs" of the keys that reside on your hardware device.
@@ -258,7 +264,7 @@ git log --show-signature -1               # Details of last commit sig.
 git log --pretty="format:%h %G? %aN  %s"  # Log of last commits. The "G" means good signature, "N" means no sig.
 ```
 
-### Permissions problems (Yubikey)
+### Permissions problems (YubiKey)
 
 Symptom: `gpg --card-status` works as root, but not as an unprivileged user.
 
@@ -300,8 +306,8 @@ I have written a few scripts to help with various PGP / GPG related tasks:
 * [gpg.conf](https://github.com/jonathancross/jc-docs/blob/master/pgp/gpg.conf) - Example "hardened" configuration file for GnuPG with secure defaults.
 * [gpg-keys-signed-by.pl](https://github.com/jonathancross/jc-docs/blob/master/pgp/gpg-keys-signed-by.pl) - Search for PGP keys in your local keychain signed by a given key.
 * [send-pgp-keys.sh](https://github.com/jonathancross/jc-docs/blob/master/pgp/send-pgp-keys.sh) - Upload your GPG public key to multiple services after a change.  Supports [keybase](https://keybase.io), public keyservers and / or your own web server.
-* [search-pgp-wot](https://github.com/jonathancross/jc-docs/blob/master/pgp/search-pgp-wot) - Check all signatures on a given PGP key looking for any in the Web Of Trust.
-* [email-key-uids.sh](https://github.com/jonathancross/jc-docs/blob/master/pgp/email-key-uids.sh) - Split a signed OpenPGP key into component UIDs and email each to the owner via Apple's Mail.app.
+* [search-pgp-wot](https://github.com/jonathancross/jc-docs/blob/master/pgp/search-pgp-wot) - Check all signatures on a given PGP key looking for any in the Web Of Trust "Strong Set".
+* [email-key-uids.sh](https://github.com/jonathancross/jc-docs/blob/master/pgp/email-key-uids.sh) - MacOS: Split a signed OpenPGP key into component UIDs and email each to the owner via Apple's Mail.app.
 * [OpenBSD release key PGP signature](https://github.com/jonathancross/jc-docs/blob/master/pgp/OpenBSD_release_key_PGP_signature.md) - How to verify the OpenBSD 6.4 release signing key using OpenPGP web of trust.
 
 
@@ -311,12 +317,16 @@ I have written a few scripts to help with various PGP / GPG related tasks:
 * Use Apple's built-in `Mail.app` program with `GPGMail` (part of the fantastic [GPG Suite](https://gpgtools.org/)).
 * Can be [setup to use a Gmail account via IMAP](https://support.google.com/mail/answer/78892?hl=en).
 
+#### Linux / Windows / Mac
+* [EnigMail PGP plugin](https://enigmail.net/index.php/en/) for Thunderbird [v60.9.0](https://ftp.mozilla.org/pub/thunderbird/releases/60.9.0/).
+* Sync Google contacts with [gcontactsync](https://addons.mozilla.org/en-US/thunderbird/addon/gcontactsync/)
+
 #### Android
 * Use [K9 Mail](https://k9mail.github.io/) and [Open Keychain](https://www.openkeychain.org/) -- [Here is a tutorial](https://www.openpgp.org/software/openkeychain/).
 
-#### Linux or Windows
-* [Enigmail PGP plugin](https://enigmail.net/index.php/en/)
-* Sync Google contacts with [gcontactsync](https://addons.mozilla.org/en-US/thunderbird/addon/gcontactsync/)
+# Additional Software
+
+* See https://www.openpgp.org/software/
 
 ## Disclaimer
 
