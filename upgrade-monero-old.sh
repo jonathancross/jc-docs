@@ -1,57 +1,54 @@
 #!/bin/bash
 #
-# Bash script used to install the newest version of the Monero cli on Linux.
+# Bash script used to install OLDER versions of the Monero cli on Linux.
+# By "old" we mean those signed by Fluffy Pony- Riccardo Spagni <ric@spagni.net>
+# Tested with v0.11 - v0.15.0.1
+# For NEW releases signed by BinaryFate -- see "upgrade-monero.sh"
 # Script will properly validate downloads, verify gpg signatures and checksums.
-# Tested with v0.15.0.5 (signed by BinaryFate)
-# See upgrade-monero-old.sh for older versions signed by Fluffy.
 #
 # REQUIREMENTS:
 #
-# 1. Import GPG Key for BinaryFate:
-#    gpg --keyserver hkps://keyserver.ubuntu.com --recv-key 81AC591FE9C4B65C5806AFC3F0AF4D462A0BDF92
-#
-# 2. Trust it:
-#    echo -e "trust\n5\ny\n" | gpg --command-fd 0 --edit-key 81AC591FE9C4B65C5806AFC3F0AF4D462A0BDF92
-#
-# 3. Configure the settings below (see CONFIGURATION) to match your system.
+# Configure the settings below (see CONFIGURATION) to match your system.
 #
 # EXAMPLE USAGE:
 #
-# ./upgrade-monero.sh
+# ./upgrade-monero-old.sh
 #
 # Upgrading the Monero daemon
 # ===========================
 #   * Downloading Hashes: https://www.getmonero.org/downloads/hashes.txt
-#     Saved as: /tmp/monero_hashes_17975.txt
+#     Saved as: /home/USER/tmp/monero_hashes_19374.txt
 #     Signature data?:  [CONFIRMED]
-#   * New version: v0.15.0.5
+#   * New version: v0.15.0.0
 #   * Destination: /home/USER/bin/
-#   * Downloading Release: https://downloads.getmonero.org/cli/monero-linux-x64-v0.15.0.5.tar.bz2
+#   * Downloading Release: https://downloads.getmonero.org/cli/monero-linux-x64-v0.15.0.0.tar.bz2
 #
-# Checking for BinaryFate's gpg key in keyring... [key found]
+# Checking for Fluffy's gpg key in keyring... [key NOT found]
+# Importing from keyserver... [OK]
 #
-# Verifying gpg signature in monero_hashes_17975.txt:
-# gpg: Signature made Wed 18 Mar 2020 10:51:04 PM CET
-# gpg: Good signature from "binaryFate <binaryfate@getmonero.org>" [ultimate]
-# Primary key fingerprint: 81AC 591F E9C4 B65C 5806  AFC3 F0AF 4D46 2A0B DF92
+# Verifying signature in monero_hashes_19374.txt:
+# gpg: Signature made Sat 09 Nov 2019 02:56:55 AM CET
+# gpg:                using RSA key 94B738DD350132F5ACBEEA1D55432DF31CCD4FCD
+# gpg: Good signature from "Riccardo Spagni <ric@spagni.net>" [unknown]
+# Primary key fingerprint: BDA6 BD70 42B7 21C4 67A9  759D 7455 C5E3 C0CD CEB9
+#      Subkey fingerprint: 94B7 38DD 3501 32F5 ACBE  EA1D 5543 2DF3 1CCD 4FCD
 # Signature VERIFIED.
 #
 # Verifying hashes:
-#   * Expected: 6cae57cdfc89d85c612980c6a71a0483bbfc1b0f56bbb30e87e933e7ba6fc7e7
-#   * Actual:   6cae57cdfc89d85c612980c6a71a0483bbfc1b0f56bbb30e87e933e7ba6fc7e7
+#   * Expected: 53d9da55137f83b1e7571aef090b0784d9f04a980115b5c391455374729393f3
+#   * Actual:   53d9da55137f83b1e7571aef090b0784d9f04a980115b5c391455374729393f3
 # Hashes match.
 #
-# Extracting files from monero-linux-x64-v0.15.0.5.tar.bz2... Done.
-#   - Renaming extracted folder... Done.
+# Extracting files from monero-linux-x64-v0.15.0.0.tar.bz2... Done.
 #
 # Moving extracted folder to /home/USER/bin/... Done.
 # Replacing soft links:
-#   'monerod' -> 'monero-v0.15.0.5/monerod'
-#   'monero-wallet-cli' -> 'monero-v0.15.0.5/monero-wallet-cli'
-#   'monero-wallet-rpc' -> 'monero-v0.15.0.5/monero-wallet-rpc'
+#   'monerod' -> 'monero-x86_64-linux-gnu-v0.15.0.0/monerod'
+#   'monero-wallet-cli' -> 'monero-x86_64-linux-gnu-v0.15.0.0/monero-wallet-cli'
+#   'monero-wallet-rpc' -> 'monero-x86_64-linux-gnu-v0.15.0.0/monero-wallet-rpc'
 #
-# Confirming installation... CONFIRMED: Monero 'Carbon Chamaeleon' (v0.15.0.5-release)
-# You can now delete the downloaded files in /tmp
+# Confirming installation... CONFIRMED: Monero 'Carbon Chamaeleon' (v0.15.0.0-release)
+# You can now delete the downloaded files in /home/USER/tmp
 #
 # DONE.
 ################################################################################
@@ -79,16 +76,16 @@ HASHES_URL='https://www.getmonero.org/downloads/hashes.txt'
 NEW_VERSION_PATTERN='monero-linux-x64-v[0-9.]+.tar.bz2'
 
 # Prefix (without version number) of the folder extracted from the bzip archive:
-EXTRACTED_FOLDER_PREFIX="monero-x86_64-linux-gnu-"
+EXTRACTED_FOLDER_PREFIX="monero-x86_64-linux-gnu-" # v0.15.0.0 version
 
 # URL prefix containing the release (without filename):
 BZIP_URL_PREFIX='https://downloads.getmonero.org/cli/'
 
-# BinaryFate's PGP key fingerprint:
-GPG_KEY_FPR='81AC 591F E9C4 B65C 5806  AFC3 F0AF 4D46 2A0B DF92'
+# Fluffy's PGP key fingerprint:
+GPG_KEY_FPR='BDA6 BD70 42B7 21C4 67A9  759D 7455 C5E3 C0CD CEB9'
 
 # Hard code expected UID in gpg key to check for fakes:
-GPG_KEY_UID='binaryFate <binaryfate@getmonero.org>'
+FLUFFY_UID='Riccardo Spagni <ric@spagni.net>'
 
 # URL for Gitian signatures built reproducibly:
 GITIAN_URL='https://github.com/monero-project/gitian.sigs'
@@ -165,7 +162,7 @@ EXTRACTED_FOLDER_NAME="${EXTRACTED_FOLDER_PREFIX}${NEW_VER}"
 NEW_VERSION_FOLDER="monero-${NEW_VER}"
 BZIP_URL="${BZIP_URL_PREFIX}${NEW_BZIP}"
 
-echo "  * New version: ${NEW_VER}"
+echo "  * New version: $NEW_VER"
 echo "  * Destination: ${DEST}/"
 
 # Download BZIP file:
@@ -183,10 +180,10 @@ else
 fi
 echo ''
 
-# Check if we have the GPG signing key in the local keyring:
+# Check if we have fluffy's key in the local keyring:
 GPG_KEY_HANDLE="${GPG_KEY_FPR:30}"      # Extract last 64 bits
 GPG_KEY_HANDLE="${GPG_KEY_HANDLE// /}"  # Remove spaces
-echo -n "Checking for BinaryFate's gpg key in keyring..."
+echo -n "Checking for Fluffy's gpg key in keyring..."
 if gpg -k 0x${GPG_KEY_HANDLE} &> /dev/null; then
   echo " [key found]"
 else
@@ -203,7 +200,7 @@ else
   fi
 fi
 
-# Use GPG key to verify hashes.txt:
+# Use Fluffy's key to verify hashes.txt:
 echo -e "\nVerifying gpg signature in ${HASHES_FILE}:"
 SIG_ERROR=1
 SIG_RESULT="$(gpg --verbose --verify ${HASHES_FILE} 2>&1)"
@@ -223,7 +220,7 @@ fi
 
 # Check the results of the signature verification:
 if [[ "${SIG_ERROR}" == "1" ]]; then
-  echo "ERROR: Bad signature for BinaryFate's key:
+  echo "ERROR: Bad signature for Fluffy's key:
        ${GPG_KEY_FPR}"
   if [[ "${SIG_RESULT}" == *"primary key ${GPG_KEY_HANDLE}"* ]]; then
     echo "Key was correct, but signature is invalid (file may have been modified?)."
@@ -231,8 +228,8 @@ if [[ "${SIG_ERROR}" == "1" ]]; then
     echo "Signature is invalid / modified or doesn't exist."
   else
     echo "WARNING: File signed using incorrect key."
-    if [[ "${SIG_RESULT}" == *"${GPG_KEY_UID}"* ]]; then
-      echo "         Key looks like an impostor pretending to be ${GPG_KEY_UID}."
+    if [[ "${SIG_RESULT}" == *"${FLUFFY_UID}"* ]]; then
+      echo "         Key looks like an impostor pretending to be ${FLUFFY_UID}."
     fi
   fi
 echo "
@@ -245,12 +242,10 @@ fi
 # Verify file checksums against those in hashes.txt
 echo -e "\nVerifying hashes:"
 
-HASH_EXPECTED="$(grep "${NEW_BZIP}" "${HASHES_FILE}")"
-HASH_EXPECTED="${HASH_EXPECTED%% *}" # Remove everything after first space.
+HASH_EXPECTED="$(grep "${NEW_BZIP}" "${HASHES_FILE}" | cut -d ' ' -f 2)"
 echo "  * Expected: ${HASH_EXPECTED}"
 
 HASH_ACTUAL="$(openssl dgst -sha256 "${NEW_BZIP}" | cut -d ' ' -f 2)"
-HASH_ACTUAL="${HASH_ACTUAL%% *}" # Remove everything after first space.
 echo "  * Actual:   ${HASH_ACTUAL}"
 
 if [[ "${HASH_EXPECTED}" == "${HASH_ACTUAL}" ]]; then
@@ -268,9 +263,27 @@ fi
 
 echo -en "
 Extracting files from ${NEW_BZIP}... "
-if tar --extract --bzip2 --file "${NEW_BZIP}"; then
+# Handle v0.14.1 release which is a gzip pretending to be a bzip2.
+# https://repo.getmonero.org/monero-project/monero-site/issues/964
+if file "${NEW_BZIP}" | grep -q gzip; then
+  echo -n '(trying to extract malformed gzip) '
+  if tar -z --extract --file "${NEW_BZIP}"; then
+    echo "Done."
+    # 14.1 also renamed for extracted folder:
+    echo -n "  - Fixing broken 14.1 naming..."
+    if mv -f "monero-x86_64-linux-gnu" ${NEW_VERSION_FOLDER}; then
+      echo " Done."
+    else
+      echo "ERROR: Failed to rename monero-x86_64-linux-gnu to ${NEW_VERSION_FOLDER}"
+      exit 1
+    fi
+  else
+    echo "ERROR: Failed to extract gzip named as bzip (release v.0.14.1)."
+    exit 1
+  fi
+elif tar --extract --bzip2 --file "${NEW_BZIP}"; then
   echo "Done."
-  echo -n "  - Renaming extracted folder..."
+  echo -n "  - Fixing v15+ naming..."
   if mv -f "${EXTRACTED_FOLDER_NAME}" "${NEW_VERSION_FOLDER}"; then
     echo " Done."
   else
