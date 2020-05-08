@@ -39,6 +39,7 @@
 # Verifying hashes:
 #   * Expected: 6cae57cdfc89d85c612980c6a71a0483bbfc1b0f56bbb30e87e933e7ba6fc7e7
 #   * Actual:   6cae57cdfc89d85c612980c6a71a0483bbfc1b0f56bbb30e87e933e7ba6fc7e7
+#   * Gitian:   6cae57cdfc89d85c612980c6a71a0483bbfc1b0f56bbb30e87e933e7ba6fc7e7
 # Hashes match.
 #
 # Extracting files from monero-linux-x64-v0.15.0.5.tar.bz2... Done.
@@ -71,6 +72,15 @@ DEST=~/bin  # Destination (without trailing slash) where we will install.
 # TODO: Add configuration options for commands needed such as openssl.
 
 # Items below can be modified, but in most cases should work fine as-is.
+
+# GitHub user trusted to have created Gitian assert files for this release:
+GH_USER=jonathancross
+
+# OpenPGP Fingerprint for the above user (ignored currently):
+GH_USER_KEY_FPR="9386 A2FB 2DA9 D0D3 1FAF  0818 C0C0 7613 2FFA 7695"
+
+# Repo URL for Gitian assert files:
+GITIAN_REPO="https://raw.githubusercontent.com/monero-project/gitian.sigs"
 
 # File containing release hashes.  This tells us the version number as well:
 HASHES_URL='https://www.getmonero.org/downloads/hashes.txt'
@@ -160,6 +170,9 @@ fi
 # Continue now that we know we have something:
 NEW_VER=${NEW_BZIP##*-}     # Strip off prefix
 NEW_VER=${NEW_VER%.tar.bz2} # Strip off suffix
+# Determine the major version (used later for URLs):
+VER_REGEX='v(0\.[0-9][0-9])\.'
+[[ $NEW_VER =~ $VER_REGEX ]] && VER_MAJOR="${BASH_REMATCH[1]}"
 NEW_TAR="${NEW_VER}.tar"    # Add back the .tar suffix
 EXTRACTED_FOLDER_NAME="${EXTRACTED_FOLDER_PREFIX}${NEW_VER}"
 NEW_VERSION_FOLDER="monero-${NEW_VER}"
@@ -184,6 +197,7 @@ fi
 echo ''
 
 # Check if we have the GPG signing key in the local keyring:
+# TODO: Put this in a for loop to also get $GH_USER_KEY_FPR
 GPG_KEY_HANDLE="${GPG_KEY_FPR:30}"      # Extract last 64 bits
 GPG_KEY_HANDLE="${GPG_KEY_HANDLE// /}"  # Remove spaces
 echo -n "Checking for BinaryFate's gpg key in keyring..."
@@ -253,9 +267,7 @@ HASH_ACTUAL="$(openssl dgst -sha256 "${NEW_BZIP}" | cut -d ' ' -f 2)"
 HASH_ACTUAL="${HASH_ACTUAL%% *}" # Remove everything after first space.
 echo "  * Actual:   ${HASH_ACTUAL}"
 
-if [[ "${HASH_EXPECTED}" == "${HASH_ACTUAL}" ]]; then
-  echo "Hashes match."
-else
+if [[ "${HASH_EXPECTED}" != "${HASH_ACTUAL}" ]]; then
   echo "
 ERROR: Hashes DO NOT match.
 You can manually verify by comparing with hashes found here:
@@ -266,11 +278,54 @@ ${WARNING_MSG}"
   exit 1
 fi
 
+# Build the URL to the Gitian assert file we will check for a hash match:
+GITIAN_ASSERT_FILE="monero-linux-${VER_MAJOR}-build.assert"
+GITIAN_ASSERT_URL="${GITIAN_REPO}/master/${NEW_VER}-linux/${GH_USER}/${GITIAN_ASSERT_FILE}"
+GITIAN_ASSERT_DOWNLOAD_ERROR=1 # Assume an error unless we know we succeed below.
+
+# Downloading Gitian assert file and sig from GitHub to cross-check:
+if curl -s --remote-name-all ${GITIAN_ASSERT_URL}{,.sig}; then
+  # Check if the files were actually downloaded:
+  if [[ -f "${GITIAN_ASSERT_FILE}" && -f "${GITIAN_ASSERT_FILE}.sig" ]]; then
+    GITIAN_ASSERT_DOWNLOAD_ERROR=0
+  fi
+fi
+
+if [[ "${GITIAN_ASSERT_DOWNLOAD_ERROR}" == "1" ]]; then
+  echo "ERROR: Failed to download assert file for ${NEW_VER} from:"
+  echo "${GITIAN_ASSERT_URL}"
+  exit 1
+fi
+
+###############################################################################
+# TODO: check the signature on the assert file using $GH_USER_KEY_FPR.
+###############################################################################
+
+# Compare Gitian hash to ours:
+GITIAN_ASSERT_HASH=$(grep --only-matching "${HASH_ACTUAL}" "${GITIAN_ASSERT_FILE}")
+if [[ "x${GITIAN_ASSERT_HASH}" == "x${HASH_ACTUAL}" ]]; then
+  echo "  * Gitian:   ${GITIAN_ASSERT_HASH}"
+  echo "Hashes match."
+else
+  echo "ERROR: Gitian hash DOES NOT match ours.
+You can manually verify by comparing hash above to those found here:
+  ${GITIAN_ASSERT_URL}
+
+${WARNING_MSG}"
+  exit 1
+fi
+
+# FINISHED CHECKING HASHES
+
 echo -en "
 Extracting files from ${NEW_BZIP}... "
 if tar --extract --bzip2 --file "${NEW_BZIP}"; then
   echo "Done."
   echo -n "  - Renaming extracted folder..."
+  if [[ -d "${NEW_VERSION_FOLDER}" ]]; then
+    echo -en " [cleaning up old files] "
+    rm -rf "${NEW_VERSION_FOLDER}"
+  fi
   if mv -f "${EXTRACTED_FOLDER_NAME}" "${NEW_VERSION_FOLDER}"; then
     echo " Done."
   else
