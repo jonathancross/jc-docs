@@ -181,6 +181,17 @@ BZIP_URL="${BZIP_URL_PREFIX}${NEW_BZIP}"
 echo "  * New version: ${NEW_VER}"
 echo "  * Destination: ${DEST}/"
 
+# Check if this version is already installed:
+if [[ -d "${DEST}/${NEW_VERSION_FOLDER}" ]]; then
+  echo "
+Seems this version is already installed:
+  ${DEST}/${NEW_VERSION_FOLDER}
+
+Nothing to do, exiting.
+"
+  exit 0
+fi
+
 # Download BZIP file:
 if [[ -f "${TMP}/${NEW_BZIP}" ]]; then
   echo "  * Release file already downloaded: ${TMP}/${NEW_BZIP}"
