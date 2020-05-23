@@ -2,7 +2,7 @@
 #
 # Bash script used to install the newest version of the Monero cli on Linux.
 # Script will properly validate downloads, verify gpg signatures and checksums.
-# Tested with v0.15.0.5 (signed by BinaryFate)
+# Tested with v0.15.0.5 - v0.16.0.0
 # See upgrade-monero-old.sh for older versions signed by Fluffy.
 #
 # REQUIREMENTS:
