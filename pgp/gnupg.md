@@ -300,6 +300,9 @@ Unfortunately `gpg2` still reports an error unless `sudo` is used:
 
 ## Additional tools / scripts / documentation
 
+* [paperkey](https://github.com/dmshaw/paperkey/) Backup / restore your gpg keys on paper.
+* [signing-party](https://salsa.debian.org/signing-party-team/signing-party) A fantastic collection of tools for use in key signing parties, WOT analysis, etc for *nix
+
 I have written a few scripts to help with various PGP / GPG related tasks:
 
 * [Secure PGP keys and Yubikey NEO](https://github.com/jonathancross/jc-docs/blob/master/pgp/Secure%20PGP%20keys%20and%20Yubikey%20NEO.md) - Notes on GPG and YubiKey NEO setup.
@@ -317,8 +320,8 @@ I have written a few scripts to help with various PGP / GPG related tasks:
 * Use Apple's built-in `Mail.app` program with `GPGMail` (part of the fantastic [GPG Suite](https://gpgtools.org/)).
 * Can be [setup to use a Gmail account via IMAP](https://support.google.com/mail/answer/78892?hl=en).
 
-#### Linux / Windows / Mac
-* [EnigMail PGP plugin](https://enigmail.net/index.php/en/) for Thunderbird [v60.9.0](https://ftp.mozilla.org/pub/thunderbird/releases/60.9.0/).
+#### Thunderbird (Linux / Windows / Mac)
+* [EnigMail PGP plugin](https://enigmail.net/index.php/en/) for Thunderbird [v60.9.0](https://ftp.mozilla.org/pub/thunderbird/releases/60.9.0/) ONLY. In v78+ (now in [testing](https://www.thunderbird.net/en-US/features/#channel)) Thunderbird [will have built-in OpenPGP support](https://wiki.mozilla.org/Thunderbird:OpenPGP:2020), so EnigMail will no longer be needed.
 * Sync Google contacts with [gcontactsync](https://addons.mozilla.org/en-US/thunderbird/addon/gcontactsync/)
 
 #### Android
