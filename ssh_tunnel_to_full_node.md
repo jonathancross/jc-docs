@@ -119,6 +119,8 @@ AllowUsers my_normal_user sshtunnel
 # Restrict the sshtunnel user to only access Monero and Bitcoin node ports.
 Match User sshtunnel
   PermitOpen localhost:18081 localhost:8332
+  PermitListen none
+  PermitTTY no
   X11Forwarding no
   AllowAgentForwarding no
   ForceCommand /bin/false
