@@ -2,7 +2,7 @@
 #
 # Bash script used to install the newest version of the Monero cli on Linux.
 # Script will properly validate downloads, verify gpg signatures and checksums.
-# Tested with v0.15.0.5 - v0.16.0.0
+# Tested with v0.15.0.5 - v0.17.0.1
 # See upgrade-monero-old.sh for older versions signed by Fluffy.
 #
 # REQUIREMENTS:
@@ -74,10 +74,10 @@ DEST=~/bin  # Destination (without trailing slash) where we will install.
 # Items below can be modified, but in most cases should work fine as-is.
 
 # GitHub user trusted to have created Gitian assert files for this release:
-GH_USER=jonathancross
+GH_USER=TheCharlatan
 
 # OpenPGP Fingerprint for the above user (ignored currently):
-GH_USER_KEY_FPR="9386 A2FB 2DA9 D0D3 1FAF  0818 C0C0 7613 2FFA 7695"
+# GH_USER_KEY_FPR="9A8FC 55F3 B04B A314 6F34  92E7 9303 B33A 3052 24CB"
 
 # Repo URL for Gitian assert files:
 GITIAN_REPO="https://raw.githubusercontent.com/monero-project/gitian.sigs"
