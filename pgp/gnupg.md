@@ -192,9 +192,19 @@ There are different types of keys, you can see this on the right as "usage":
 * `usage: E` = **Encrypt** messages to other people.  This can be a Subkey.
 * `usage: A` = **Authenticate** yourself, for example when using SSH to log into a server.  This can be a Subkey.
 
+## A few useful examples
+
+#### Work with a fresh, empty keyring
+
+This command will cause a new, temporary keyring to be created.  This can be helpful for checking a key / signature before importing it into your real keyring, or used for experiments, etc.
+
+```
+export GNUPGHOME=$(mktemp -d /tmp/.gnupgXXXXXX)
+```
+
 #### Multiple private keys
 
-The _local user_ option allows you specify the key used for signing / encryption if you have multiple private keys.
+The _local user_ option allows you specify the key used for signing if you have multiple private keys.
 
 ````
 gpg --sign-key 0xBAADABBA --local-user 0xDEADBEEF
@@ -221,7 +231,17 @@ gpg -q --armor --export \
 
 More complex examples can be made using substring match `keep-uid="uid =~ Alfa"`, `&&` or `||` logical connection operators, etc.
 
-### Using gnupg offline
+#### Encrypting a message on the commandline without signing
+
+This does not require a private key at all, just the pubkey for 0xBAADABBA.
+
+```
+gpg -aer 0xBAADABBA
+[type your message here]
+```
+Type `^d` (Control-d) to end the message and have gpg display the encrypted text.
+
+## Using gnupg offline
 
 The recommended way to use gpg in a secure manner is to keep the master key offline and only use it on an air-gapped computer. Booting into [Tails OS](https://tails.boum.org/) is a convenient way to work with this kind of sensitive material as it will "forget" anything you do on the system as soon as it is restarted.  Installing Tails on a USB stick works well on my MacBook Air as there is no functioning WiFi driver and furthermore it is easy to disable networking from the welcome screen.  Tails now contains a modern version of Gnupg 2.1+ which fixes many known bugs in previous versions.
 
