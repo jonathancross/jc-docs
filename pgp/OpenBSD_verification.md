@@ -84,4 +84,4 @@ This document comes with no guarantees, do your own homework. [Feedback](https:/
 
 ## License
 
-WTFPL - See [LICENSE](LICENSE) for more info.
+WTFPL - See [LICENSE](https://github.com/jonathancross/jc-docs/blob/master/LICENSE) for more info.
