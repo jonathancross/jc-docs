@@ -12,17 +12,16 @@ This is a very rough guide that can help you secure a remote connection to your 
 ## Remote node setup
 
 1. Setup your remote node on a server/vps and ensure it is working.  You will need a static IP address or hostname.
-   - Install and sync `monerod`.
-   - Configure it to accept localhost RPC commands and secure via username & password.
-   - Make sure RPC commands are working when you are ssh'd into the server.
-   - Settings for `~/.bitmonero/bitmonero.conf`
+   - Install `monerod`
+   - Configure rpc-login like this in `~/.bitmonero/bitmonero.conf`
    ```
    # Careful with the password as special characters can easily break your setup.
-   # Avoid these chars for compatibility: @`:"#'%$&=*
+   # Avoid these chars and spaces: @`:"#'%$&=*
+   # It doesn't have to be super secure.
+   # Example: xmr:D9-x2.F6a
    rpc-login=USER_NAME:PASSWORD
-   # Size 40 here helps make wallets 'feel' more responsive on mobile.
-   block-sync-size=40 # Default is 200 blocks per batch.
    ```
+   - Start `monerod` and sync the whole blockchain.
 
 2. Create a new user for tunneling: `useradd sshtunnel -m -d /home/sshtunnel -s /bin/true`
    - See [Hardening](#hardening) below to secure this user account.
@@ -49,7 +48,7 @@ You should now be able to tunnel packets to your node.
 2. As long as it doesn't fail, you can then open up the Monero GUI and configure a "Remote node" as:
    - Address: `localhost`
    - Port: `18081`
-   - Click on "Show advanced", then add username and password for the RPC server.
+   - Click on "Show advanced", then add your `USER_NAME` and `PASSWORD` for the RPC server (as configured in *Remote node setup* Step 1).
    - Click "Connect"
 
 If all went well, you should see the GUI start to load blocks after a minute or so.  It may feel faster if you configure your node to use smaller batches of blocks, eg: `block-sync-size=20`
