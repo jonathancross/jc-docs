@@ -3,6 +3,13 @@ A collection of SHA-256 software hashes
 
 Many projects do not digitally sign their releases.  I have hashed the files below and provided the SHA256 checksum here so that others may _attempt_ to verify authenticity based on the fact that at least 1 other person received the same file as they did.  Hopefully others will also begin doing this so we can cross-verify the checksums and crowd-source a bit of security.
 
+## OpenWRT
+
+`de272e6ef17e5ff37347538859b93b8a6200761564b5d4eccb4481033adf8996`  [Banana Pi R4 firmware image](https://docs.banana-pi.org/en/BPI-R4/BananaPi_BPI-R4#_system_image) based on OpenWRT 21.02 [BPI-R4-8G-BE1350-WIFI_MP4_1-SDK-20240318.zip](https://drive.google.com/file/d/1PZf443Yu1KdiUiBOlF89s9PVyaW30SmU/view?usp=sharing)
+`d4e2c032657c35d79f651d7e3b6af2e05f6a498228be31394d032640851a9643`  mt7996_eeprom_233_2i5i6i.bin - Stock version
+`0f75d50468780f7d0038a95f2718898af6feee98788fe34e7ace708cd25ed651`  Eagle_MT7976C_MT7977iA_2i3i3i_6G_TSSI_OFF_TC_ON_Test_mode_20240116_V04.bin - New version of mt7996_eeprom_233_2i5i6i.bin above [Found here](https://docs.banana-pi.org/en/BPI-R4/GettingStarted_BPI-R4#_faq) and [downloaded from here](https://drive.google.com/file/d/1qneVF1a6ZGMDoLLPpQw2LPYZsRKXto1T/view?usp=sharing).
+
+
 
 ## Mac OSX
 
