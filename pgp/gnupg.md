@@ -3,26 +3,48 @@ Using GNU Privacy Guard - [gpg.wtf](http://gpg.wtf)
 
 GNU Privacy Guard is very powerful software with a terrible interface.
 
-This document attempts to give you the tools needed to answer questions and explain the mysteries of gpg and PGP so that you too can take advantage of this tool and stop making excuses.
+This document is not a "how to" guide, but rather a collection of notes -- `CTRL-F` is your friend. It attempts to give you the tools needed to answer questions and explain the mysteries of gpg and PGP so that you too can take advantage of this tool and stop making excuses.
 
-This page assumes you have basic familiarity with `gpg` and have already created an OpenPGP key. If not, please see [Secure PGP keys and Yubikey NEO.md](https://github.com/jonathancross/jc-docs/blob/master/pgp/Secure%20PGP%20keys%20and%20Yubikey%20NEO.md) for information on how to create an offline master key and then transfer the sub keys onto a YubiKey hardware device for daily use.
+This page assumes you have basic familiarity with `gpg` and have already created an OpenPGP key. If not, please see [Secure PGP keys and Yubikey NEO.md](https://github.com/jonathancross/jc-docs/blob/master/pgp/Secure%20PGP%20keys%20and%20Yubikey%20NEO.md) for information on how to create an offline master key and then transfer the sub keys onto a YubiKey [hardware device](#hardware) for daily use.
 
 ### Get started
 
 * [Example config file](https://raw.githubusercontent.com/jonathancross/jc-docs/master/pgp/gpg.conf) (`~/.gnupg/gpg.conf`) - Some better defaults.
 * [My key signing policy](https://jonathancross.com/C0C076132FFA7695.policy.txt) - to learn about different signature types and what they mean to me.
 
+### Hardware
+
+Recomended hardware devices to manage your OpenPGP keys:
+
+* [OnlyKey](https://onlykey.io/) - Open Source hardware, ability to clone / backup device, firmware updates, hardware PIN keypad and many [more Cypherpunk features](https://docs.onlykey.io/features.html)!
+* [NitroKey](https://www.nitrokey.com/products/nitrokeys) - Also a great option now with the most important features matching or exceeding the Yubiikey.
+* [YubiKey](https://www.yubico.com/products/) - The classic hardware token which _used_ to run Open Source apps, but, sadly [does not anymore](https://github.com/Yubico/ykneo-openpgp/issues/2#issuecomment-218436213).
+
 # Web Of Trust
 
 <img align="center" src="https://imgs.xkcd.com/comics/responsible_behavior.png" alt="xkcd : web of trust + responsible behavior"><br>[xkcd.com](https://xkcd.com)
 
 
-The [OpenPGP Web Of Trust](https://en.wikipedia.org/wiki/Web_of_trust) is a way to establish the authenticity of the binding between a public key and its owner without relying on centralized authorities. Participants can chose to verify, then sign each other's keys, then publish those signatures for other people to use.  Once your key is in the "Strong Set" (set of cross-signed keys), anyone can use a tool such as [the PGP pathfinder](https://pgp.cs.uu.nl/) to easily calculate _trust paths_ from one key to another (modern software will do this automatically).  This can be especially helpful when verifying digital signatures on software for example.
+The [OpenPGP Web Of Trust](https://en.wikipedia.org/wiki/Web_of_trust) is a way to establish the authenticity of the binding between a public key and its owner without relying on centralized authorities. Participants can chose to verify, then sign each other's keys, then publish those signatures for other people to use.  Once your key is in the "Strong Set" (set of cross-signed keys), anyone can use a tool such as [the PGP pathfinder](https://the.earth.li/~noodles/pathfind.html) to easily calculate _trust paths_ from one key to another (modern software will do this automatically).  This can be especially helpful when verifying digital signatures on software for example.
 
 "Signing" someone's key means that you use your Master key's `C` (Certify) capability to make a digital signature on one or more ID's of their public key.  This indicates to what degree you verified the data in that specific UID (usually name and email address).  Ideally the checking should be done in-person, government issued ID should be compared to the name listed in the key UID, and the key fingerprint should be provided by the owner on paper to be taken home and verified + signed later.
 
 Here are [slides from a presentation that I did on the OpenPGP Web Of Trust](https://docs.google.com/presentation/d/1bGSWwbFheaxgs35gh3wAOzR1g1Us8U-_Ix_Om1KAXWI/edit) with visual examples.
 
+## The Web Of Trust is slowly dying...
+
+In recent years, much of the infrastructure which made the Web Of Trust usable has been dismantled / neglected.  I consider this a huge loss as we still don't have equivalent tools in many cases.
+
+1. Most keyservers now silently strip out 3rd party certifications.  Due to the design of OpenPGP keys, 3rd party signatures can be embedded into anyone's key.  This unfortunately means that [an attacker can DOS attack someone by stuffing bogus signatures into a key](https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f#mitigations) and make it too big to effectively use. Most gpg implementations have quietly switched to a specific keyserver based on [Hagrid](https://gitlab.com/hagrid-keyserver/hagrid) which **strips all 3rd party certs** from keys it serves:
+   - `hkps://keys.openpgp.org`
+Very few people understand that this will make the OpenPGP WOT basically unusable as none of the connection data will be visible.
+   - Solution: Use keyserver.ubuntu.com instead, or send/recieve keys directly with others.
+
+2. Once you have the certifications you need to verify keys, you can use a tool such as [wotmate](https://www.kali.org/tools/wotmate/) locally as a "pathfinder" between keys.  Basically searching for trust relationships between your key, the ones you have verified and hopefully ones which were verified by people you trust to do a good job.
+
+3. The original PGP Pathfinder website is dead, but there is a mirror here as of 2025: [https://the.earth.li/~noodles/pathfind.html](https://the.earth.li/~noodles/pathfind.html) -- you can use this to discover trust paths in the OpenPGP Web Of Trust.
+
+4. Even Gnupg itself will silently strip out 3rd party signatures (certs) in many cases.  This is a moving target, so I'll try to update this doc with info as I discuver issues / workarounds.
 
 ### Signing keys offline
 
@@ -62,12 +84,6 @@ Some UID may not contain an email address, but rather a photo, website or other 
 ## What is a keyserver?
 
 A key server is a repository of keys.  Anyone can upload their own key there or another person's key and the key there could be manipulated by the owner of the server.  DO NOT BLINDLY TRUST THE KEYS.  You can use a keyserver as a convenient way to locate a key from a fingerprint, but always verify the key after downloading.
-
-Due to the design of OpenPGP keys, 3rd party signatures can be embedded into anyone's key.  This unfortunately means that [an attacker can cause a DOS someone by stuffing bogus signatures into a key](https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f#mitigations) and make it too big to effectively use. Most gpg implementations have quietly switched to a specific keyserver based on [Hagrid](https://gitlab.com/hagrid-keyserver/hagrid) which **strips all 3rd party certs** from keys it serves:
-
-* `hkps://keys.openpgp.org`
-
-Very few people understand that this will make the OpenPGP Web of Trust basically unusable as none of the connection data will be visible.
 
 When sharing your key (uploading), I highly recommend using these keyservers because they allow upload of signature data:
 * `keyserver.ubuntu.com`
@@ -172,7 +188,7 @@ When listing Secret keys (`gpg --list-secret-keys` or `gpg -K`) you may see:
 * `sec#` = Master key secret is not present, only a "stub" of the private key.  This is normal when using subkeys without their Master key being present.
 * `uid` = User ID.  Combination of name, email address and an optional comment.  You can have multiple UIDs, add and remove (`revoke`) them without breaking your Master key.  If you add a photo, it will be a new `uid` added to the key. When people "sign your key", they are really signing one or more of these UIDs.
 * `ssb` = Subkey Certified by the master key.
-* `ssb>` = Subkey where the private portion is on the YubiKey or another device.
+* `ssb>` = Subkey where the private portion is on a [hardware device](#hardware).
 
 When listing Public keys (`gpg --list-keys` or `gpg -k`) you may see:
 * `pub` = Public portion of your Master keypair.
@@ -253,9 +269,9 @@ Securing your keys using a hardware device that is independent from your compute
 
 ### Creating stubs on a new computer
 
-When you are on a new computer and want to use a hardware device (like the YubiKey or the [NitroKey](https://www.nitrokey.com/)), you will need to create on-disk "stubs" of the keys that reside on your hardware device.
+When you are on a new computer and want to use a [hardware device](#hardware), you will need to create on-disk "stubs" of the keys that reside on your hardware device.
 
-1. On Linux, you need to add [these udev rules](https://github.com/Yubico/libu2f-host/blob/master/70-u2f.rules) to `/etc/udev/rules.d/`.
+1. On Linux, you might need to add [these udev rules](https://github.com/Yubico/libu2f-host/blob/master/70-u2f.rules) to `/etc/udev/rules.d/`.
 2. Run `sudo gpg --card-edit`
 3. Get your key stubs: `fetch`
 4. Quit: `q`
@@ -284,30 +300,10 @@ git log --show-signature -1               # Details of last commit sig.
 git log --pretty="format:%h %G? %aN  %s"  # Log of last commits. The "G" means good signature, "N" means no sig.
 ```
 
-### Permissions problems (YubiKey)
-
-Symptom: `gpg --card-status` works as root, but not as an unprivileged user.
-
-    gpg --card-status
-    gpg: selecting openpgp failed: unknown command
-    gpg: OpenPGP card not available: general error
-
-Workaround: use sudo:
-
-    sudo gpg --card-status
-
-Same with signing, but you need to explicitly add -S
-
-    sudo git commit -a -S
-
 
 ### Linux git commit signing
 
-I have been able to fix `gpg` and `git` signing in Linux Mint 17.3 using `udev` rules:
-
-    sudo sh -c 'wget -q -O - https://raw.githubusercontent.com/Yubico/yubikey-neo-manager/master/resources/linux-fix-ccid-udev | python'
-
-I can then use `git commit -a -S` to sign my commit. NOTE: If using git version >= 2, you can make this the default via:
+I can then use `git commit -a -S` to sign my commit. You can make this the default via:
 
     git config --global commit.gpgsign true
 
@@ -326,10 +322,10 @@ Unfortunately `gpg2` still reports an error unless `sudo` is used:
 I have written a few scripts to help with various PGP / GPG related tasks:
 
 * [Secure PGP keys and Yubikey NEO](https://github.com/jonathancross/jc-docs/blob/master/pgp/Secure%20PGP%20keys%20and%20Yubikey%20NEO.md) - Notes on GPG and YubiKey NEO setup.
-* [gpg.conf](https://github.com/jonathancross/jc-docs/blob/master/pgp/gpg.conf) - Example "hardened" configuration file for GnuPG with secure defaults.
+* [gpg.conf](https://github.com/jonathancross/jc-docs/blob/master/pgp/gpg.conf) - Example "hardened" configuration file for GnuPG with secure defaults.  Much of this is no longer needed because Gnupg now has sane defaults.
 * [gpg-keys-signed-by.pl](https://github.com/jonathancross/jc-docs/blob/master/pgp/gpg-keys-signed-by.pl) - Search for PGP keys in your local keychain signed by a given key.
 * [send-pgp-keys.sh](https://github.com/jonathancross/jc-docs/blob/master/pgp/send-pgp-keys.sh) - Upload your GPG public key to multiple services after a change.  Supports [keybase](https://keybase.io), public keyservers and / or your own web server.
-* [search-pgp-wot](https://github.com/jonathancross/jc-docs/blob/master/pgp/search-pgp-wot) - Check all signatures on a given PGP key looking for any in the Web Of Trust "Strong Set".
+* [search-pgp-wot](https://github.com/jonathancross/jc-docs/blob/master/pgp/search-pgp-wot) - Check all signatures on a given PGP key looking for any in the Web Of Trust "Strong Set". [broken until I update to use a new pathfinder]
 * [email-key-uids.sh](https://github.com/jonathancross/jc-docs/blob/master/pgp/email-key-uids.sh) - MacOS: Split a signed OpenPGP key into component UIDs and email each to the owner via Apple's Mail.app.
 * [OpenBSD release key PGP signature](https://github.com/jonathancross/jc-docs/blob/master/pgp/OpenBSD_release_key_PGP_signature.md) - How to verify the OpenBSD 6.4 release signing key using OpenPGP web of trust.
 
@@ -341,7 +337,7 @@ I have written a few scripts to help with various PGP / GPG related tasks:
 * Can be [setup to use a Gmail account via IMAP](https://support.google.com/mail/answer/78892?hl=en).
 
 #### Thunderbird (Linux / Windows / Mac)
-* [EnigMail PGP plugin](https://enigmail.net/index.php/en/) for Thunderbird [v60.9.0](https://ftp.mozilla.org/pub/thunderbird/releases/60.9.0/) ONLY. In v78+ (now in [testing](https://www.thunderbird.net/en-US/features/#channel)) Thunderbird [will have built-in OpenPGP support](https://wiki.mozilla.org/Thunderbird:OpenPGP:2020), so EnigMail will no longer be needed.
+* Mozilla Thunderbird now has built-in support for OpenPGP -- key management, email encryption and signing.
 * Sync Google contacts with [gcontactsync](https://addons.mozilla.org/en-US/thunderbird/addon/gcontactsync/)
 
 #### Android
