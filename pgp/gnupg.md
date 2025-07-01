@@ -3,7 +3,7 @@ Using GNU Privacy Guard - [gpg.wtf](http://gpg.wtf)
 
 GNU Privacy Guard is very powerful software with a terrible interface.
 
-This document is not a "how to" guide, but rather a collection of notes -- `CTRL-F` is your friend. It attempts to give you the tools needed to answer questions and explain the mysteries of gpg and PGP so that you too can take advantage of this tool and stop making excuses.
+This document is not a "how to" guide, but rather a collection of notes -- `CTRL-F` is your friend. This site will hopefully answer questions and explain the mysteries of gpg and PGP so that you too can take advantage of this tool and improve your security / privacy.
 
 This page assumes you have basic familiarity with `gpg` and have already created an OpenPGP key. If not, please see [Secure PGP keys and Yubikey NEO.md](https://github.com/jonathancross/jc-docs/blob/master/pgp/Secure%20PGP%20keys%20and%20Yubikey%20NEO.md) for information on how to create an offline master key and then transfer the sub keys onto a YubiKey [hardware device](#hardware) for daily use.
 
@@ -16,22 +16,21 @@ This page assumes you have basic familiarity with `gpg` and have already created
 
 Recomended hardware devices to manage your OpenPGP keys:
 
-* [OnlyKey](https://onlykey.io/) - Open Source hardware, ability to clone / backup device, firmware updates, hardware PIN keypad and many [more Cypherpunk features](https://docs.onlykey.io/features.html)!
-* [NitroKey](https://www.nitrokey.com/products/nitrokeys) - Also a great option now with the most important features matching or exceeding the Yubiikey.
-* [YubiKey](https://www.yubico.com/products/) - The classic hardware token which _used_ to run Open Source apps, but, sadly [does not anymore](https://github.com/Yubico/ykneo-openpgp/issues/2#issuecomment-218436213).
+* [OnlyKey](https://onlykey.io/) Open Source hardware, ability to clone / backup device, firmware updates, hardware PIN keypad and many [many nerdy features](https://docs.onlykey.io/features.html)!
+* [NitroKey](https://www.nitrokey.com/products/nitrokeys) Also a great option now with the most important features matching or exceeding the YubiKey.
+* [YubiKey](https://www.yubico.com/products/) The classic hardware token which _used_ to run Open Source apps, but, sadly [does not anymore](https://github.com/Yubico/ykneo-openpgp/issues/2#issuecomment-218436213).
 
 # Web Of Trust
 
 <img align="center" src="https://imgs.xkcd.com/comics/responsible_behavior.png" alt="xkcd : web of trust + responsible behavior"><br>[xkcd.com](https://xkcd.com)
 
-
 The [OpenPGP Web Of Trust](https://en.wikipedia.org/wiki/Web_of_trust) is a way to establish the authenticity of the binding between a public key and its owner without relying on centralized authorities. Participants can chose to verify, then sign each other's keys, then publish those signatures for other people to use.  Once your key is in the "Strong Set" (set of cross-signed keys), anyone can use a tool such as [the PGP pathfinder](https://the.earth.li/~noodles/pathfind.html) to easily calculate _trust paths_ from one key to another (modern software will do this automatically).  This can be especially helpful when verifying digital signatures on software for example.
 
 "Signing" someone's key means that you use your Master key's `C` (Certify) capability to make a digital signature on one or more ID's of their public key.  This indicates to what degree you verified the data in that specific UID (usually name and email address).  Ideally the checking should be done in-person, government issued ID should be compared to the name listed in the key UID, and the key fingerprint should be provided by the owner on paper to be taken home and verified + signed later.
 
-Here are [slides from a presentation that I did on the OpenPGP Web Of Trust](https://docs.google.com/presentation/d/1bGSWwbFheaxgs35gh3wAOzR1g1Us8U-_Ix_Om1KAXWI/edit) with visual examples.
+Here are [slides from a presentation I did on the OpenPGP Web Of Trust](https://docs.google.com/presentation/d/1bGSWwbFheaxgs35gh3wAOzR1g1Us8U-_Ix_Om1KAXWI/edit) with visual examples.
 
-## The Web Of Trust is slowly dying...
+### The Web Of Trust is slowly dying...
 
 In recent years, much of the infrastructure which made the Web Of Trust usable has been dismantled / neglected.  I consider this a huge loss as we still don't have equivalent tools in many cases.
 
@@ -330,22 +329,10 @@ I have written a few scripts to help with various PGP / GPG related tasks:
 * [OpenBSD release key PGP signature](https://github.com/jonathancross/jc-docs/blob/master/pgp/OpenBSD_release_key_PGP_signature.md) - How to verify the OpenBSD 6.4 release signing key using OpenPGP web of trust.
 
 
-# GUI Tools
-
-#### Mac
-* Use Apple's built-in `Mail.app` program with `GPGMail` (part of the fantastic [GPG Suite](https://gpgtools.org/)).
-* Can be [setup to use a Gmail account via IMAP](https://support.google.com/mail/answer/78892?hl=en).
-
-#### Thunderbird (Linux / Windows / Mac)
-* Mozilla Thunderbird now has built-in support for OpenPGP -- key management, email encryption and signing.
-* Sync Google contacts with [gcontactsync](https://addons.mozilla.org/en-US/thunderbird/addon/gcontactsync/)
-
-#### Android
-* Use [K9 Mail](https://k9mail.github.io/) and [Open Keychain](https://www.openkeychain.org/) -- [Here is a tutorial](https://www.openpgp.org/software/openkeychain/).
-
 # Additional Software
 
 * See https://www.openpgp.org/software/
+* [wotmate](https://www.kali.org/tools/wotmate/)
 
 ## Disclaimer
 
