@@ -1,20 +1,20 @@
-Using GNU Privacy Guard - [gpg.wtf](http://gpg.wtf)
+Info about GNU Privacy Guard and OpenPGP - [gpg.wtf](http://gpg.wtf)
 =======================================
 
-GNU Privacy Guard is very powerful software with a terrible interface.
+GNU Privacy Guard is very powerful software with a terrible interface implementing a confusing protocol with a lot of cruft.
 
-This document is not a "how to" guide, but rather a collection of notes -- `CTRL-F` is your friend. This site will hopefully answer questions and explain the mysteries of gpg and PGP so that you too can take advantage of this tool and improve your security / privacy.
+This document is not a "how to" guide, but rather a collection of notes -- `CTRL-F` is your friend. This site will hopefully answer questions and explain the mysteries of gpg and PGP so that you too can take advantage of these tools and improve your security / privacy.
 
 This page assumes you have basic familiarity with `gpg` and have already created an OpenPGP key. If not, please see [Secure PGP keys and Yubikey NEO.md](https://github.com/jonathancross/jc-docs/blob/master/pgp/Secure%20PGP%20keys%20and%20Yubikey%20NEO.md) for information on how to create an offline master key and then transfer the sub keys onto a YubiKey [hardware device](#hardware) for daily use.
 
-### Get started
+### Getting started
 
 * [Example config file](https://raw.githubusercontent.com/jonathancross/jc-docs/master/pgp/gpg.conf) (`~/.gnupg/gpg.conf`) - Some better defaults.
 * [My key signing policy](https://jonathancross.com/C0C076132FFA7695.policy.txt) - to learn about different signature types and what they mean to me.
 
 ### Hardware
 
-Recomended hardware devices to manage your OpenPGP keys:
+Recommended hardware devices to manage your OpenPGP keys:
 
 * [OnlyKey](https://onlykey.io/) Open Source hardware, ability to clone / backup device, firmware updates, hardware PIN keypad and many [many nerdy features](https://docs.onlykey.io/features.html)!
 * [NitroKey](https://www.nitrokey.com/products/nitrokeys) Also a great option now with the most important features matching or exceeding the YubiKey.
@@ -34,22 +34,23 @@ Here are [slides from a presentation I did on the OpenPGP Web Of Trust](https://
 
 In recent years, much of the infrastructure which made the Web Of Trust usable has been dismantled / neglected.  I consider this a huge loss as we still don't have equivalent tools in many cases.
 
-1. Most keyservers now silently strip out 3rd party certifications.  Due to the design of OpenPGP keys, 3rd party signatures can be embedded into anyone's key.  This unfortunately means that [an attacker can DOS attack someone by stuffing bogus signatures into a key](https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f#mitigations) and make it too big to effectively use. Most gpg implementations have quietly switched to a specific keyserver based on [Hagrid](https://gitlab.com/hagrid-keyserver/hagrid) which **strips all 3rd party certs** from keys it serves:
+1. Most keyservers now silently strip out 3rd party certifications.  Due to the design of OpenPGP keys, 3rd party signatures can be embedded into anyone's key.  This unfortunately means that [an attacker can DOS attack someone by stuffing bogus signatures into a key](https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f#mitigations) and make it too big to effectively use. Most gpg implementations have quietly switched to a specific keyserver based on [Hagrid](https://gitlab.com/hagrid-keyserver/hagrid) which **strips all 3rd party certs** from keys it touches:
    - `hkps://keys.openpgp.org`
 Very few people understand that this will make the OpenPGP WOT basically unusable as none of the connection data will be visible.
-   - Solution: Use keyserver.ubuntu.com instead, or send/recieve keys directly with others.
+   - Solution: Use keyserver.ubuntu.com instead, or send/receive keys directly with others.
+   - NOTE: *uploading* keys does not expose you to the above mentioned attack vector.
 
 2. Once you have the certifications you need to verify keys, you can use a tool such as [wotmate](https://www.kali.org/tools/wotmate/) locally as a "pathfinder" between keys.  Basically searching for trust relationships between your key, the ones you have verified and hopefully ones which were verified by people you trust to do a good job.
 
 3. The original PGP Pathfinder website is dead, but there is a mirror here as of 2025: [https://the.earth.li/~noodles/pathfind.html](https://the.earth.li/~noodles/pathfind.html) -- you can use this to discover trust paths in the OpenPGP Web Of Trust.
 
-4. Even Gnupg itself will silently strip out 3rd party signatures (certs) in many cases.  This is a moving target, so I'll try to update this doc with info as I discuver issues / workarounds.
+4. Even GnuPG itself will silently strip out 3rd party signatures (certs) in many cases.  This is a moving target, so I'll try to update this doc with info as I discover issues / workarounds.
 
 ### Signing keys offline
 
 Signing another person's key with your "offline" master key is far more secure than keeping the master key on a normal Internet-connected computer.  It is also a bit more complex, but instructions below should easily guide you through the process.  Replace `KEYID` below with the actual long ID of the key you want to sign:
 
-1. Locate the key you want to sign, eg: `gpg --search KEYID`.  Then type the number of the key you want to import into Gnupg's database.
+1. Locate the key you want to sign, eg: `gpg --search KEYID`.  Then type the number of the key you want to import into GnuPG's database.
 2. Check the master key fingerprint, eg: `gpg --fingerprint KEYID`
 3. When satisfied, export the public key to a file, eg: `gpg -a --export KEYID > KEYID_unsigned.asc`
 4. Put the key you want to sign onto a clean USB stick (or find some other way to get it into your air-gapped computer).
@@ -68,7 +69,7 @@ Signing another person's key with your "offline" master key is far more secure t
 
 #### Ensuring that your signature goes to the right UID
 
-It is tempting to just upload the key directly to a keyserver, but this is considered bad form because the data you signed is not verified and uploading irrevocably publishes data that the user may not want to make public (see section below about what can be changed on a keyserver).
+It is tempting to just upload the signed key directly to a keyserver, but this is considered bad form because the data you signed is not verified and uploading irrevocably publishes data that the user may not want to make public (see section below about what can be changed on a keyserver).
 
 Instead, we will send each signed UID to the email address listed in an **encrypted email**.
 
@@ -84,21 +85,18 @@ Some UID may not contain an email address, but rather a photo, website or other 
 
 A key server is a repository of keys.  Anyone can upload their own key there or another person's key and the key there could be manipulated by the owner of the server.  DO NOT BLINDLY TRUST THE KEYS.  You can use a keyserver as a convenient way to locate a key from a fingerprint, but always verify the key after downloading.
 
-When sharing your key (uploading), I highly recommend using these keyservers because they allow upload of signature data:
+When sharing your key (uploading), I highly recommend using these keyservers based on the [Hockypuck](https://hockeypuck.io/) backend because they allow upload of signature data:
 * `keyserver.ubuntu.com`
-* `hkps.pool.sks-keyservers.net`
-* `pgpkeys.urown.net`
-
-(NOTE: uploading keys does not expose you to the above mentioned attack vector)
+* `pgp.surf.nl`
 
 
 One can use a keyserver to **search** for a key via the web by prefixing with `https://` or on the commandline with the prefix `hkps://` like this:
 
-    gpg --keyserver hkps://keys.openpgp.org --search 0xC0C076132FFA7695
+    gpg --keyserver hkps://keyserver.ubuntu.com --search 0xC0C076132FFA7695
 
 You can also upload your key to a server:
 
-    gpg --keyserver hkps://keys.openpgp.org --send-key YOUR_KEY_ID
+    gpg --keyserver hkps://keyserver.ubuntu.com --send-key YOUR_KEY_ID
 
 Feel free to use [this script](https://raw.githubusercontent.com/jonathancross/jc-docs/master/pgp/send-pgp-keys.sh) I made to automate the upload of your key to keyservers, your website and / or Keybase.io.
 
@@ -119,7 +117,7 @@ gpg: depth: 0  valid:   4  signed: 115  trust: 0-, 0q, 0n, 0m, 0f, 4u
 gpg: depth: 1  valid: 115  signed:  67  trust: 3-, 0q, 0n, 2m, 110f, 0u
 gpg: depth: 2  valid:  50  signed:  39  trust: 35-, 2q, 1n, 5m, 7f, 0u
 gpg: depth: 3  valid:   3  signed:   6  trust: 0-, 0q, 0n, 3m, 0f, 0u
-gpg: next trustdb check due at 2019-07-09
+gpg: next trustdb check due at 2025-07-09
 ```
 
 Please see [this excellent explanation](https://security.stackexchange.com/a/41209/16036) from [Jens Erat](https://security.stackexchange.com/users/19837/jens-erat) of the values and meanings seen above.
@@ -142,8 +140,8 @@ Many people have [declared PGP dead](https://blog.cryptographyengineering.com/20
 * [Why do I see “Secret key is available.” in gpg when it is not?](http://security.stackexchange.com/questions/115230/why-do-i-see-secret-key-is-available-in-gpg-when-it-is-not)
 * The command `gpg --armor --export=2FFA7695` will export *ALL* public keys, not just `2FFA7695` as one might expect.  Unlike many other gnu programs, gpg doesn't support the `=` (equals sign) as value separator, so it just silently assumes you want everything.
 *  By default, `gpg -k` will **not** list fingerprints or the recommended longer key ID format experts agree should be used.  Instead, it lists the [unsafe 8-character "short" format](http://www.asheesh.org/note/debian/short-key-ids-are-bad-news.html).  Why is the default the less secure option?  Use `gpg -k --fingerprint --keyid-format long` instead.
-* When you use `gpg --search-keys KEYID`, the command will often not find perfectly valid keys (eg: those on pool.sks-keyservers.net or pgp.mit.edu).  There is a bunch of keyservers, so the key you are looking for *may* be on any of them, or *none of them*, or maybe it is there, but the search algo doesn't find it.
-* If you add a picture (must be a jpg!), add a default keyserver, etc. it will be stored as part of your Public key.  Your pub key will be changing often and should be republished.
+* When you use `gpg --search-keys KEYID`, the command will often not find perfectly valid keys.  There is a bunch of keyservers, so the key you are looking for *may* be on any of them, or *none of them*, or maybe it is there, but the search algo doesn't find it.
+* If you add a picture (must be a jpg!), add a default keyserver, etc. it will be stored as part of your Public key.  Your pubkey will be changing often and should be republished each time.
 
 #### Which actions change your pubkey?
 
@@ -161,10 +159,13 @@ In gpg, your "public key" is actually a collection of many pieces of metadata, u
 
 #### Can I make changes to a key on a keyserver?
 
-Generally, no.
+There are 2 major different backends with very different models:
 
-You can **add** information such as valid signatures or new UIDs, but not delete anything.
-You can also update expiration dates (ie _adding_ a signature with a later expiration date).
+  * [Hagrid](https://gitlab.com/hagrid-keyserver/hagrid)-based keyservers (eg keys.openpgp.org) authenticate your email address and will let you make some changes to your key. But you cannot upload other people's key information there, even info they cryptographically signed.
+
+  * [Hockypuck](https://hockeypuck.io/)-based server (eg keyserver.ubuntu.com) are the old-school servers which do not authenticate.  They are untrusted repositories of key material and nothing can be deleted, only added.
+    You can add valid signatures or new, certified UIDs *to any key* (not just your own).
+    You can also update expiration dates (ie _adding_ a signature with a later expiration date) for any key.
 
 #### Many ways to represent a public key...
 
