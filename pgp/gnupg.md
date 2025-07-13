@@ -1,4 +1,4 @@
-Info about GNU Privacy Guard and OpenPGP - [gpg.wtf](http://gpg.wtf)
+Info about GNU Privacy Guard and OpenPGP - [gpg.wtf](https://gpg.wtf)
 =======================================
 
 GNU Privacy Guard is very powerful software with a terrible interface implementing a confusing protocol with a lot of cruft.
@@ -137,9 +137,9 @@ Many people have [declared PGP dead](https://blog.cryptographyengineering.com/20
         gpg --encrypt --recipient ja@wikileaks.org
         gpg --encrypt ja@wikileaks.org
         gpg --recipient 92318DBA
-* [Why do I see “Secret key is available.” in gpg when it is not?](http://security.stackexchange.com/questions/115230/why-do-i-see-secret-key-is-available-in-gpg-when-it-is-not)
+* [Why do I see “Secret key is available.” in gpg when it is not?](https://security.stackexchange.com/questions/115230/why-do-i-see-secret-key-is-available-in-gpg-when-it-is-not)
 * The command `gpg --armor --export=2FFA7695` will export *ALL* public keys, not just `2FFA7695` as one might expect.  Unlike many other gnu programs, gpg doesn't support the `=` (equals sign) as value separator, so it just silently assumes you want everything.
-*  By default, `gpg -k` will **not** list fingerprints or the recommended longer key ID format experts agree should be used.  Instead, it lists the [unsafe 8-character "short" format](http://www.asheesh.org/note/debian/short-key-ids-are-bad-news.html).  Why is the default the less secure option?  Use `gpg -k --fingerprint --keyid-format long` instead.
+*  By default, `gpg -k` will **not** list fingerprints or the recommended longer key ID format experts agree should be used.  Instead, it lists the [unsafe 8-character "short" format](https://www.asheesh.org/note/debian/short-key-ids-are-bad-news.html).  Why is the default the less secure option?  Use `gpg -k --fingerprint --keyid-format long` instead.
 * When you use `gpg --search-keys KEYID`, the command will often not find perfectly valid keys.  There is a bunch of keyservers, so the key you are looking for *may* be on any of them, or *none of them*, or maybe it is there, but the search algo doesn't find it.
 * If you add a picture (must be a jpg!), add a default keyserver, etc. it will be stored as part of your Public key.  Your pubkey will be changing often and should be republished each time.
 
@@ -200,7 +200,7 @@ When editing a key (`gpg --edit-key KEYID`) you may see:
 
 When listing signatures (`gpg --list-sigs KEYID`) you may see:
 * `sig `, `sig 1`, `sig 2`, `sig 3` = How thoroughly was the identity claim verified (`sig`=unknown ... `sig 3`=extremely thorough).
-Here is [a detailed explanation](http://security.stackexchange.com/a/141508/16036).
+Here is [a detailed explanation](https://security.stackexchange.com/a/141508/16036).
 
 There are different types of keys, you can see this on the right as "usage":
 * `usage: C` = **Certify** other keys, IE: this is your Master key.
@@ -300,7 +300,6 @@ git log --show-signature -1               # Details of last commit sig.
 git log --pretty="format:%h %G? %aN  %s"  # Log of last commits. The "G" means good signature, "N" means no sig.
 ```
 
-
 ### Linux git commit signing
 
 I can then use `git commit -a -S` to sign my commit. You can make this the default via:
@@ -313,6 +312,33 @@ Unfortunately `gpg2` still reports an error unless `sudo` is used:
     gpg: selecting openpgp failed: Unsupported certificate
     gpg: OpenPGP card not available: Unsupported certificate
 
+### Configure git to authenticate via SSH with an OpenPGP key
+
+> will work for Linux and Windows
+> in Windows use git-bash, bundled with git installation
+
+- add auth subkey in GnuPG
+- get auth subkey id `AUTH_SSB_ID`
+- add auth subkey KEYGRIP to known ssh identities
+```bash
+echo AUTH_SSB_KEYGRIP >> ~/.gnupg/sshcontrol
+```
+- add ssh representation of auth subkey to *SSH keys* in VCS userprofile settings
+```bash
+gpg --export-ssh-key AUTH_SSB_ID!
+```
+- configure ssh connection
+  - enable ssh ability of gpg-agent
+```bash
+echo enable-ssh-support >> $HOME/.gnupg/gpg-agent.conf
+```
+  - replace ssh-agent with gpg-agent - add following to bash initialization file
+```text
+export GPG_TTY=$(tty)
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+gpg-connect-agent /bye
+```
+
 
 ## Additional tools / scripts / documentation
 
@@ -323,6 +349,7 @@ I have written a few scripts to help with various PGP / GPG related tasks:
 
 * [Secure PGP keys and Yubikey NEO](https://github.com/jonathancross/jc-docs/blob/master/pgp/Secure%20PGP%20keys%20and%20Yubikey%20NEO.md) - Notes on GPG and YubiKey NEO setup.
 * [gpg.conf](https://github.com/jonathancross/jc-docs/blob/master/pgp/gpg.conf) - Example "hardened" configuration file for GnuPG with secure defaults.  Much of this is no longer needed because Gnupg now has sane defaults.
+* [gpg-agent.conf](https://github.com/jonathancross/jc-docs/blob/master/pgp/gpg-agent.conf) - gpg-agent configuration for ssh authentication via OpenPGP key.
 * [gpg-keys-signed-by.pl](https://github.com/jonathancross/jc-docs/blob/master/pgp/gpg-keys-signed-by.pl) - Search for PGP keys in your local keychain signed by a given key.
 * [send-pgp-keys.sh](https://github.com/jonathancross/jc-docs/blob/master/pgp/send-pgp-keys.sh) - Upload your GPG public key to multiple services after a change.  Supports [keybase](https://keybase.io), public keyservers and / or your own web server.
 * [search-pgp-wot](https://github.com/jonathancross/jc-docs/blob/master/pgp/search-pgp-wot) - Check all signatures on a given PGP key looking for any in the Web Of Trust "Strong Set". [broken until I update to use a new pathfinder]
